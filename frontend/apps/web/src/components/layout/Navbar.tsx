@@ -154,7 +154,6 @@ export function Navbar() {
                         position: 'absolute',
                         top: '100%',
                         left: '50%',
-                        transform: 'translateX(-50%)',
                         marginTop: '1.5rem',
                         width: '640px',
                         background: 'rgba(15,12,8,0.97)',
