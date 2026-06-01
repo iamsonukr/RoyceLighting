@@ -84,7 +84,7 @@ export default function CartPage() {
       </div>
 
       <div
-        className="max-w-7xl mx-auto"
+        className="max-w-7xl mx-auto cart-layout"
         style={{ padding: '3rem 1.5rem 6rem', display: 'grid', gridTemplateColumns: '1fr 380px', gap: '3rem' }}
       >
         {/* Items */}
@@ -127,6 +127,7 @@ export default function CartPage() {
               const imageUrl = item.image?.startsWith('http') ? item.image : `${imageBase}${item.image}`;
               return (
                 <div
+                  className="cart-item-row"
                   key={`${item.productId}-${item.color}`}
                   style={{
                     display: 'grid',
@@ -274,6 +275,7 @@ export default function CartPage() {
         {/* Summary */}
         <div>
           <div
+            className="cart-summary-panel"
             style={{
               background: 'var(--charcoal-2)',
               border: '1px solid rgba(250,247,240,0.07)',

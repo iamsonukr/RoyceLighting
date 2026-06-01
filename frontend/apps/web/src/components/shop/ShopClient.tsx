@@ -108,7 +108,7 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
           }}
         >
           {/* Search */}
-          <form onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+          <form className="shop-search-form" onSubmit={handleSearch} style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
             <Search size={14} style={{ position: 'absolute', left: '1rem', color: 'rgba(250,247,240,0.3)', pointerEvents: 'none' }} />
             <input
               value={searchInput}
@@ -119,7 +119,7 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
             />
           </form>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div className="shop-control-actions" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             {/* Sort */}
             <select
               value={currentSort}
@@ -219,10 +219,11 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
           </div>
         )}
 
-        <div style={{ display: 'flex', gap: '2.5rem' }}>
+        <div className="shop-content-layout" style={{ display: 'flex', gap: '2.5rem' }}>
           {/* Sidebar */}
           {filtersOpen && (
             <aside
+              className="shop-filters"
               style={{
                 width: '220px',
                 flexShrink: 0,
@@ -378,12 +379,10 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
             ) : (
               <div
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: `repeat(${filtersOpen ? 3 : 4}, 1fr)`,
                   gap: '1px',
                   background: 'rgba(250,247,240,0.04)',
                 }}
-                className="max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1"
+                className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ${filtersOpen ? '' : 'xl:grid-cols-4'}`}
               >
                 {products.map((product) => (
                   <ProductCard key={product._id} product={product} />

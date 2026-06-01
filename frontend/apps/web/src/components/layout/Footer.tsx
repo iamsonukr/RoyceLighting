@@ -50,11 +50,11 @@ export function Footer() {
 
       {/* Main footer grid */}
       <div
-        className="max-w-7xl mx-auto"
+        className="max-w-7xl mx-auto footer-grid"
         style={{ padding: '4rem 1.5rem 3rem', display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '2rem' }}
       >
         {/* Brand col */}
-        <div style={{ gridColumn: 'span 4' }}>
+        <div className="footer-brand-col" style={{ gridColumn: 'span 4' }}>
           <div
             style={{
               fontFamily: "'Playfair Display', serif",
@@ -108,7 +108,7 @@ export function Footer() {
         </div>
 
         {/* Collections */}
-        <div style={{ gridColumn: 'span 3', paddingLeft: '1rem' }}>
+        <div className="footer-links-col" style={{ gridColumn: 'span 3', paddingLeft: '1rem' }}>
           <h4
             style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -149,7 +149,7 @@ export function Footer() {
         </div>
 
         {/* Info */}
-        <div style={{ gridColumn: 'span 2' }}>
+        <div className="footer-links-col" style={{ gridColumn: 'span 2' }}>
           <h4
             style={{
               fontFamily: "'DM Sans', sans-serif",
@@ -187,7 +187,7 @@ export function Footer() {
         </div>
 
         {/* Contact */}
-        <div style={{ gridColumn: 'span 3' }}>
+        <div className="footer-links-col" style={{ gridColumn: 'span 3' }}>
           <h4
             style={{
               fontFamily: "'DM Sans', sans-serif",

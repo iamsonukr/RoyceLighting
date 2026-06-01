@@ -80,8 +80,8 @@ export default async function ProductDetailPage({
               </Link>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1px', background: 'rgba(250,247,240,0.04)' }}
-              className="max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1">
+            <div style={{ gap: '1px', background: 'rgba(250,247,240,0.04)' }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {related.slice(0, 4).map((p: any) => (
                 <ProductCard key={p._id} product={p} />
               ))}

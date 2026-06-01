@@ -146,8 +146,8 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
 
       {/* Main product section */}
       <div
-        className="max-w-7xl mx-auto"
-        style={{ padding: '2.5rem 1.5rem 5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem', alignItems: 'start' }}
+        className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2"
+        style={{ padding: '2.5rem 1.5rem 5rem', gap: '5rem', alignItems: 'start' }}
       >
         {/* Gallery */}
         <div>
@@ -241,7 +241,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
         </div>
 
         {/* Product info */}
-        <div style={{ position: 'sticky', top: '100px' }}>
+        <div className="product-info-panel" style={{ position: 'sticky', top: '100px' }}>
           {/* Category */}
           <p className="overline-text" style={{ marginBottom: '0.875rem' }}>{product.category}</p>
 
@@ -375,7 +375,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
           </div>
 
           {/* CTA buttons */}
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem' }}>
+          <div className="product-cta-row" style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem' }}>
             <button
               onClick={handleAddToCart}
               disabled={adding || product.totalQuantity === 0}

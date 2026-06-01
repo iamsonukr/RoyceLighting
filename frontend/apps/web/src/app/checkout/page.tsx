@@ -222,7 +222,7 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto" style={{ padding: '3rem 1.5rem 6rem', display: 'grid', gridTemplateColumns: '1fr 340px', gap: '3rem', alignItems: 'start' }}>
+      <div className="max-w-5xl mx-auto checkout-layout" style={{ padding: '3rem 1.5rem 6rem', display: 'grid', gridTemplateColumns: '1fr 340px', gap: '3rem', alignItems: 'start' }}>
 
         {/* Main form area */}
         <div>
@@ -232,7 +232,7 @@ export default function CheckoutPage() {
             <div style={{ animation: 'fadeUp 0.4s ease forwards' }}>
               <SectionTitle num="01" label="Delivery Address" />
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+              <div className="checkout-two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
                 <LuxuryField
                   label="Full Name" value={address.fullName} error={errors.fullName}
                   onChange={(v) => setAddress({ ...address, fullName: v })}
@@ -258,7 +258,7 @@ export default function CheckoutPage() {
                 style={{ marginBottom: '1rem' }}
               />
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '2.5rem' }}>
+              <div className="checkout-three-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '2.5rem' }}>
                 <LuxuryField
                   label="City" value={address.city} error={errors.city}
                   onChange={(v) => setAddress({ ...address, city: v })}
@@ -286,7 +286,7 @@ export default function CheckoutPage() {
                 />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="checkout-actions" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Link href="/cart" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.6rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(250,247,240,0.3)', textDecoration: 'none', transition: 'color 0.2s ease' }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = 'rgba(250,247,240,0.6)')}
                   onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(250,247,240,0.3)')}
@@ -345,7 +345,7 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div className="checkout-actions" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <button onClick={() => setStep(1)} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.6rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(250,247,240,0.3)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color 0.2s ease' }}>
                   <ArrowLeft size={12} /> Back
                 </button>
@@ -393,7 +393,7 @@ export default function CheckoutPage() {
                 ))}
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="checkout-actions" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <button onClick={() => setStep(2)} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.6rem', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(250,247,240,0.3)', background: 'none', border: 'none', cursor: 'pointer', transition: 'color 0.2s ease' }}>
                   <ArrowLeft size={12} /> Back
                 </button>
@@ -412,7 +412,7 @@ export default function CheckoutPage() {
         </div>
 
         {/* Order summary sidebar */}
-        <div style={{ position: 'sticky', top: '100px' }}>
+        <div className="checkout-summary-panel" style={{ position: 'sticky', top: '100px' }}>
           <div style={{ background: 'var(--charcoal-2)', border: '1px solid rgba(250,247,240,0.07)', padding: '1.75rem' }}>
             <p style={{ fontSize: '0.58rem', letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '1.5rem' }}>
               Order Summary

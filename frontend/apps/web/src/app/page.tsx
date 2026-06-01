@@ -348,11 +348,9 @@ export default async function HomePage() {
       {/* ── STATS BAND ── */}
       <div style={{ background: 'var(--charcoal-2)', borderBottom: '1px solid rgba(250,247,240,0.06)' }}>
         <div
-          className="max-w-6xl mx-auto"
+          className="max-w-6xl mx-auto grid grid-cols-2 sm:grid-cols-4"
           style={{
             padding: '3.5rem 1.5rem',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
             gap: '1px',
             background: 'rgba(250,247,240,0.05)',
           }}
@@ -417,12 +415,10 @@ export default async function HomePage() {
 
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
               gap: '1px',
               background: 'rgba(250,247,240,0.05)',
             }}
-            className="max-md:grid-cols-2 max-sm:grid-cols-1"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
           >
             {COLLECTIONS.map((col, i) => (
               <Link
@@ -551,12 +547,10 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
               gap: '6rem',
               alignItems: 'center',
             }}
-            className="max-lg:grid-cols-1"
+            className="grid grid-cols-1 lg:grid-cols-2 max-md:gap-12"
           >
             {/* Image */}
             <div style={{ position: 'relative' }}>
@@ -585,6 +579,7 @@ export default async function HomePage() {
               />
               {/* Floating badge */}
               <div
+                className="atelier-badge"
                 style={{
                   position: 'absolute',
                   top: '2rem',
@@ -758,12 +753,10 @@ export default async function HomePage() {
 
             <div
               style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
                 gap: '1px',
                 background: 'rgba(250,247,240,0.04)',
               }}
-              className="max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
             >
               {featured.map((product: any) => (
                 <ProductCard key={product._id} product={product} />
@@ -846,12 +839,10 @@ export default async function HomePage() {
 
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
               gap: '1px',
               background: 'rgba(250,247,240,0.05)',
             }}
-            className="max-md:grid-cols-1"
+            className="grid grid-cols-1 md:grid-cols-3"
           >
             {TESTIMONIALS.map((t, i) => (
               <div
@@ -961,7 +952,7 @@ export default async function HomePage() {
           >
             Be the first to view new collections, exclusive limited editions, and invitations to our Delhi showroom events.
           </p>
-          <div style={{ display: 'flex', gap: '0' }}>
+          <div className="newsletter-form" style={{ display: 'flex', gap: '0' }}>
             <input
               type="email"
               placeholder="Your email address"
