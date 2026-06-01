@@ -686,6 +686,11 @@
     grid-column: span 1 !important;
     padding-left: 0 !important;
   }
+
+  .home-philosophy-grid,
+  .product-detail-layout {
+    gap: 3rem !important;
+  }
 }
 
 @media (max-width: 767px) {
@@ -798,6 +803,12 @@
   .atelier-badge span:first-child {
     font-size: 1.5rem !important;
   }
+
+  .brand-logo {
+    font-size: 0.9rem !important;
+    letter-spacing: 0.1em !important;
+    gap: 0.3rem !important;
+  }
 }
 
 @media (max-width: 420px) {
@@ -810,5 +821,11 @@
   .badge-dark {
     letter-spacing: 0.12em;
     padding-inline: 0.55rem;
+  }
+
+  .brand-logo {
+    max-width: 150px;
+    font-size: 0.78rem !important;
+    letter-spacing: 0.08em !important;
   }
 }

@@ -104,6 +104,7 @@ export function Navbar() {
             {/* Logo */}
             <Link
               href="/"
+              className="brand-logo"
               style={{
                 fontFamily: "'Playfair Display', serif",
                 fontSize: '1.2rem',

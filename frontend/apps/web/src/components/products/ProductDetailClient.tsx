@@ -146,7 +146,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
 
       {/* Main product section */}
       <div
-        className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2"
+        className="max-w-7xl mx-auto product-detail-layout grid grid-cols-1 lg:grid-cols-2"
         style={{ padding: '2.5rem 1.5rem 5rem', gap: '5rem', alignItems: 'start' }}
       >
         {/* Gallery */}

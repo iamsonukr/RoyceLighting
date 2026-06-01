@@ -550,7 +550,7 @@ export default async function HomePage() {
               gap: '6rem',
               alignItems: 'center',
             }}
-            className="grid grid-cols-1 lg:grid-cols-2 max-md:gap-12"
+            className="home-philosophy-grid grid grid-cols-1 lg:grid-cols-2"
           >
             {/* Image */}
             <div style={{ position: 'relative' }}>
