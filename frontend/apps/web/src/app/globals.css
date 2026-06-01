@@ -7,8 +7,10 @@
 @layer base {
   :root {
     /* Core Palette */
-    --gold: #C9A84C;
-    --gold-light: #E8C97A;
+    /* --gold: #C9A84C;
+    --gold-light: #E8C97A; */
+    --gold: #F5F5DC;
+    --gold-light: #F5F5DC;
     --gold-pale: #F5EDD6;
     --gold-deep: #9A7535;
     --gold-muted: rgba(201,168,76,0.15);
