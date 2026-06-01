@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
+@layer base {
+  :root {
+    /* Royal Luxury Palette */
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-pale: #F5EDD6;
+    --gold-deep: #9A7535;
+
+    --obsidian: #0E0B07;
+    --charcoal: #1C1812;
+    --slate: #2E2A22;
+    --smoke: #3D3830;
+
+    --ivory: #FAF7F0;
+    --cream: #F4EFE4;
+    --linen: #EDE6D6;
+    --parchment: #E2D8C4;
+
+    --burgundy: #5C1F2E;
+    --burgundy-light: #7A2D3E;
+
+    --navy: #0C1A35;
+    --navy-light: #162547;
+
+    /* shadcn-compatible overrides */
+    --background: 40 33% 97%;
+    --foreground: 30 15% 10%;
+    --card: 40 33% 97%;
+    --card-foreground: 30 15% 10%;
+    --popover: 40 33% 97%;
+    --popover-foreground: 30 15% 10%;
+    --primary: 40 48% 55%;
+    --primary-foreground: 30 15% 8%;
+    --secondary: 40 20% 93%;
+    --secondary-foreground: 30 15% 10%;
+    --muted: 40 20% 93%;
+    --muted-foreground: 30 10% 45%;
+    --accent: 40 20% 88%;
+    --accent-foreground: 30 15% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 38 18% 82%;
+    --input: 38 18% 82%;
+    --ring: 40 48% 55%;
+    --radius: 0.25rem;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: var(--ivory);
+    color: var(--obsidian);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+}
+
+@layer components {
+
+  /* ── Buttons ── */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 font-medium tracking-widest uppercase text-xs px-8 py-4 transition-all duration-300;
+    background-color: var(--gold);
+    color: var(--obsidian);
+    letter-spacing: 0.15em;
+  }
+  .btn-primary:hover {
+    background-color: var(--gold-deep);
+    color: var(--ivory);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2 font-medium tracking-widest uppercase text-xs px-8 py-4 transition-all duration-300;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    letter-spacing: 0.15em;
+  }
+  .btn-outline:hover {
+    background-color: var(--gold);
+    color: var(--obsidian);
+  }
+
+  .btn-ghost-light {
+    @apply inline-flex items-center gap-2 font-medium tracking-widest uppercase text-xs px-8 py-4 transition-all duration-300;
+    border: 1px solid rgba(201, 168, 76, 0.5);
+    color: var(--gold-light);
+    letter-spacing: 0.15em;
+  }
+  .btn-ghost-light:hover {
+    background-color: var(--gold);
+    color: var(--obsidian);
+    border-color: var(--gold);
+  }
+
+  /* ── Typography ── */
+  .display-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-style: italic;
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 2.25rem;
+    letter-spacing: 0.02em;
+    color: var(--obsidian);
+  }
+
+  .overline {
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* ── Cards ── */
+  .card-hover {
+    @apply transition-all duration-500;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 64px rgba(14, 11, 7, 0.12);
+  }
+
+  .product-card {
+    background: var(--ivory);
+    border: 1px solid var(--parchment);
+  }
+
+  /* ── Gold divider ── */
+  .gold-divider {
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 auto;
+  }
+
+  /* ── Luxury surfaces ── */
+  .surface-dark {
+    background-color: var(--charcoal);
+    color: var(--ivory);
+  }
+
+  .surface-gold {
+    background-color: var(--gold);
+    color: var(--obsidian);
+  }
+
+  /* ── Nav ── */
+  .nav-link {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    transition: color 0.2s;
+  }
+  .nav-link:hover {
+    color: var(--gold-deep);
+  }
+
+  /* ── Input ── */
+  .input-luxury {
+    @apply w-full px-4 py-3 text-sm transition-all duration-200;
+    background: transparent;
+    border: 1px solid var(--parchment);
+    color: var(--obsidian);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    outline: none;
+  }
+  .input-luxury:focus {
+    border-color: var(--gold);
+  }
+  .input-luxury::placeholder {
+    color: var(--smoke);
+    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+  }
+}

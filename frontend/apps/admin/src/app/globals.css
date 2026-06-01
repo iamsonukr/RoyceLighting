@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .admin-card {
+    @apply bg-white rounded-xl border border-gray-100 shadow-sm;
+  }
+  .stat-card {
+    @apply admin-card p-6;
+  }
+  .btn-admin {
+    @apply bg-gray-900 hover:bg-gray-800 text-white font-medium px-4 py-2.5 rounded-lg text-sm transition-colors;
+  }
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2.5 rounded-lg text-sm transition-colors;
+  }
+  .table-row {
+    @apply border-b border-gray-50 hover:bg-gray-50/60 transition-colors;
+  }
+}

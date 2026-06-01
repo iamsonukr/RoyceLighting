@@ -1,0 +1,49 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "nest build",
+    "dev": "nest start --watch",
+    "dev:start": "npm run dev",
+    "start": "node dist/main.js",
+    "start:prod": "node dist/main.js",
+    "seed:admin": "node scripts/seed-admin.js",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.3.10",
+    "@nestjs/config": "^3.2.3",
+    "@nestjs/core": "^10.3.10",
+    "@nestjs/jwt": "^10.2.0",
+    "@nestjs/mongoose": "^10.0.10",
+    "@nestjs/passport": "^10.0.3",
+    "@nestjs/platform-express": "^10.3.10",
+    "@nestjs/serve-static": "^4.0.2",
+    "bcryptjs": "^2.4.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "crypto": "^1.0.1",
+    "mongoose": "^8.5.1",
+    "morgan": "^1.10.1",
+    "multer": "^1.4.5-lts.1",
+    "nanoid": "^3.3.7",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "razorpay": "^2.9.4",
+    "reflect-metadata": "^0.2.2",
+    "resend": "^3.4.0",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.4.2",
+    "@nestjs/schematics": "^10.1.4",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/morgan": "^1.9.10",
+    "@types/multer": "^1.4.11",
+    "@types/node": "^20.14.10",
+    "@types/passport-jwt": "^4.0.1",
+    "typescript": "^5.4.5"
+  }
+}
