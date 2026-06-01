@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Pencil, Trash2, Image as ImageIcon, X, Loader2, Search } from 'lucide-react';
+import { Plus, Pencil, Trash2, Image as ImageIcon, X, Loader2, Search, GripVertical, Star } from 'lucide-react';
 import { adminApi } from '@/lib/api';
 import Pagination from '@/components/Pagination';
 
@@ -14,6 +14,13 @@ const EMPTY_FORM = {
   productId: '', Fineshed: '', LightSource: '', Remark: '',
 };
 
+type ImageItem = {
+  id: string;
+  src: string;
+  file?: File;
+  existing: boolean;
+};
+
 export default function AdminProductsPage() {
   const queryClient = useQueryClient();
   const fileRef = useRef<HTMLInputElement>(null);
@@ -21,8 +28,11 @@ export default function AdminProductsPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [form, setForm] = useState({ ...EMPTY_FORM });
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
-  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const [imageItems, setImageItems] = useState<ImageItem[]>([]);
+  const [primaryImageId, setPrimaryImageId] = useState('');
+  const [enableCompression, setEnableCompression] = useState(true);
+  const [draggedImageId, setDraggedImageId] = useState<string | null>(null);
+  const [formError, setFormError] = useState('');
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
   const [page, setPage] = useState(1);
@@ -31,6 +41,15 @@ export default function AdminProductsPage() {
   useEffect(() => {
     setPage(1);
   }, [search, category]);
+
+  useEffect(() => {
+    if (imageItems.length && !imageItems.some((item) => item.id === primaryImageId)) {
+      setPrimaryImageId(imageItems[0].id);
+    }
+    if (!imageItems.length && primaryImageId) {
+      setPrimaryImageId('');
+    }
+  }, [imageItems, primaryImageId]);
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin-products', search, category, page, limit],
@@ -67,6 +86,9 @@ export default function AdminProductsPage() {
       queryClient.invalidateQueries({ queryKey: ['admin-products'] });
       closeModal();
     },
+    onError: (error: any) => {
+      setFormError(error?.response?.data?.message || 'Unable to save product. Please check the fields and try again.');
+    },
   });
 
   const deleteProduct = useMutation({
@@ -77,14 +99,23 @@ export default function AdminProductsPage() {
   const openAdd = () => {
     setEditingProduct(null);
     setForm({ ...EMPTY_FORM });
-    setImageFiles([]);
-    setImagePreviews([]);
+    setImageItems([]);
+    setPrimaryImageId('');
+    setEnableCompression(true);
+    setFormError('');
     setModalOpen(true);
   };
 
   const getProductImages = (product: any) => {
+    if (Array.isArray(product.imageAssets) && product.imageAssets.length) {
+      return [...product.imageAssets]
+        .sort((a: any, b: any) => Number(a.order || 0) - Number(b.order || 0))
+        .map((asset: any) => asset.webpUrl || asset.url)
+        .filter(Boolean);
+    }
     const images = Array.isArray(product.images) ? product.images.filter(Boolean) : [];
-    return images.length ? images : product.image ? [product.image] : [];
+    const primary = product.primaryImage || product.image;
+    return images.length ? [...new Set([primary, ...images].filter(Boolean))] : primary ? [primary] : [];
   };
 
   const getImageSrc = (image?: string) => {
@@ -106,22 +137,80 @@ export default function AdminProductsPage() {
       weight: product.weight || '', isActive: product.isActive,
       productId: product.productId || '', Fineshed: product.Fineshed || '', LightSource: product.LightSource || '', Remark: product.Remark || '',
     });
-    setImagePreviews(getProductImages(product));
-    setImageFiles([]);
+    const nextImages = getProductImages(product).map((src: string) => ({
+      id: src,
+      src,
+      existing: true,
+    }));
+    setImageItems(nextImages);
+    setPrimaryImageId(
+      nextImages.find((item) => item.src === (product.primaryImage || product.image))?.id ||
+      nextImages[0]?.id ||
+      '',
+    );
+    setEnableCompression(true);
+    setFormError('');
     setModalOpen(true);
   };
 
-  const closeModal = () => { setModalOpen(false); setEditingProduct(null); };
+  const closeModal = () => {
+    imageItems.forEach((item) => {
+      if (!item.existing && item.src.startsWith('blob:')) URL.revokeObjectURL(item.src);
+    });
+    setModalOpen(false);
+    setEditingProduct(null);
+    setFormError('');
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
-    setImageFiles(files);
-    setImagePreviews(files.map((file) => URL.createObjectURL(file)));
+    const nextItems = files.map((file, index) => ({
+      id: `new:${Date.now()}:${index}:${file.name}`,
+      src: URL.createObjectURL(file),
+      file,
+      existing: false,
+    }));
+    setImageItems((current) => {
+      const merged = [...current, ...nextItems].slice(0, 8);
+      return merged;
+    });
+    e.target.value = '';
+  };
+
+  const removeImage = (id: string) => {
+    setImageItems((items) => {
+      const removed = items.find((item) => item.id === id);
+      if (removed && !removed.existing && removed.src.startsWith('blob:')) URL.revokeObjectURL(removed.src);
+      const next = items.filter((item) => item.id !== id);
+      if (primaryImageId === id) setPrimaryImageId(next[0]?.id || '');
+      return next;
+    });
+  };
+
+  const moveImage = (fromId: string, toId: string) => {
+    setImageItems((items) => {
+      const fromIndex = items.findIndex((item) => item.id === fromId);
+      const toIndex = items.findIndex((item) => item.id === toId);
+      if (fromIndex < 0 || toIndex < 0 || fromIndex === toIndex) return items;
+      const next = [...items];
+      const [moved] = next.splice(fromIndex, 1);
+      next.splice(toIndex, 0, moved);
+      return next;
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError('');
+    if (!form.category) {
+      setFormError('Please select a category.');
+      return;
+    }
+    if (!editingProduct && imageItems.length === 0) {
+      setFormError('Please add at least one product image.');
+      return;
+    }
     const fd = new FormData();
     Object.entries(form).forEach(([k, v]) => {
       if (k === 'colors' || k === 'tags' || k === 'materialUsed') {
@@ -132,7 +221,22 @@ export default function AdminProductsPage() {
         fd.append(k, String(v));
       }
     });
-    imageFiles.forEach((file) => fd.append('images', file));
+    const newItems = imageItems.filter((item) => !item.existing && item.file);
+    const imageOrder = imageItems.map((item) => (
+      item.existing ? item.src : `new:${newItems.findIndex((newItem) => newItem.id === item.id)}`
+    ));
+    const primaryItem = imageItems.find((item) => item.id === primaryImageId) || imageItems[0];
+    const primaryImage = primaryItem
+      ? primaryItem.existing
+        ? primaryItem.src
+        : `new:${newItems.findIndex((newItem) => newItem.id === primaryItem.id)}`
+      : '';
+
+    fd.append('enableCompression', String(enableCompression));
+    fd.append('existingImages', JSON.stringify(imageItems.filter((item) => item.existing).map((item) => item.src)));
+    fd.append('imageOrder', JSON.stringify(imageOrder));
+    fd.append('primaryImage', primaryImage);
+    newItems.forEach((item) => item.file && fd.append('images', item.file));
     saveProduct.mutate(fd);
   };
 
@@ -276,21 +380,67 @@ export default function AdminProductsPage() {
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
               {/* Image upload */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
+                <div className="mb-2 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                  <label className="block text-sm font-medium text-gray-700">Product Images</label>
+                  <label className="inline-flex items-center gap-2 text-xs font-medium text-gray-600">
+                    <input
+                      type="checkbox"
+                      checked={enableCompression}
+                      onChange={(e) => setEnableCompression(e.target.checked)}
+                      className="h-4 w-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                    />
+                    Enable Automatic Compression
+                  </label>
+                </div>
                 <div
                   onClick={() => fileRef.current?.click()}
                   className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center cursor-pointer hover:border-gray-400 transition-colors"
                 >
-                  {imagePreviews.length ? (
+                  {imageItems.length ? (
                     <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
-                      {imagePreviews.map((preview, index) => (
-                        <div key={`${preview}-${index}`} className="relative aspect-square rounded-lg bg-gray-100 overflow-hidden">
-                          <img src={getImageSrc(preview)} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
-                          {index === 0 && (
-                            <span className="absolute left-1.5 top-1.5 rounded-md bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white">
+                      {imageItems.map((item, index) => (
+                        <div
+                          key={item.id}
+                          draggable
+                          onClick={(e) => e.stopPropagation()}
+                          onDragStart={() => setDraggedImageId(item.id)}
+                          onDragOver={(e) => e.preventDefault()}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            if (draggedImageId) moveImage(draggedImageId, item.id);
+                            setDraggedImageId(null);
+                          }}
+                          className={`group relative aspect-square rounded-lg bg-gray-100 overflow-hidden border ${primaryImageId === item.id ? 'border-gray-900 ring-2 ring-gray-900/10' : 'border-gray-200'}`}
+                        >
+                          <img src={getImageSrc(item.src)} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            className="absolute left-1 top-1 rounded-md bg-white/90 p-1 text-gray-500 shadow-sm cursor-grab"
+                            title="Drag to reorder"
+                          >
+                            <GripVertical size={13} />
+                          </button>
+                          {primaryImageId === item.id && (
+                            <span className="absolute left-1.5 bottom-1.5 rounded-md bg-black/70 px-1.5 py-0.5 text-[10px] font-medium text-white">
                               Primary
                             </span>
                           )}
+                          <button
+                            type="button"
+                            onClick={() => setPrimaryImageId(item.id)}
+                            className={`absolute right-1 top-1 rounded-md p-1 shadow-sm ${primaryImageId === item.id ? 'bg-amber-400 text-white' : 'bg-white/90 text-gray-500 hover:text-amber-500'}`}
+                            title="Set as primary image"
+                          >
+                            <Star size={13} fill={primaryImageId === item.id ? 'currentColor' : 'none'} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => removeImage(item.id)}
+                            className="absolute right-1 bottom-1 rounded-md bg-white/90 p-1 text-gray-500 opacity-0 shadow-sm transition-opacity hover:text-red-600 group-hover:opacity-100"
+                            title="Remove image"
+                          >
+                            <X size={13} />
+                          </button>
                         </div>
                       ))}
                     </div>
@@ -298,12 +448,28 @@ export default function AdminProductsPage() {
                     <div className="text-gray-400">
                       <ImageIcon size={32} className="mx-auto mb-2" />
                       <p className="text-sm">Click to upload images</p>
-                      <p className="text-xs mt-1">PNG, JPG, WEBP up to 5MB each</p>
+                      <p className="text-xs mt-1">PNG, JPG, WEBP up to 10MB each</p>
                     </div>
                   )}
                 </div>
+                <div className="mt-2 flex items-center justify-between gap-3 text-xs text-gray-500">
+                  <span>Drag images to reorder. Use the star to choose the featured image.</span>
+                  <button
+                    type="button"
+                    onClick={() => fileRef.current?.click()}
+                    className="font-medium text-gray-900 hover:underline"
+                  >
+                    Add images
+                  </button>
+                </div>
                 <input ref={fileRef} type="file" accept="image/*" multiple className="hidden" onChange={handleImageChange} />
               </div>
+
+              {formError && (
+                <div className="rounded-lg border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {formError}
+                </div>
+              )}
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">

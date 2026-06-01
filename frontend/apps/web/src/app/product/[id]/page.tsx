@@ -19,14 +19,15 @@ async function getProduct(id: string) {
   }
 }
 
-async function getRelated(category: string, excludeId: string) {
+async function getRelated(category: string | undefined, excludeId: string) {
+  if (!category) return [];
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/products?category=${encodeURIComponent(category)}&limit=4`,
       { next: { revalidate: 300 } },
     );
     const data = await res.json();
-    return (data.data || []).filter((p: any) => p._id !== excludeId);
+    return (data.data?.products || data.products || []).filter((p: any) => p._id !== excludeId);
   } catch {
     return [];
   }
@@ -55,7 +56,10 @@ export default async function ProductDetailPage({
   const product = await getProduct(id);
   if (!product) notFound();
 
-  const related = await getRelated(product.category, id);
+  const categoryRef = typeof product.category === 'object'
+    ? product.category?.slug || product.category?._id
+    : product.category;
+  const related = await getRelated(categoryRef, id);
 
   return (
     <div>
@@ -73,7 +77,7 @@ export default async function ProductDetailPage({
                 </h2>
               </div>
               <Link
-                href={`/shop?category=${product.category}`}
+                href={`/shop?category=${categoryRef}`}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', textDecoration: 'none' }}
               >
                 View All <ArrowRight size={12} />

@@ -50,7 +50,7 @@ export class CartService {
         quantity,
         color: color || '',
         size: size || '',
-        image: product.images?.[0] || product.image,
+        image: product.primaryImage || product.images?.[0] || product.image,
       });
     }
 

@@ -3,6 +3,18 @@ import { Document, Types } from 'mongoose';
 
 export type ProductDocument = Product & Document;
 
+export class ProductImageAsset {
+  url: string;
+  webpUrl?: string;
+  originalName?: string;
+  mimeType?: string;
+  size?: number;
+  width?: number;
+  height?: number;
+  order: number;
+  isPrimary: boolean;
+}
+
 @Schema({ timestamps: true })
 export class Product {
   @Prop({ required: true, trim: true })
@@ -48,6 +60,12 @@ export class Product {
 
   @Prop({ type: [String], default: [] })
   images?: string[];
+
+  @Prop({ trim: true })
+  primaryImage?: string;
+
+  @Prop({ type: [Object], default: [] })
+  imageAssets?: ProductImageAsset[];
 
   @Prop({ default: true })
   isActive: boolean;

@@ -3,32 +3,20 @@ import {
   UseGuards, Request, UseInterceptors, UploadedFiles,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname, join } from 'path';
-import { existsSync, mkdirSync } from 'fs';
+import { memoryStorage } from 'multer';
 import { ProductsService } from './products.service';
 import { CreateProductDto, UpdateProductDto, ProductQueryDto } from './dto/product.dto';
 import { JwtAuthGuard, AdminGuard, VendorGuard } from '../auth/guards/auth.guard';
 
 const multerOptions = {
-  storage: diskStorage({
-    destination: (req, file, cb) => {
-      const uploadPath = join(process.cwd(), 'uploads');
-      if (!existsSync(uploadPath)) mkdirSync(uploadPath, { recursive: true });
-      cb(null, uploadPath);
-    },
-    filename: (req, file, cb) => {
-      const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-      cb(null, `product-${uniqueSuffix}${extname(file.originalname)}`);
-    },
-  }),
+  storage: memoryStorage(),
   fileFilter: (req, file, cb) => {
     if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp)$/)) {
       return cb(new Error('Only image files are allowed'), false);
     }
     cb(null, true);
   },
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  limits: { fileSize: 10 * 1024 * 1024 },
 };
 
 @Controller('products')
@@ -57,12 +45,6 @@ export class ProductsController {
     return { success: true, data };
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    const data = await this.productsService.findOne(id);
-    return { success: true, data };
-  }
-
   // ─── Admin routes ────────────────────────────────────────
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Get('admin/all')
@@ -84,9 +66,12 @@ export class ProductsController {
     @Request() req,
   ) {
     const uploadedFiles = [...(files?.images || []), ...(files?.image || [])];
-    const imagePaths = uploadedFiles.map((file) => `/uploads/${file.filename}`);
+    const uploadedAssets = await this.productsService.optimizeUploadedImages(
+      uploadedFiles,
+      dto.enableCompression !== false,
+    );
     const vendorId = req.user.role === 'vendor' ? req.user._id : undefined;
-    const data = await this.productsService.create(dto, imagePaths, vendorId);
+    const data = await this.productsService.create(dto, uploadedAssets, vendorId);
     return { success: true, message: 'Product created', data };
   }
 
@@ -103,9 +88,12 @@ export class ProductsController {
     @Request() req,
   ) {
     const uploadedFiles = [...(files?.images || []), ...(files?.image || [])];
-    const imagePaths = uploadedFiles.map((file) => `/uploads/${file.filename}`);
+    const uploadedAssets = await this.productsService.optimizeUploadedImages(
+      uploadedFiles,
+      dto.enableCompression !== false,
+    );
     const data = await this.productsService.update(
-      id, dto, imagePaths.length ? imagePaths : undefined, req.user._id, req.user.role,
+      id, dto, uploadedAssets, req.user._id, req.user.role,
     );
     return { success: true, message: 'Product updated', data };
   }
@@ -122,6 +110,12 @@ export class ProductsController {
   @Get('vendor/my-products')
   async vendorProducts(@Request() req, @Query() query: ProductQueryDto) {
     const data = await this.productsService.findVendorProducts(req.user._id, query);
+    return { success: true, data };
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    const data = await this.productsService.findOne(id);
     return { success: true, data };
   }
 }

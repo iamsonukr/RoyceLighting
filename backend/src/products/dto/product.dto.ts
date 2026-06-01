@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsArray, IsBoolean } from 'class-validator';
+import { IsString, IsNumber, IsOptional, IsBoolean } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class CreateProductDto {
@@ -56,6 +56,25 @@ export class CreateProductDto {
     typeof value === 'string' ? JSON.parse(value) : value,
   )
   materialUsed?: string[];
+
+  @IsOptional()
+  @Transform(({ value }) =>
+    typeof value === 'string' ? JSON.parse(value) : value,
+  )
+  existingImages?: string[];
+
+  @IsOptional()
+  @Transform(({ value }) =>
+    typeof value === 'string' ? JSON.parse(value) : value,
+  )
+  imageOrder?: string[];
+
+  @IsOptional() @IsString()
+  primaryImage?: string;
+
+  @IsOptional() @IsBoolean()
+  @Transform(({ value }) => value !== 'false' && value !== false)
+  enableCompression?: boolean;
 }
 
 export class UpdateProductDto extends CreateProductDto {

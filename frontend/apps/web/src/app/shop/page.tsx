@@ -9,7 +9,8 @@ export const metadata: Metadata = {
 async function getProducts(params: Record<string, string | undefined>) {
   try {
     const query = new URLSearchParams();
-    if (params.category) query.set('category', params.category);
+    const category = params.category || params.collection;
+    if (category) query.set('category', category);
     if (params.search) query.set('search', params.search);
     if (params.sortBy) query.set('sortBy', params.sortBy.replace('_asc', '').replace('_desc', ''));
     if (params.sortBy?.includes('_asc')) query.set('order', 'asc');
@@ -24,7 +25,11 @@ async function getProducts(params: Record<string, string | undefined>) {
       { next: { revalidate: 60 } },
     );
     const data = await res.json();
-    return { products: data.data || [], total: data.total || 0, pages: data.pages || 1 };
+    return {
+      products: data.data?.products || data.products || [],
+      total: data.data?.total || data.total || 0,
+      pages: data.data?.pages || data.pages || 1,
+    };
   } catch {
     return { products: [], total: 0, pages: 1 };
   }

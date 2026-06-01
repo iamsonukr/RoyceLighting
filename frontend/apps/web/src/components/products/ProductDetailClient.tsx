@@ -43,12 +43,23 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
   const [openAccordion, setOpenAccordion] = useState<string | null>('details');
 
   const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace('/api', '');
-  const productImages = product.images?.length ? product.images : product.image ? [product.image] : [];
+  const productImages = product.imageAssets?.length
+    ? [...product.imageAssets]
+        .sort((a: any, b: any) => Number(a.order || 0) - Number(b.order || 0))
+        .map((asset: any) => asset.webpUrl || asset.url)
+        .filter(Boolean)
+    : [...new Set([product.primaryImage, ...(product.images || []), product.image].filter(Boolean))];
   const getImageUrl = (img?: string) =>
     img?.startsWith('http') ? img : `${imageBase}${img}`;
 
-  const [selectedImage, setSelectedImage] = useState(productImages[0] || '');
+  const [selectedImage, setSelectedImage] = useState(product.primaryImage || productImages[0] || '');
   const imageUrl = getImageUrl(selectedImage);
+  const categoryLabel = typeof product.category === 'object'
+    ? product.category?.name || product.category?.slug || ''
+    : product.category;
+  const categoryHref = typeof product.category === 'object'
+    ? product.category?.slug || product.category?._id || ''
+    : product.category;
 
   const discount =
     product.retailPrice > product.sellingPrice
@@ -76,11 +87,17 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
   };
 
   const specDetails = [
-    { label: 'Category', value: product.category },
+    { label: 'Category', value: categoryLabel },
     product.brand && { label: 'Brand', value: product.brand },
     product.weight && { label: 'Weight', value: product.weight },
-    product.size?.height && { label: 'Dimensions', value: `${product.size.height} × ${product.size.width}` },
-    product.materialUsed?.length > 0 && { label: 'Materials', value: product.materialUsed.join(', ') },
+    (product.size?.height || product.dimension?.height) && {
+      label: 'Dimensions',
+      value: `${product.size?.height || product.dimension?.height} x ${product.size?.width || product.dimension?.width}`,
+    },
+    (product.materialUsed?.length > 0 || product.material?.length > 0) && {
+      label: 'Materials',
+      value: (product.materialUsed || product.material).join(', '),
+    },
   ].filter(Boolean);
 
   const accordions = [
@@ -114,7 +131,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
           {[
             { label: 'Home', href: '/' },
             { label: 'Shop', href: '/shop' },
-            { label: product.category, href: `/shop?category=${product.category}` },
+            { label: categoryLabel, href: `/shop?category=${categoryHref}` },
             { label: product.name, href: null },
           ].map((crumb, i, arr) => (
             <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -243,7 +260,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
         {/* Product info */}
         <div className="product-info-panel" style={{ position: 'sticky', top: '100px' }}>
           {/* Category */}
-          <p className="overline-text" style={{ marginBottom: '0.875rem' }}>{product.category}</p>
+          <p className="overline-text" style={{ marginBottom: '0.875rem' }}>{categoryLabel}</p>
 
           {/* Name */}
           <h1

@@ -15,7 +15,9 @@ interface Product {
   retailPrice: number;
   image?: string;
   images?: string[];
-  category: string;
+  primaryImage?: string;
+  imageAssets?: { url: string; webpUrl?: string; order?: number; isPrimary?: boolean }[];
+  category: string | { _id?: string; name?: string; slug?: string };
   colors?: string[];
   totalQuantity: number;
   salesCount?: number;
@@ -40,7 +42,18 @@ export function ProductCard({ product }: ProductCardProps) {
       : 0;
 
   const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace('/api', '');
-  const productImages = product.images?.length ? product.images : product.image ? [product.image] : [];
+  const assetImages = product.imageAssets?.length
+    ? [...product.imageAssets]
+        .sort((a, b) => Number(a.order || 0) - Number(b.order || 0))
+        .map((asset) => asset.webpUrl || asset.url)
+        .filter(Boolean)
+    : [];
+  const productImages = assetImages.length
+    ? assetImages
+    : [...new Set([product.primaryImage, ...(product.images || []), product.image].filter(Boolean) as string[])];
+  const categoryLabel = typeof product.category === 'object'
+    ? product.category?.name || product.category?.slug || ''
+    : product.category;
   const getImgUrl = (img?: string) =>
     img?.startsWith('http') ? img : img ? `${imageBase}${img}` : null;
 
@@ -265,7 +278,7 @@ export function ProductCard({ product }: ProductCardProps) {
               marginBottom: '0.5rem',
             }}
           >
-            {product.category}
+            {categoryLabel}
           </p>
           <h3
             style={{

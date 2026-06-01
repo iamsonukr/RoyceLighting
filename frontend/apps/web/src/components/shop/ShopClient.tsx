@@ -38,7 +38,7 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
   const router = useRouter();
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const currentCategory = searchParams.category || '';
+  const currentCategory = searchParams.category || searchParams.collection || '';
   const currentSearch = searchParams.search || '';
   const currentPage = Number(searchParams.page) || 1;
   const currentSort = searchParams.sortBy || 'createdAt';
