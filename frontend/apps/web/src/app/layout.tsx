@@ -10,6 +10,7 @@ import { Footer } from '../components/layout/Footer';
 import { AuthModal } from '../components/auth/AuthModal';
 import { Toaster } from '../components/ui/Toaster';
 import { CartDrawer } from '../components/layout/CartDrawer';
+import { PageTransition } from '../components/layout/PageTransition';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 60 * 1000 } },
@@ -26,7 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <Navbar />
-            <main className="min-h-screen">{children}</main>
+            <PageTransition>{children}</PageTransition>
             <Footer />
             <CartDrawer />
             <AuthModal />

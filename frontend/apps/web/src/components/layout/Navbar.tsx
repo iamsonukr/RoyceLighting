@@ -14,25 +14,25 @@ const COLLECTIONS = [
     label: 'Grand Chandeliers',
     href: '/shop?collection=chandeliers',
     desc: 'Ballrooms & foyers',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=70',
+    image: 'https://source.unsplash.com/featured/?grand-chandelier,luxury-lighting',
   },
   {
     label: 'Pendant Lights',
     href: '/shop?collection=pendants',
     desc: 'Dining & living',
-    image: 'https://images.unsplash.com/photo-1565814636199-ae8133055c1c?w=400&q=70',
+    image: 'https://source.unsplash.com/featured/?pendant-light,decorative-lighting',
   },
   {
     label: 'Wall Sconces',
     href: '/shop?collection=sconces',
     desc: 'Hallways & bedrooms',
-    image: 'https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?w=400&q=70',
+    image: 'https://source.unsplash.com/featured/?wall-sconce,decorative-lighting',
   },
   {
     label: 'Table Lamps',
     href: '/shop?collection=table-lamps',
     desc: 'Intimate spaces',
-    image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&q=70',
+    image: 'https://source.unsplash.com/featured/?table-lamp,decorative-lighting',
   },
 ];
 
