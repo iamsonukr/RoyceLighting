@@ -9,9 +9,9 @@ A complete luxury brand redesign of the eCommerce lighting website. Inspired by 
 ### Color Palette
 | Token | Value | Usage |
 |---|---|---|
-| `--gold` | `#C9A84C` | Primary accent, CTAs, highlights |
-| `--gold-light` | `#E8C97A` | Hero text, hover states |
-| `--gold-deep` | `#9A7535` | Gradient endpoints |
+| `--gold` | `#006039` | Primary accent, CTAs, highlights |
+| `--gold-light` | `#006039` | Hero text, hover states |
+| `--gold-deep` | `#004b2d` | Gradient endpoints |
 | `--obsidian` | `#080604` | Deepest backgrounds |
 | `--charcoal` | `#0F0C08` | Page backgrounds |
 | `--charcoal-2` | `#16120D` | Card backgrounds, sidebars |

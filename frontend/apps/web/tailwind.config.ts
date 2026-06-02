@@ -19,9 +19,9 @@ const config: Config = {
         ivory: '#FAF7F0',
         cream: '#F3EDE1',
         linen: '#EDE6D6',
-        gold: '#C9A84C',
-        'gold-light': '#E8C97A',
-        'gold-deep': '#9A7535',
+        gold: '#006039',
+        'gold-light': '#006039',
+        'gold-deep': '#004b2d',
         burgundy: '#4A1622',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -72,8 +72,8 @@ const config: Config = {
       boxShadow: {
         luxury: '0 32px 80px rgba(8,6,4,0.6), 0 8px 24px rgba(8,6,4,0.3)',
         card: '0 16px 48px rgba(8,6,4,0.4)',
-        'gold-sm': '0 0 30px rgba(201,168,76,0.2)',
-        'gold-lg': '0 0 60px rgba(201,168,76,0.25), 0 0 120px rgba(201,168,76,0.1)',
+        'gold-sm': '0 0 30px rgba(0,96,57,0.2)',
+        'gold-lg': '0 0 60px rgba(0,96,57,0.25), 0 0 120px rgba(0,96,57,0.1)',
       },
       animation: {
         marquee: 'marquee 30s linear infinite',
@@ -83,9 +83,9 @@ const config: Config = {
         shimmer: 'shimmer 1.5s infinite',
       },
       backgroundImage: {
-        'gold-gradient': 'linear-gradient(135deg, #C9A84C, #9A7535)',
+        'gold-gradient': 'linear-gradient(135deg, #006039, #004b2d)',
         'dark-gradient': 'linear-gradient(to bottom, #080604, #16120D)',
-        'radial-gold': 'radial-gradient(ellipse at center, rgba(201,168,76,0.15) 0%, transparent 70%)',
+        'radial-gold': 'radial-gradient(ellipse at center, rgba(0,96,57,0.15) 0%, transparent 70%)',
       },
     },
     screens: {

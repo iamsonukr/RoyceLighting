@@ -371,8 +371,8 @@ export default function CheckoutPage() {
                     onClick={() => setPaymentMethod(opt.value as 'cod' | 'online')}
                     style={{
                       display: 'flex', alignItems: 'flex-start', gap: '1.25rem', padding: '1.5rem',
-                      background: paymentMethod === opt.value ? 'rgba(201,168,76,0.06)' : 'var(--charcoal-2)',
-                      border: `1px solid ${paymentMethod === opt.value ? 'rgba(201,168,76,0.35)' : 'rgba(250,247,240,0.08)'}`,
+                      background: paymentMethod === opt.value ? 'rgba(0,96,57,0.06)' : 'var(--charcoal-2)',
+                      border: `1px solid ${paymentMethod === opt.value ? 'rgba(0,96,57,0.35)' : 'rgba(250,247,240,0.08)'}`,
                       cursor: 'pointer', textAlign: 'left', transition: 'all 0.25s ease',
                     }}
                   >

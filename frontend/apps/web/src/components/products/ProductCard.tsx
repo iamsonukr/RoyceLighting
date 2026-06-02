@@ -170,7 +170,7 @@ export function ProductCard({ product }: ProductCardProps) {
               <span className="badge-gold">−{discount}%</span>
             )}
             {product.isNew && (
-              <span className="badge-dark" style={{ borderColor: 'rgba(201,168,76,0.3)', color: 'var(--gold)' }}>New</span>
+              <span className="badge-dark" style={{ borderColor: 'rgba(0,96,57,0.3)', color: 'var(--gold)' }}>New</span>
             )}
           </div>
 

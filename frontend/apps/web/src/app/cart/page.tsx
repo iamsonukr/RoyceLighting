@@ -30,7 +30,7 @@ export default function CartPage() {
   if (!token) {
     return (
       <EmptyState
-        icon={<ShoppingBag size={40} strokeWidth={1} style={{ color: 'rgba(201,168,76,0.4)' }} />}
+        icon={<ShoppingBag size={40} strokeWidth={1} style={{ color: 'rgba(0,96,57,0.4)' }} />}
         title="Sign in to view your cart"
         desc="Your saved pieces will appear here."
         action={
@@ -45,7 +45,7 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <EmptyState
-        icon={<ShoppingBag size={40} strokeWidth={1} style={{ color: 'rgba(201,168,76,0.4)' }} />}
+        icon={<ShoppingBag size={40} strokeWidth={1} style={{ color: 'rgba(0,96,57,0.4)' }} />}
         title="Your cart is empty"
         desc="Discover our handcrafted lighting collections."
         action={
@@ -93,8 +93,8 @@ export default function CartPage() {
           <div
             style={{
               padding: '1.25rem 1.5rem',
-              background: freeInstall ? 'rgba(201,168,76,0.08)' : 'var(--charcoal-2)',
-              border: `1px solid ${freeInstall ? 'rgba(201,168,76,0.25)' : 'rgba(250,247,240,0.07)'}`,
+              background: freeInstall ? 'rgba(0,96,57,0.08)' : 'var(--charcoal-2)',
+              border: `1px solid ${freeInstall ? 'rgba(0,96,57,0.25)' : 'rgba(250,247,240,0.07)'}`,
               marginBottom: '2rem',
             }}
           >
@@ -385,7 +385,7 @@ function EmptyState({ icon, title, desc, action }: { icon: React.ReactNode; titl
         style={{
           width: 80,
           height: 80,
-          border: '1px solid rgba(201,168,76,0.2)',
+          border: '1px solid rgba(0,96,57,0.2)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

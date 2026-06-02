@@ -152,7 +152,7 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
                 gap: '0.5rem',
                 padding: '0.6rem 1rem',
                 background: filtersOpen ? 'var(--gold-muted)' : 'rgba(250,247,240,0.04)',
-                border: `1px solid ${filtersOpen ? 'rgba(201,168,76,0.3)' : 'rgba(250,247,240,0.1)'}`,
+                border: `1px solid ${filtersOpen ? 'rgba(0,96,57,0.3)' : 'rgba(250,247,240,0.1)'}`,
                 color: filtersOpen ? 'var(--gold)' : 'rgba(250,247,240,0.5)',
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: '0.62rem',
@@ -345,12 +345,12 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
                   style={{
                     width: 80,
                     height: 80,
-                    border: '1px solid rgba(201,168,76,0.2)',
+                    border: '1px solid rgba(0,96,57,0.2)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: '1.75rem',
-                    color: 'rgba(201,168,76,0.4)',
+                    color: 'rgba(0,96,57,0.4)',
                   }}
                 >
                   ✦

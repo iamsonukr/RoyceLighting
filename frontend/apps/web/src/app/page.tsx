@@ -139,7 +139,7 @@ export default async function HomePage() {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'radial-gradient(ellipse at center top, rgba(201,168,76,0.08) 0%, transparent 60%)',
+            background: 'radial-gradient(ellipse at center top, rgba(0,96,57,0.08) 0%, transparent 60%)',
           }}
         />
         <div
@@ -170,7 +170,7 @@ export default async function HomePage() {
             transform: 'translateX(-50%)',
             width: '600px',
             height: '400px',
-            background: 'radial-gradient(ellipse, rgba(201,168,76,0.06) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse, rgba(0,96,57,0.06) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}
         />
@@ -193,8 +193,8 @@ export default async function HomePage() {
               gap: '0.75rem',
               marginBottom: '2.5rem',
               padding: '0.4rem 1.25rem',
-              border: '1px solid rgba(201,168,76,0.25)',
-              background: 'rgba(201,168,76,0.06)',
+              border: '1px solid rgba(0,96,57,0.25)',
+              background: 'rgba(0,96,57,0.06)',
               backdropFilter: 'blur(8px)',
             }}
           >
@@ -299,7 +299,7 @@ export default async function HomePage() {
             flexDirection: 'column',
             alignItems: 'center',
             gap: '0.5rem',
-            color: 'rgba(201,168,76,0.5)',
+            color: 'rgba(0,96,57,0.5)',
             animation: 'fadeIn 1.5s ease 1.2s both',
           }}
         >
@@ -464,7 +464,7 @@ export default async function HomePage() {
                     left: '1.5rem',
                     fontFamily: "'Playfair Display', serif",
                     fontSize: '0.65rem',
-                    color: 'rgba(201,168,76,0.5)',
+                    color: 'rgba(0,96,57,0.5)',
                     fontWeight: 300,
                     letterSpacing: '0.1em',
                   }}
@@ -531,7 +531,7 @@ export default async function HomePage() {
                   style={{
                     position: 'absolute',
                     inset: 0,
-                    border: '1px solid rgba(201,168,76,0)',
+                    border: '1px solid rgba(0,96,57,0)',
                     transition: 'border-color 0.4s ease',
                     pointerEvents: 'none',
                   }}
@@ -573,7 +573,7 @@ export default async function HomePage() {
                   right: '-16px',
                   width: '100%',
                   height: '100%',
-                  border: '1px solid rgba(201,168,76,0.25)',
+                  border: '1px solid rgba(0,96,57,0.25)',
                   pointerEvents: 'none',
                 }}
               />
@@ -777,7 +777,7 @@ export default async function HomePage() {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'radial-gradient(ellipse at center, rgba(201,168,76,0.08) 0%, rgba(8,6,4,0.5) 100%)',
+            background: 'radial-gradient(ellipse at center, rgba(0,96,57,0.08) 0%, rgba(8,6,4,0.5) 100%)',
           }}
         />
         <div
@@ -922,7 +922,7 @@ export default async function HomePage() {
             transform: 'translate(-50%,-50%)',
             width: '600px',
             height: '400px',
-            background: 'radial-gradient(ellipse, rgba(201,168,76,0.07) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse, rgba(0,96,57,0.07) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}
         />

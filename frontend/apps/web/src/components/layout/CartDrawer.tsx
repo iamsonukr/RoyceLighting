@@ -106,7 +106,7 @@ export function CartDrawer() {
 
         {/* Free shipping bar */}
         {subtotal > 0 && (
-          <div style={{ padding: '0.875rem 1.75rem', borderBottom: '1px solid rgba(250,247,240,0.06)', background: 'rgba(201,168,76,0.04)' }}>
+          <div style={{ padding: '0.875rem 1.75rem', borderBottom: '1px solid rgba(250,247,240,0.06)', background: 'rgba(0,96,57,0.04)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
               <span style={{ fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(250,247,240,0.4)' }}>
                 {freeShippingLeft > 0
@@ -146,14 +146,14 @@ export function CartDrawer() {
                 style={{
                   width: 72,
                   height: 72,
-                  border: '1px solid rgba(201,168,76,0.2)',
+                  border: '1px solid rgba(0,96,57,0.2)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginBottom: '0.5rem',
                 }}
               >
-                <ShoppingBag size={24} style={{ color: 'rgba(201,168,76,0.5)' }} strokeWidth={1} />
+                <ShoppingBag size={24} style={{ color: 'rgba(0,96,57,0.5)' }} strokeWidth={1} />
               </div>
               <p
                 style={{

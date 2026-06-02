@@ -449,7 +449,7 @@ export function Navbar() {
             <div
               style={{
                 background: 'rgba(15,12,8,0.97)',
-                border: '1px solid rgba(201,168,76,0.2)',
+                border: '1px solid rgba(0,96,57,0.2)',
                 backdropFilter: 'blur(24px)',
                 padding: '1.5rem',
                 boxShadow: '0 40px 80px rgba(8,6,4,0.7)',
@@ -513,7 +513,7 @@ export function Navbar() {
                       border: '1px solid rgba(250,247,240,0.08)',
                       transition: 'all 0.2s ease',
                     }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--gold)'; e.currentTarget.style.borderColor = 'rgba(201,168,76,0.3)'; }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--gold)'; e.currentTarget.style.borderColor = 'rgba(0,96,57,0.3)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(250,247,240,0.4)'; e.currentTarget.style.borderColor = 'rgba(250,247,240,0.08)'; }}
                   >
                     {cat}

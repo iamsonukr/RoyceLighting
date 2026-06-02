@@ -26,7 +26,7 @@ export function Footer() {
           borderBottom: '1px solid rgba(250,247,240,0.06)',
           padding: '4rem 1.5rem',
           textAlign: 'center',
-          background: 'radial-gradient(ellipse at center, rgba(201,168,76,0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse at center, rgba(0,96,57,0.06) 0%, transparent 70%)',
         }}
       >
         <p className="overline-text" style={{ marginBottom: '1rem' }}>Commission a Piece</p>

@@ -7,13 +7,13 @@
 @layer base {
   :root {
     /* Core Palette */
-    /* --gold: #C9A84C;
-    --gold-light: #E8C97A; */
-    --gold: #F5F5DC;
-    --gold-light: #F5F5DC;
-    --gold-pale: #F5EDD6;
-    --gold-deep: #9A7535;
-    --gold-muted: rgba(201,168,76,0.15);
+    /* --gold: #006039;
+    --gold-light: #006039; */
+    --gold: #006039;
+    --gold-light: #006039;
+    --gold-pale: #d8efe5;
+    --gold-deep: #004b2d;
+    --gold-muted: rgba(0,96,57,0.15);
 
     --obsidian: #080604;
     --charcoal: #0F0C08;
@@ -32,11 +32,11 @@
     /* Glass surfaces */
     --glass-dark: rgba(15,12,8,0.75);
     --glass-light: rgba(250,247,240,0.08);
-    --glass-gold: rgba(201,168,76,0.12);
+    --glass-gold: rgba(0,96,57,0.12);
 
     /* Glow */
-    --glow-gold: 0 0 60px rgba(201,168,76,0.25), 0 0 120px rgba(201,168,76,0.1);
-    --glow-gold-sm: 0 0 30px rgba(201,168,76,0.2);
+    --glow-gold: 0 0 60px rgba(0,96,57,0.25), 0 0 120px rgba(0,96,57,0.1);
+    --glow-gold-sm: 0 0 30px rgba(0,96,57,0.2);
     --shadow-luxury: 0 32px 80px rgba(8,6,4,0.6), 0 8px 24px rgba(8,6,4,0.3);
     --shadow-card: 0 16px 48px rgba(8,6,4,0.4);
     --shadow-sm: 0 4px 16px rgba(8,6,4,0.3);
@@ -48,19 +48,19 @@
     --card-foreground: 40 30% 96%;
     --popover: 30 15% 6%;
     --popover-foreground: 40 30% 96%;
-    --primary: 42 58% 55%;
+    --primary: 156 100% 19%;
     --primary-foreground: 30 15% 4%;
     --secondary: 30 10% 12%;
     --secondary-foreground: 40 20% 85%;
     --muted: 30 10% 12%;
     --muted-foreground: 40 10% 55%;
-    --accent: 42 58% 55%;
+    --accent: 156 100% 19%;
     --accent-foreground: 30 15% 4%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 40 30% 96%;
     --border: 38 15% 18%;
     --input: 38 15% 18%;
-    --ring: 42 58% 55%;
+    --ring: 156 100% 19%;
     --radius: 0.125rem;
   }
 }
@@ -87,7 +87,7 @@
   }
 
   ::selection {
-    background: rgba(201,168,76,0.3);
+    background: rgba(0,96,57,0.3);
     color: var(--ivory);
   }
 
@@ -98,11 +98,11 @@
     background: var(--charcoal-3);
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(201,168,76,0.3);
+    background: rgba(0,96,57,0.3);
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(201,168,76,0.5);
+    background: rgba(0,96,57,0.5);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -141,7 +141,7 @@
   .btn-outline {
     @apply inline-flex items-center gap-2 font-medium uppercase tracking-widest text-xs transition-all duration-300;
     padding: 1rem 2.5rem;
-    border: 1px solid rgba(201,168,76,0.4);
+    border: 1px solid rgba(0,96,57,0.4);
     color: var(--gold-light);
     letter-spacing: 0.18em;
     font-family: 'DM Sans', sans-serif;
@@ -246,8 +246,8 @@
   }
 
   .card-glass-gold {
-    background: rgba(201,168,76,0.05);
-    border: 1px solid rgba(201,168,76,0.15);
+    background: rgba(0,96,57,0.05);
+    border: 1px solid rgba(0,96,57,0.15);
     backdrop-filter: blur(12px);
   }
 
@@ -265,8 +265,8 @@
     overflow: hidden;
   }
   .product-card:hover {
-    border-color: rgba(201,168,76,0.25);
-    box-shadow: 0 24px 60px rgba(8,6,4,0.5), 0 0 0 0.5px rgba(201,168,76,0.1);
+    border-color: rgba(0,96,57,0.25);
+    box-shadow: 0 24px 60px rgba(8,6,4,0.5), 0 0 0 0.5px rgba(0,96,57,0.1);
     transform: translateY(-4px);
   }
 
@@ -287,7 +287,7 @@
   }
   .input-luxury:focus {
     border-color: var(--gold);
-    background: rgba(201,168,76,0.04);
+    background: rgba(0,96,57,0.04);
   }
   .input-luxury::placeholder {
     color: rgba(250,247,240,0.25);
@@ -330,7 +330,7 @@
     transform: translate(-50%, -50%);
     width: 60%;
     height: 60%;
-    background: radial-gradient(ellipse, rgba(201,168,76,0.15) 0%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(0,96,57,0.15) 0%, transparent 70%);
     pointer-events: none;
     z-index: 0;
   }
@@ -518,7 +518,7 @@
     inset: 0;
     background: radial-gradient(
       circle at var(--mx, 50%) var(--my, 50%),
-      rgba(201,168,76,0.08) 0%,
+      rgba(0,96,57,0.08) 0%,
       transparent 60%
     );
     pointer-events: none;
@@ -629,7 +629,7 @@
   }
   .color-swatch.selected {
     border-color: var(--gold);
-    box-shadow: 0 0 0 2px rgba(201,168,76,0.3);
+    box-shadow: 0 0 0 2px rgba(0,96,57,0.3);
   }
   .color-swatch:hover { transform: scale(1.15); }
 

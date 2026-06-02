@@ -35,8 +35,8 @@ export default function MyOrdersPage() {
   if (!token) {
     return (
       <EmptyWrapper>
-        <div style={{ width: 80, height: 80, border: '1px solid rgba(201,168,76,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Package size={32} strokeWidth={1} style={{ color: 'rgba(201,168,76,0.4)' }} />
+        <div style={{ width: 80, height: 80, border: '1px solid rgba(0,96,57,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Package size={32} strokeWidth={1} style={{ color: 'rgba(0,96,57,0.4)' }} />
         </div>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.8rem', fontWeight: 300, fontStyle: 'italic', color: 'rgba(250,247,240,0.6)' }}>
           Sign in to view your orders
@@ -64,8 +64,8 @@ export default function MyOrdersPage() {
   if (orders.length === 0) {
     return (
       <EmptyWrapper>
-        <div style={{ width: 80, height: 80, border: '1px solid rgba(201,168,76,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Package size={32} strokeWidth={1} style={{ color: 'rgba(201,168,76,0.4)' }} />
+        <div style={{ width: 80, height: 80, border: '1px solid rgba(0,96,57,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Package size={32} strokeWidth={1} style={{ color: 'rgba(0,96,57,0.4)' }} />
         </div>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.8rem', fontWeight: 300, fontStyle: 'italic', color: 'rgba(250,247,240,0.6)' }}>
           No orders yet
@@ -104,7 +104,7 @@ export default function MyOrdersPage() {
                   marginBottom: '1px',
                   animation: `fadeUp 0.5s ease ${oi * 0.08}s both`,
                   transition: 'border-color 0.3s ease',
-                  borderColor: isExpanded ? 'rgba(201,168,76,0.2)' : 'rgba(250,247,240,0.07)',
+                  borderColor: isExpanded ? 'rgba(0,96,57,0.2)' : 'rgba(250,247,240,0.07)',
                 }}
               >
                 {/* Order header */}
@@ -119,8 +119,8 @@ export default function MyOrdersPage() {
                   <div
                     style={{
                       width: 44, height: 44, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      background: order.status === 'delivered' ? 'rgba(34,197,94,0.1)' : order.status === 'cancelled' ? 'rgba(239,68,68,0.1)' : 'rgba(201,168,76,0.08)',
-                      border: `1px solid ${order.status === 'delivered' ? 'rgba(34,197,94,0.25)' : order.status === 'cancelled' ? 'rgba(239,68,68,0.25)' : 'rgba(201,168,76,0.2)'}`,
+                      background: order.status === 'delivered' ? 'rgba(34,197,94,0.1)' : order.status === 'cancelled' ? 'rgba(239,68,68,0.1)' : 'rgba(0,96,57,0.08)',
+                      border: `1px solid ${order.status === 'delivered' ? 'rgba(34,197,94,0.25)' : order.status === 'cancelled' ? 'rgba(239,68,68,0.25)' : 'rgba(0,96,57,0.2)'}`,
                     }}
                   >
                     <StatusIcon size={18} strokeWidth={1.5} style={{ color: order.status === 'delivered' ? '#86efac' : order.status === 'cancelled' ? '#fca5a5' : 'var(--gold)' }} />

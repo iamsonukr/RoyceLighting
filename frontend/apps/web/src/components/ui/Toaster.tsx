@@ -36,8 +36,8 @@ export function Toaster() {
         const isError = toast.type === 'error';
         const Icon = isSuccess ? Check : isError ? AlertCircle : Info;
         const iconColor = isSuccess ? '#86efac' : isError ? '#fca5a5' : 'var(--gold)';
-        const borderColor = isSuccess ? 'rgba(34,197,94,0.25)' : isError ? 'rgba(239,68,68,0.25)' : 'rgba(201,168,76,0.25)';
-        const bgColor = isSuccess ? 'rgba(34,197,94,0.06)' : isError ? 'rgba(239,68,68,0.06)' : 'rgba(201,168,76,0.06)';
+        const borderColor = isSuccess ? 'rgba(34,197,94,0.25)' : isError ? 'rgba(239,68,68,0.25)' : 'rgba(0,96,57,0.25)';
+        const bgColor = isSuccess ? 'rgba(34,197,94,0.06)' : isError ? 'rgba(239,68,68,0.06)' : 'rgba(0,96,57,0.06)';
 
         return (
           <div
