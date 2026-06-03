@@ -77,7 +77,7 @@ export function Footer() {
           <p
             style={{
               fontSize: '0.78rem',
-              color: 'rgba(250,247,240,0.4)',
+              color: 'rgba(250,247,240,0.9)',
               lineHeight: 1.9,
               fontWeight: 300,
               letterSpacing: '0.04em',
@@ -129,7 +129,7 @@ export function Footer() {
                   href={item.href}
                   style={{
                     fontSize: '0.72rem',
-                    color: 'rgba(250,247,240,0.4)',
+                    color: 'rgba(250,247,240,0.9)',
                     textDecoration: 'none',
                     letterSpacing: '0.06em',
                     fontWeight: 300,
@@ -139,7 +139,7 @@ export function Footer() {
                     gap: '0.4rem',
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(250,247,240,0.4)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(250,247,240,0.9)')}
                 >
                   {item.label}
                 </Link>
@@ -170,14 +170,14 @@ export function Footer() {
                   href={item.href}
                   style={{
                     fontSize: '0.72rem',
-                    color: 'rgba(250,247,240,0.4)',
+                    color: 'rgba(250, 247, 240, 0.91)',
                     textDecoration: 'none',
                     letterSpacing: '0.06em',
                     fontWeight: 300,
                     transition: 'color 0.2s ease',
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold)')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(250,247,240,0.4)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(250,247,240,0.9)')}
                 >
                   {item.label}
                 </Link>
@@ -204,19 +204,19 @@ export function Footer() {
           <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
             <li style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
               <Mail size={13} style={{ color: 'var(--gold)', marginTop: '0.15rem', flexShrink: 0 }} strokeWidth={1.5} />
-              <span style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.4)', letterSpacing: '0.04em', fontWeight: 300 }}>
+              <span style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.9)', letterSpacing: '0.04em', fontWeight: 300 }}>
                 atelier@roycelighting.com
               </span>
             </li>
             <li style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
               <Phone size={13} style={{ color: 'var(--gold)', marginTop: '0.15rem', flexShrink: 0 }} strokeWidth={1.5} />
-              <span style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.4)', letterSpacing: '0.04em', fontWeight: 300 }}>
+              <span style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.9)', letterSpacing: '0.04em', fontWeight: 300 }}>
                 +91 98765 43210
               </span>
             </li>
             <li style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
               <MapPin size={13} style={{ color: 'var(--gold)', marginTop: '0.15rem', flexShrink: 0 }} strokeWidth={1.5} />
-              <span style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.4)', letterSpacing: '0.04em', fontWeight: 300, lineHeight: 1.7 }}>
+              <span style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.9)', letterSpacing: '0.04em', fontWeight: 300, lineHeight: 1.7 }}>
                 Mehrauli Road, Qutub Area<br />New Delhi, 110030
               </span>
             </li>
