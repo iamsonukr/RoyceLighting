@@ -9,10 +9,13 @@ interface AdminAuthState {
 const adminAuthSlice = createSlice({
   name: 'adminAuth',
   initialState: {
-    token: typeof window !== 'undefined' ? localStorage.getItem('nc_admin_token') : null,
+    token: null,
     admin: null,
   } as AdminAuthState,
   reducers: {
+    setAdminToken(state, action: PayloadAction<string>) {
+      state.token = action.payload;
+    },
     setAdminAuth(state, action: PayloadAction<{ token: string; admin: any }>) {
       state.token = action.payload.token;
       state.admin = action.payload.admin;
@@ -30,7 +33,7 @@ const adminAuthSlice = createSlice({
   },
 });
 
-export const { setAdminAuth, adminLogout } = adminAuthSlice.actions;
+export const { setAdminAuth, setAdminToken, adminLogout } = adminAuthSlice.actions;
 
 export const adminStore = configureStore({
   reducer: { adminAuth: adminAuthSlice.reducer },

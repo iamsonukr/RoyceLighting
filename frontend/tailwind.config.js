@@ -1,6 +1,5 @@
-import type { Config } from 'tailwindcss';
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   darkMode: ['class'],
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -26,6 +25,7 @@ const config: Config = {
         forest: '#003D2B',
         coffee: '#1D120B',
         burgundy: '#4A1622',
+        // shadcn / web CSS variable tokens
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -39,10 +39,6 @@ const config: Config = {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
         },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
         muted: {
           DEFAULT: 'hsl(var(--muted))',
           foreground: 'hsl(var(--muted-foreground))',
@@ -50,6 +46,10 @@ const config: Config = {
         accent: {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',
@@ -59,12 +59,25 @@ const config: Config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        // Admin/Vendor shared brand palette (amber-based)
+        brand: {
+          50:  '#fdf8f0',
+          100: '#faefd9',
+          200: '#f3d9a8',
+          300: '#eabc6d',
+          400: '#e09a38',
+          500: '#d4831c',
+          600: '#b96514',
+          700: '#974b13',
+          800: '#7c3c16',
+          900: '#663315',
+        },
       },
       fontFamily: {
-        display: ['Playfair Display', 'serif'],
-        serif: ['Playfair Display', 'serif'],
-        cormorant: ['Cormorant', 'serif'],
         sans: ['DM Sans', 'sans-serif'],
+        serif: ['Playfair Display', 'serif'],
+        display: ['Playfair Display', 'serif'],
+        cormorant: ['Cormorant', 'serif'],
         body: ['DM Sans', 'sans-serif'],
       },
       borderRadius: {
@@ -102,7 +115,5 @@ const config: Config = {
       'max-lg': { max: '1023px' },
     },
   },
-  plugins: [],
+  plugins: [require('tailwindcss-animate')],
 };
-
-export default config;

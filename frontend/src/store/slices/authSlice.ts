@@ -10,7 +10,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: typeof window !== 'undefined' ? localStorage.getItem('nc_token') : null,
+  token: null,
   loading: false,
   error: null,
 };

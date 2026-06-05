@@ -9,10 +9,13 @@ interface VendorAuthState {
 const vendorAuthSlice = createSlice({
   name: 'vendorAuth',
   initialState: {
-    token: typeof window !== 'undefined' ? localStorage.getItem('nc_vendor_token') : null,
+    token: null,
     vendor: null,
   } as VendorAuthState,
   reducers: {
+    setVendorToken(state, action: PayloadAction<string>) {
+      state.token = action.payload;
+    },
     setVendorAuth(state, action: PayloadAction<{ token: string; vendor: any }>) {
       state.token = action.payload.token;
       state.vendor = action.payload.vendor;
@@ -26,7 +29,7 @@ const vendorAuthSlice = createSlice({
   },
 });
 
-export const { setVendorAuth, vendorLogout } = vendorAuthSlice.actions;
+export const { setVendorAuth, setVendorToken, vendorLogout } = vendorAuthSlice.actions;
 export const vendorStore = configureStore({ reducer: { vendorAuth: vendorAuthSlice.reducer } });
 export type VendorRootState = ReturnType<typeof vendorStore.getState>;
 export type VendorDispatch = typeof vendorStore.dispatch;

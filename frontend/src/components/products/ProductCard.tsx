@@ -2,7 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingBag, Heart, Eye, ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { ShoppingBag, Heart, Eye } from 'lucide-react';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { addToCartThunk } from '../../store/slices/cartSlice';
@@ -29,12 +30,12 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((s) => s.auth);
   const [hovered, setHovered] = useState(false);
   const [adding, setAdding] = useState(false);
   const [wishlisted, setWishlisted] = useState(false);
-  const [imgIdx, setImgIdx] = useState(0);
 
   const discount =
     product.retailPrice > product.sellingPrice
@@ -82,14 +83,38 @@ export function ProductCard({ product }: ProductCardProps) {
     setWishlisted(!wishlisted);
   };
 
+  const productHref = `/product/${product._id}`;
+
+  const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target instanceof HTMLElement && e.target.closest('a,button,input,select,textarea')) {
+      return;
+    }
+
+    router.push(productHref);
+  };
+
+  const handleCardKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      router.push(productHref);
+    }
+  };
+
   return (
-    <Link href={`/product/${product._id}`} style={{ textDecoration: 'none', display: 'block' }}>
-      <div
-        className="product-card"
-        onMouseEnter={() => { setHovered(true); if (secondaryImg) setImgIdx(1); }}
-        onMouseLeave={() => { setHovered(false); setImgIdx(0); }}
-        style={{ cursor: 'pointer' }}
-      >
+    <div
+      className="product-card"
+      role="link"
+      tabIndex={0}
+      onClick={handleCardClick}
+      onKeyDown={handleCardKeyDown}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{ cursor: 'pointer' }}
+    >
         {/* Image container */}
         <div
           style={{
@@ -246,7 +271,7 @@ export function ProductCard({ product }: ProductCardProps) {
               {adding ? 'Adding...' : product.totalQuantity === 0 ? 'Sold Out' : 'Add to Cart'}
             </button>
             <Link
-              href={`/product/${product._id}`}
+              href={productHref}
               style={{
                 width: 48,
                 display: 'flex',
@@ -346,6 +371,5 @@ export function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
       </div>
-    </Link>
   );
 }

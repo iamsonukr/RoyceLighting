@@ -112,7 +112,18 @@ export default function AdminCategoriesPage() {
         </table>
         {!isLoading && !categories?.length && <p className="text-center text-gray-400 py-16">No categories yet</p>}
         {!isLoading && total > (page * limit - limit) && (
-          <Pagination page={page} pages={!Array.isArray(data) ? data.pages : 1} total={total} onPageChange={(p) => setPage(p)} />
+          <Pagination
+            page={page}
+            pages={!Array.isArray(data) ? data.pages : 1}
+            total={total}
+            pageSize={limit}
+            itemLabel="categories"
+            onPageChange={(p) => setPage(p)}
+            onPageSizeChange={(nextLimit) => {
+              setLimit(nextLimit);
+              setPage(1);
+            }}
+          />
         )}
       </div>
 
