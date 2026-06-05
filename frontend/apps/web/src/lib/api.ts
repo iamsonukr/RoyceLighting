@@ -26,14 +26,21 @@ api.interceptors.response.use(
 );
 
 export async function placeOrderAPI(token: string, orderData: any) {
-  const res = await api.post('/orders', orderData, {
+  const res = await api.post('/orders/place', orderData, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data.data || res.data;
+}
+
+export async function createRazorpayOrderAPI(token: string, amount: number) {
+  const res = await api.post('/orders/create-razorpay-order', { amount }, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data.data || res.data;
 }
 
 export async function fetchOrdersAPI(token: string) {
-  const res = await api.get('/orders', {
+  const res = await api.get('/orders/my-orders', {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data.data || res.data;

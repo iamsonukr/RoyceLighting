@@ -4,14 +4,14 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, ArrowLeft } from 'lucide-react';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
   fetchCartThunk,
   removeFromCartThunk,
-  addToCartThunk,
+  updateCartItemThunk,
   selectCartTotal,
-} from '../../store/slices/cartSlice';
-import { openAuthModal } from '../../store/slices/uiSlice';
+} from '@/store/slices/cartSlice';
+import { addToast, openAuthModal } from '@/store/slices/uiSlice';
 
 const FREE_THRESHOLD = 150000;
 
@@ -203,7 +203,9 @@ export default function CartPage() {
                       <button
                         className="qty-btn"
                         style={{ width: 32, height: 32 }}
-                        onClick={() => token && dispatch(addToCartThunk({ token, productId: item.productId, quantity: -1, color: item.color }))}
+                        onClick={() => token && dispatch(updateCartItemThunk({ token, productId: item.productId, quantity: item.quantity - 1, color: item.color, size: item.size }))
+                          .unwrap()
+                          .catch((message) => dispatch(addToast({ message: String(message), type: 'error' })))}
                       >
                         −
                       </button>
@@ -227,7 +229,9 @@ export default function CartPage() {
                       <button
                         className="qty-btn"
                         style={{ width: 32, height: 32 }}
-                        onClick={() => token && dispatch(addToCartThunk({ token, productId: item.productId, quantity: 1, color: item.color }))}
+                        onClick={() => token && dispatch(updateCartItemThunk({ token, productId: item.productId, quantity: item.quantity + 1, color: item.color, size: item.size }))
+                          .unwrap()
+                          .catch((message) => dispatch(addToast({ message: String(message), type: 'error' })))}
                       >
                         +
                       </button>

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Cart, CartDocument } from './schemas/cart.schema';
@@ -26,8 +26,16 @@ export class CartService {
     color?: string,
     size?: string,
   ) {
+    if (!Types.ObjectId.isValid(productId)) {
+      throw new BadRequestException('Invalid product');
+    }
+    if (!Number.isInteger(quantity) || quantity === 0) {
+      throw new BadRequestException('Quantity must be a non-zero whole number');
+    }
+
     const product = await this.productModel.findById(productId);
     if (!product) throw new NotFoundException('Product not found');
+    if (!product.isActive) throw new BadRequestException('Product is not available');
 
     let cart = await this.cartModel.findOne({ userId: new Types.ObjectId(userId) });
     if (!cart) {
@@ -41,8 +49,22 @@ export class CartService {
     const existingIdx = cart.items.findIndex(key);
 
     if (existingIdx > -1) {
-      cart.items[existingIdx].quantity += quantity;
+      const nextQuantity = cart.items[existingIdx].quantity + quantity;
+      if (nextQuantity <= 0) {
+        cart.items.splice(existingIdx, 1);
+      } else {
+        if (nextQuantity > product.totalQuantity) {
+          throw new BadRequestException(`Only ${product.totalQuantity} piece(s) available`);
+        }
+        cart.items[existingIdx].quantity = nextQuantity;
+      }
     } else {
+      if (quantity < 1) {
+        throw new BadRequestException('Item is not in cart');
+      }
+      if (quantity > product.totalQuantity) {
+        throw new BadRequestException(`Only ${product.totalQuantity} piece(s) available`);
+      }
       (cart.items as any[]).push({
         productId,
         name: product.name,
@@ -65,6 +87,13 @@ export class CartService {
     color?: string,
     size?: string,
   ) {
+    if (!Types.ObjectId.isValid(productId)) {
+      throw new BadRequestException('Invalid product');
+    }
+    if (!Number.isInteger(quantity) || quantity < 0) {
+      throw new BadRequestException('Quantity must be zero or a positive whole number');
+    }
+
     const cart = await this.cartModel.findOne({ userId: new Types.ObjectId(userId) });
     if (!cart) throw new NotFoundException('Cart not found');
 
@@ -77,6 +106,12 @@ export class CartService {
     if (quantity <= 0) {
       cart.items.splice(idx, 1);
     } else {
+      const product = await this.productModel.findById(productId);
+      if (!product) throw new NotFoundException('Product not found');
+      if (!product.isActive) throw new BadRequestException('Product is not available');
+      if (quantity > product.totalQuantity) {
+        throw new BadRequestException(`Only ${product.totalQuantity} piece(s) available`);
+      }
       cart.items[idx].quantity = quantity;
     }
 

@@ -65,11 +65,14 @@ export function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation();
     if (!token) { dispatch(openAuthModal('login')); return; }
     setAdding(true);
-    const result = await dispatch(addToCartThunk({ token, productId: product._id, quantity: 1 }));
-    setAdding(false);
-    if (result.meta.requestStatus === 'fulfilled') {
+    try {
+      await dispatch(addToCartThunk({ token, productId: product._id, quantity: 1 })).unwrap();
       dispatch(addToast({ message: 'Added to cart', type: 'success' }));
       dispatch(openCartDrawer());
+    } catch (message) {
+      dispatch(addToast({ message: String(message), type: 'error' }));
+    } finally {
+      setAdding(false);
     }
   };
 

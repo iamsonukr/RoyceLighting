@@ -28,6 +28,7 @@ class OrderItem {
 
 @Schema({ _id: false })
 class OrderAddress {
+  @Prop() fullName?: string;
   @Prop({ required: true }) addressLineOne: string;
   @Prop() addressLineTwo?: string;
   @Prop({ required: true }) city: string;

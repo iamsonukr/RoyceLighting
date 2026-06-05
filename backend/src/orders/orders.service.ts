@@ -30,14 +30,25 @@ export class OrdersService {
 
   // ─── Create Razorpay Order ────────────────────────────────
   async createRazorpayOrder(amount: number) {
+    const normalizedAmount = Number(amount);
+    if (!Number.isFinite(normalizedAmount) || normalizedAmount <= 0) {
+      throw new BadRequestException('Invalid payment amount');
+    }
+
+    const keyId = this.config.get<string>('RAZORPAY_KEY_ID');
+    const keySecret = this.config.get<string>('RAZORPAY_KEY_SECRET');
+    if (!keyId || !keySecret) {
+      throw new BadRequestException('Online payment is not configured');
+    }
+
     const Razorpay = require('razorpay');
     const razorpay = new Razorpay({
-      key_id: this.config.get('RAZORPAY_KEY_ID'),
-      key_secret: this.config.get('RAZORPAY_KEY_SECRET'),
+      key_id: keyId,
+      key_secret: keySecret,
     });
 
     const order = await razorpay.orders.create({
-      amount: amount * 100, // paise
+      amount: Math.round(normalizedAmount * 100), // paise
       currency: 'INR',
       receipt: `receipt_${Date.now()}`,
     });
@@ -48,6 +59,7 @@ export class OrdersService {
   // ─── Verify Payment ──────────────────────────────────────
   verifyPayment(razorpayOrderId: string, razorpayPaymentId: string, signature: string): boolean {
     const secret = this.config.get<string>('RAZORPAY_KEY_SECRET');
+    if (!secret || !razorpayOrderId || !razorpayPaymentId || !signature) return false;
     const body = `${razorpayOrderId}|${razorpayPaymentId}`;
     const expected = crypto.createHmac('sha256', secret).update(body).digest('hex');
     return expected === signature;
@@ -55,35 +67,113 @@ export class OrdersService {
 
   // ─── Place Order ──────────────────────────────────────────
   async placeOrder(userId: string, dto: CreateOrderDto) {
-    const { razorpayOrderId, razorpayPaymentId, razorpaySignature, ...rest } = dto;
-
-    // Verify Razorpay signature
-    const valid = this.verifyPayment(razorpayOrderId, razorpayPaymentId, razorpaySignature);
-    if (!valid) throw new BadRequestException('Payment verification failed');
+    const { razorpayOrderId, razorpayPaymentId, razorpaySignature } = dto;
+    const paymentMethod =
+      dto.paymentMethod === 'online' || dto.paymentMethod === 'razorpay'
+        ? 'online'
+        : 'cod';
 
     // Fetch user
     const user = await this.userModel.findById(userId);
     if (!user) throw new NotFoundException('User not found');
 
-    // Decrease stock for each product
+    if (!dto.items?.length) {
+      throw new BadRequestException('Order must contain at least one item');
+    }
+
+    const normalizedItems = [];
+    let subtotal = 0;
+
     for (const item of dto.items) {
-      await this.productModel.findByIdAndUpdate(item.productId, {
-        $inc: { totalQuantity: -item.quantity, salesCount: item.quantity },
+      const productId = item.productId || item.product;
+      if (!productId || !Types.ObjectId.isValid(productId)) {
+        throw new BadRequestException('Invalid product in order');
+      }
+
+      const quantity = Number(item.quantity);
+      if (!Number.isInteger(quantity) || quantity < 1) {
+        throw new BadRequestException('Invalid item quantity');
+      }
+
+      const product = await this.productModel.findById(productId);
+      if (!product) throw new NotFoundException('Product not found');
+      if (!product.isActive) throw new BadRequestException(`${product.name} is not available`);
+      if (product.totalQuantity < quantity) {
+        throw new BadRequestException(`Only ${product.totalQuantity} piece(s) available for ${product.name}`);
+      }
+
+      const price = Number(product.sellingPrice);
+      const itemTotal = price * quantity;
+      subtotal += itemTotal;
+      normalizedItems.push({
+        productId: String(product._id),
+        name: product.name,
+        price,
+        quantity,
+        color: item.color || '',
+        size: item.size || '',
+        image: product.primaryImage || product.images?.[0] || product.image || item.image || '',
+        itemTotal,
       });
+    }
+
+    const deliveryFees = Number(dto.deliveryFees || 0);
+    if (!Number.isFinite(deliveryFees) || deliveryFees < 0) {
+      throw new BadRequestException('Invalid delivery fee');
+    }
+
+    const amount = subtotal + deliveryFees;
+    const clientAmount = Number(dto.amount ?? dto.totalAmount ?? 0);
+    if (!Number.isFinite(clientAmount) || Math.abs(clientAmount - amount) > 1) {
+      throw new BadRequestException('Order amount does not match current product prices');
+    }
+
+    if (paymentMethod === 'online') {
+      const valid = this.verifyPayment(razorpayOrderId, razorpayPaymentId, razorpaySignature);
+      if (!valid) throw new BadRequestException('Payment verification failed');
+    }
+
+    const decremented: { productId: string; quantity: number }[] = [];
+    try {
+      for (const item of normalizedItems) {
+        const updated = await this.productModel.findOneAndUpdate(
+          {
+            _id: new Types.ObjectId(item.productId),
+            totalQuantity: { $gte: item.quantity },
+          },
+          { $inc: { totalQuantity: -item.quantity, salesCount: item.quantity } },
+        );
+
+        if (!updated) {
+          throw new BadRequestException(`Insufficient stock for ${item.name}`);
+        }
+        decremented.push({ productId: item.productId, quantity: item.quantity });
+      }
+    } catch (err) {
+      await Promise.all(
+        decremented.map((item) =>
+          this.productModel.findByIdAndUpdate(item.productId, {
+            $inc: { totalQuantity: item.quantity, salesCount: -item.quantity },
+          }),
+        ),
+      );
+      throw err;
     }
 
     // Create order in DB
     const order = await this.orderModel.create({
       userId: new Types.ObjectId(userId),
-      items: dto.items,
-      amount: dto.amount,
-      deliveryFees: dto.deliveryFees,
+      items: normalizedItems,
+      amount,
+      deliveryFees,
       address: dto.address,
       paymentId: razorpayPaymentId,
       razorpayOrderId,
-      payment: true,
+      payment: paymentMethod === 'online',
+      paymentMethod,
       status: OrderStatus.PLACED,
       orderDate: new Date(),
+      deliveryMethod: dto.deliveryMethod,
     });
 
     // Clear cart
@@ -136,9 +226,9 @@ export class OrdersService {
         state: order.address.state,
         pinCode: order.address.pinCode,
         country: order.address.country || 'India',
-        codAmount: 0,
+        codAmount: order.paymentMethod === 'cod' ? order.amount : 0,
         orderValue: order.amount,
-        paymentMode: 'Prepaid',
+        paymentMode: order.paymentMethod === 'cod' ? 'COD' : 'Prepaid',
         weight: totalWeight,
         productName: productNames,
         quantity: totalQty,

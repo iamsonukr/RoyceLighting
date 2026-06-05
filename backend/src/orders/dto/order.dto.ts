@@ -1,12 +1,13 @@
-import { IsString, IsNumber, IsArray, IsBoolean, IsOptional, ValidateNested } from 'class-validator';
+import { IsIn, IsNumber, IsOptional, IsString, IsArray, Min, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { OrderStatus } from '../schemas/order.schema';
 
 export class OrderItemDto {
-  @IsString() productId: string;
-  @IsString() name: string;
-  @IsNumber() price: number;
-  @IsNumber() quantity: number;
+  @IsOptional() @IsString() productId?: string;
+  @IsOptional() @IsString() product?: string;
+  @IsOptional() @IsString() name?: string;
+  @IsOptional() @IsNumber() price?: number;
+  @IsNumber() @Min(1) quantity: number;
   @IsOptional() @IsString() color?: string;
   @IsOptional() @IsString() size?: string;
   @IsOptional() @IsString() image?: string;
@@ -14,6 +15,7 @@ export class OrderItemDto {
 }
 
 export class OrderAddressDto {
+  @IsOptional() @IsString() fullName?: string;
   @IsString() addressLineOne: string;
   @IsOptional() @IsString() addressLineTwo?: string;
   @IsString() city: string;
@@ -30,16 +32,21 @@ export class CreateOrderDto {
   @Type(() => OrderItemDto)
   items: OrderItemDto[];
 
-  @IsNumber() amount: number;
-  @IsNumber() deliveryFees: number;
+  @IsOptional() @IsNumber() amount?: number;
+  @IsOptional() @IsNumber() deliveryFees?: number;
+
+  @IsOptional() @IsNumber() totalAmount?: number;
+
+  @IsOptional() @IsIn(['cod', 'online', 'razorpay'])
+  paymentMethod?: 'cod' | 'online' | 'razorpay';
 
   @ValidateNested()
   @Type(() => OrderAddressDto)
   address: OrderAddressDto;
 
-  @IsString() razorpayOrderId: string;
-  @IsString() razorpayPaymentId: string;
-  @IsString() razorpaySignature: string;
+  @IsOptional() @IsString() razorpayOrderId?: string;
+  @IsOptional() @IsString() razorpayPaymentId?: string;
+  @IsOptional() @IsString() razorpaySignature?: string;
 
   @IsOptional() @IsString() deliveryMethod?: string;
 }

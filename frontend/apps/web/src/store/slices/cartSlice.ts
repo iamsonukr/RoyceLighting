@@ -48,8 +48,25 @@ export const addToCartThunk = createAsyncThunk(
         headers: { Authorization: `Bearer ${token}` },
       });
       return res.data.data.items || [];
-    } catch {
-      return rejectWithValue('Failed to add to cart');
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to add to cart');
+    }
+  },
+);
+
+export const updateCartItemThunk = createAsyncThunk(
+  'cart/update',
+  async (
+    { token, ...body }: { token: string; productId: string; quantity: number; color?: string; size?: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const res = await api.put('/cart/update', body, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data.data.items || [];
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to update cart');
     }
   },
 );
@@ -66,8 +83,8 @@ export const removeFromCartThunk = createAsyncThunk(
         data: body,
       });
       return res.data.data.items || [];
-    } catch {
-      return rejectWithValue('Failed to remove from cart');
+    } catch (err: any) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to remove from cart');
     }
   },
 );
@@ -104,6 +121,7 @@ const cartSlice = createSlice({
     builder
       .addCase(fetchCartThunk.fulfilled, (state, action) => { state.items = action.payload; })
       .addCase(addToCartThunk.fulfilled, (state, action) => { state.items = action.payload; })
+      .addCase(updateCartItemThunk.fulfilled, (state, action) => { state.items = action.payload; })
       .addCase(removeFromCartThunk.fulfilled, (state, action) => { state.items = action.payload; })
       .addCase(clearCartThunk.fulfilled, (state) => { state.items = []; });
   },

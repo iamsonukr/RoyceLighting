@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ProductDetailClient } from '../../../components/products/ProductDetailClient';
-import { ProductCard } from '../../../components/products/ProductCard';
+import { ProductDetailClient } from '@/components/products/ProductDetailClient';
+import { ProductCard } from '@/components/products/ProductCard';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 

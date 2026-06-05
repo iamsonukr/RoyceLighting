@@ -9,8 +9,10 @@ import { fetchOrdersAPI } from '@/lib/api';
 
 const STATUS_CONFIG: Record<string, { label: string; className: string; icon: any; progress: number }> = {
   placed:     { label: 'Order Placed',  className: 'status-placed',     icon: Clock,          progress: 20  },
+  confirmed:  { label: 'Confirmed',     className: 'status-placed',     icon: CheckCircle,    progress: 30  },
   processing: { label: 'Processing',    className: 'status-processing',  icon: AlertCircle,    progress: 40  },
   shipped:    { label: 'In Transit',    className: 'status-shipped',     icon: Truck,          progress: 70  },
+  'out for delivery': { label: 'Out for Delivery', className: 'status-shipped', icon: Truck, progress: 85 },
   delivered:  { label: 'Delivered',     className: 'status-delivered',   icon: CheckCircle,    progress: 100 },
   cancelled:  { label: 'Cancelled',     className: 'status-cancelled',   icon: XCircle,        progress: 0   },
 };
@@ -99,7 +101,8 @@ export default function MyOrdersPage() {
       <div className="max-w-4xl mx-auto" style={{ padding: '3rem 1.5rem 6rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
           {orders.map((order, oi) => {
-            const status = STATUS_CONFIG[order.status] || STATUS_CONFIG.placed;
+            const statusKey = String(order.status || 'placed').toLowerCase();
+            const status = STATUS_CONFIG[statusKey] || STATUS_CONFIG.placed;
             const StatusIcon = status.icon;
             const isExpanded = expandedOrder === order._id;
             const orderDate = new Date(order.createdAt || Date.now()).toLocaleDateString('en-IN', {

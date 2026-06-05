@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { ArrowLeft, ArrowRight, Check, CreditCard, MapPin, Package, Lock, ChevronDown } from 'lucide-react';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { fetchCartThunk, clearCart, selectCartTotal } from '../../store/slices/cartSlice';
-import { openAuthModal, addToast } from '../../store/slices/uiSlice';
-import { placeOrderAPI } from '../../lib/api';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { fetchCartThunk, clearCart, selectCartTotal } from '@/store/slices/cartSlice';
+import { openAuthModal, addToast } from '@/store/slices/uiSlice';
+import { createRazorpayOrderAPI, placeOrderAPI } from '@/lib/api';
 
 const STEPS = [
   { id: 1, label: 'Address', icon: MapPin },
@@ -40,12 +39,12 @@ const INDIAN_STATES = [
 
 export default function CheckoutPage() {
   const dispatch = useAppDispatch();
-  const router = useRouter();
   const { token } = useAppSelector((s) => s.auth);
   const { items } = useAppSelector((s) => s.cart);
   const subtotal = useAppSelector(selectCartTotal);
 
   const [step, setStep] = useState(1);
+  const [cartReady, setCartReady] = useState(false);
   const [address, setAddress] = useState<AddressForm>(emptyAddress);
   const [errors, setErrors] = useState<Partial<AddressForm>>({});
   const [paymentMethod, setPaymentMethod] = useState<'cod' | 'online'>('cod');
@@ -55,7 +54,9 @@ export default function CheckoutPage() {
   const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '');
 
   useEffect(() => {
-    if (token) dispatch(fetchCartThunk(token));
+    if (!token) return;
+    setCartReady(false);
+    dispatch(fetchCartThunk(token)).finally(() => setCartReady(true));
   }, [token, dispatch]);
 
   if (!token) {
@@ -124,6 +125,48 @@ export default function CheckoutPage() {
     );
   }
 
+  if (!cartReady) {
+    return (
+      <div
+        className="min-h-screen flex flex-col items-center justify-center"
+        style={{
+          background: 'linear-gradient(180deg, var(--forest-2), var(--charcoal) 55%, var(--coffee))',
+          gap: '1rem',
+          padding: '2rem',
+        }}
+      >
+        <p className="overline-text">Loading Cart</p>
+        <p style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.4)', letterSpacing: '0.08em' }}>
+          Preparing your checkout...
+        </p>
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <div
+        className="min-h-screen flex flex-col items-center justify-center"
+        style={{
+          background: 'linear-gradient(180deg, var(--forest-2), var(--charcoal) 55%, var(--coffee))',
+          gap: '1.25rem',
+          padding: '2rem',
+          textAlign: 'center',
+        }}
+      >
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '2rem', fontWeight: 300, fontStyle: 'italic', color: 'rgba(250,247,240,0.7)' }}>
+          Your cart is empty
+        </h2>
+        <p style={{ fontSize: '0.75rem', color: 'rgba(250,247,240,0.35)', letterSpacing: '0.06em' }}>
+          Add a lighting piece before starting checkout.
+        </p>
+        <Link href="/shop" className="btn-primary" style={{ fontSize: '0.6rem' }}>
+          Explore Collections <ArrowRight size={14} />
+        </Link>
+      </div>
+    );
+  }
+
   const validateAddress = (): boolean => {
     const errs: Partial<AddressForm> = {};
     if (!address.fullName.trim()) errs.fullName = 'Required';
@@ -145,31 +188,104 @@ export default function CheckoutPage() {
     }
   };
 
+  const loadRazorpayScript = () =>
+    new Promise<boolean>((resolve) => {
+      if (typeof window === 'undefined') return resolve(false);
+      if ((window as any).Razorpay) return resolve(true);
+
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+
+  const getOrderPayload = (paymentFields: Record<string, string> = {}) => ({
+    items: items.map((item) => ({
+      productId: item.productId,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      color: item.color || '',
+      size: item.size || '',
+      image: item.image || '',
+      itemTotal: item.price * item.quantity,
+    })),
+    amount: subtotal,
+    totalAmount: subtotal,
+    deliveryFees: 0,
+    paymentMethod,
+    address: {
+      fullName: address.fullName,
+      addressLineOne: address.addressLine1,
+      addressLineTwo: address.addressLine2,
+      city: address.city,
+      state: address.state,
+      pinCode: address.pincode,
+      country: 'India',
+      phone: address.phone,
+    },
+    ...paymentFields,
+  });
+
+  const collectOnlinePayment = async () => {
+    const key = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+    if (!key) throw new Error('Online payment is not configured');
+
+    const loaded = await loadRazorpayScript();
+    if (!loaded) throw new Error('Unable to load payment gateway');
+
+    const razorpayOrder = await createRazorpayOrderAPI(token!, subtotal);
+    return new Promise<Record<string, string>>((resolve, reject) => {
+      const Razorpay = (window as any).Razorpay;
+      const checkout = new Razorpay({
+        key,
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency || 'INR',
+        name: 'Royce Lighting',
+        description: 'Lighting order payment',
+        order_id: razorpayOrder.orderId,
+        prefill: {
+          name: address.fullName,
+          contact: address.phone,
+        },
+        handler: (response: any) => {
+          resolve({
+            razorpayOrderId: response.razorpay_order_id,
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpaySignature: response.razorpay_signature,
+          });
+        },
+        modal: {
+          ondismiss: () => reject(new Error('Payment was cancelled')),
+        },
+      });
+
+      checkout.open();
+    });
+  };
+
   const handlePlaceOrder = async () => {
     if (!token) return;
+    if (!items.length) {
+      dispatch(addToast({ message: 'Your cart is empty', type: 'error' }));
+      return;
+    }
+
     setPlacing(true);
     try {
-      const orderData = {
-        items: items.map((i) => ({ product: i.productId, quantity: i.quantity, color: i.color })),
-        shippingAddress: address,
-        paymentMethod,
-        totalAmount: subtotal,
-      };
+      const paymentFields = paymentMethod === 'online' ? await collectOnlinePayment() : {};
+      const orderData = getOrderPayload(paymentFields);
       const res = await placeOrderAPI(token, orderData);
       dispatch(clearCart());
       setOrderPlaced({ orderId: res.order?._id || res._id || 'RL-' + Date.now() });
       dispatch(addToast({ message: 'Order placed successfully!', type: 'success' }));
     } catch (err: any) {
-      dispatch(addToast({ message: err.message || 'Order failed. Please try again.', type: 'error' }));
+      dispatch(addToast({ message: err.response?.data?.message || err.message || 'Order failed. Please try again.', type: 'error' }));
     } finally {
       setPlacing(false);
     }
   };
-
-  const inputStyle = (field: keyof AddressForm) => ({
-    ...({} as any),
-    borderColor: errors[field] ? 'rgba(239,68,68,0.5)' : undefined,
-  });
 
   return (
     <div

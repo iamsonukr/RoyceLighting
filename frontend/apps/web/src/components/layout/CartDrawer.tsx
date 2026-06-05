@@ -5,11 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { X, Plus, Minus, ShoppingBag, ArrowRight, Trash2 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { closeCartDrawer } from '../../store/slices/uiSlice';
+import { addToast, closeCartDrawer } from '../../store/slices/uiSlice';
 import {
   fetchCartThunk,
   removeFromCartThunk,
-  addToCartThunk,
+  updateCartItemThunk,
   selectCartTotal,
 } from '../../store/slices/cartSlice';
 
@@ -251,7 +251,9 @@ export function CartDrawer() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
                           <button
                             className="qty-btn"
-                            onClick={() => token && dispatch(addToCartThunk({ token, productId: item.productId, quantity: -1, color: item.color }))}
+                            onClick={() => token && dispatch(updateCartItemThunk({ token, productId: item.productId, quantity: item.quantity - 1, color: item.color, size: item.size }))
+                              .unwrap()
+                              .catch((message) => dispatch(addToast({ message: String(message), type: 'error' })))}
                             style={{ width: 28, height: 28, fontSize: '0.8rem' }}
                           >
                             −
@@ -269,7 +271,9 @@ export function CartDrawer() {
                           </span>
                           <button
                             className="qty-btn"
-                            onClick={() => token && dispatch(addToCartThunk({ token, productId: item.productId, quantity: 1, color: item.color }))}
+                            onClick={() => token && dispatch(updateCartItemThunk({ token, productId: item.productId, quantity: item.quantity + 1, color: item.color, size: item.size }))
+                              .unwrap()
+                              .catch((message) => dispatch(addToast({ message: String(message), type: 'error' })))}
                             style={{ width: 28, height: 28, fontSize: '0.8rem' }}
                           >
                             +

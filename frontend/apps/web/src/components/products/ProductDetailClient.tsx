@@ -69,15 +69,18 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
   const handleAddToCart = async () => {
     if (!token) { dispatch(openAuthModal('login')); return; }
     setAdding(true);
-    const result = await dispatch(
-      addToCartThunk({ token, productId: product._id, quantity, color: selectedColor }),
-    );
-    setAdding(false);
-    if (result.meta.requestStatus === 'fulfilled') {
+    try {
+      await dispatch(
+        addToCartThunk({ token, productId: product._id, quantity, color: selectedColor }),
+      ).unwrap();
       setAdded(true);
       dispatch(addToast({ message: 'Added to cart', type: 'success' }));
       dispatch(openCartDrawer());
       setTimeout(() => setAdded(false), 2500);
+    } catch (message) {
+      dispatch(addToast({ message: String(message), type: 'error' }));
+    } finally {
+      setAdding(false);
     }
   };
 
