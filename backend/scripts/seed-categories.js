@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const path = require('path');
 
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 const mongoUri = process.env.MONGODB_URI;
 if (!mongoUri) {
   console.error('Missing MONGODB_URI environment variable.');

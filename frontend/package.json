@@ -1,30 +1,21 @@
 {
-  "name": "nasreen-crafts",
+  "name": "royce-lighting",
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/web"
   ],
   "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "lint": "turbo run lint",
-    "type-check": "turbo run type-check",
-    "dev:api": "turbo run dev --filter=api",
-    "dev:web": "turbo run dev --filter=web",
-    "dev:admin": "turbo run dev --filter=admin",
-    "dev:vendor": "turbo run dev --filter=vendor"
+    "dev": "npm run dev --workspace=apps/web",
+    "build": "npm run build --workspace=apps/web",
+    "start": "npm run start --workspace=apps/web",
+    "lint": "npm run lint --workspace=apps/web",
+    "type-check": "npm run type-check --workspace=apps/web"
   },
   "devDependencies": {
-    "turbo": "^2.0.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.7.2"
   },
   "engines": {
     "node": ">=18.0.0"
-  },
-  "packageManager": "npm@10.0.0",
-  "dependencies": {
-    "tailwindcss-animate": "^1.0.7"
   }
 }

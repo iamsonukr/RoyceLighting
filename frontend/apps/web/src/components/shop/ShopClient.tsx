@@ -65,13 +65,20 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
   const collectionLabel = CATEGORIES.find((c) => c.value === currentCategory)?.label || 'All Pieces';
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--charcoal)' }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        background:
+          'linear-gradient(180deg, var(--forest-2) 0%, var(--charcoal) 34%, var(--coffee) 100%)',
+      }}
+    >
       {/* Page header */}
       <div
         style={{
           padding: '6rem 1.5rem 4rem',
-          background: 'var(--charcoal-2)',
-          borderBottom: '1px solid rgba(250,247,240,0.06)',
+          background:
+            'radial-gradient(circle at 18% 12%, rgba(199,164,90,0.12), transparent 28%), linear-gradient(135deg, var(--forest), var(--charcoal-2) 58%, var(--coffee))',
+          borderBottom: '1px solid rgba(0,96,57,0.28)',
           textAlign: 'center',
         }}
       >
@@ -104,7 +111,7 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
             gap: '1rem',
             flexWrap: 'wrap',
             paddingBottom: '2rem',
-            borderBottom: '1px solid rgba(250,247,240,0.06)',
+            borderBottom: '1px solid rgba(0,96,57,0.16)',
           }}
         >
           {/* Search */}
@@ -125,8 +132,8 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
               value={currentSort}
               onChange={(e) => updateUrl({ sortBy: e.target.value, page: undefined })}
               style={{
-                background: 'rgba(250,247,240,0.04)',
-                border: '1px solid rgba(250,247,240,0.1)',
+                background: 'rgba(0,96,57,0.12)',
+                border: '1px solid rgba(0,96,57,0.24)',
                 color: 'rgba(250,247,240,0.6)',
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: '0.62rem',
@@ -137,7 +144,7 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
               }}
             >
               {SORT_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value} style={{ background: '#1C1812' }}>
+                <option key={o.value} value={o.value} style={{ background: '#062f24' }}>
                   {o.label}
                 </option>
               ))}
@@ -151,9 +158,9 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
                 alignItems: 'center',
                 gap: '0.5rem',
                 padding: '0.6rem 1rem',
-                background: filtersOpen ? 'var(--gold-muted)' : 'rgba(250,247,240,0.04)',
-                border: `1px solid ${filtersOpen ? 'rgba(0,96,57,0.3)' : 'rgba(250,247,240,0.1)'}`,
-                color: filtersOpen ? 'var(--gold)' : 'rgba(250,247,240,0.5)',
+                background: filtersOpen ? 'var(--green-muted)' : 'rgba(0,96,57,0.08)',
+                border: `1px solid ${filtersOpen ? 'rgba(228,199,124,0.42)' : 'rgba(0,96,57,0.2)'}`,
+                color: filtersOpen ? 'var(--gold-light)' : 'rgba(250,247,240,0.5)',
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: '0.62rem',
                 letterSpacing: '0.15em',
@@ -232,8 +239,8 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
             >
               <div
                 style={{
-                  background: 'var(--charcoal-2)',
-                  border: '1px solid rgba(250,247,240,0.07)',
+                  background: 'linear-gradient(180deg, rgba(6,47,36,0.78), var(--charcoal-2))',
+                  border: '1px solid rgba(0,96,57,0.24)',
                   padding: '1.75rem',
                   position: 'sticky',
                   top: '100px',
@@ -262,8 +269,8 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
                         padding: '0.65rem 0',
                         fontSize: '0.7rem',
                         letterSpacing: '0.06em',
-                        color: currentCategory === cat.value ? 'var(--gold)' : 'rgba(250,247,240,0.4)',
-                        background: 'none',
+                        color: currentCategory === cat.value ? 'var(--gold-light)' : 'rgba(250,247,240,0.4)',
+                        background: currentCategory === cat.value ? 'rgba(0,96,57,0.12)' : 'none',
                         border: 'none',
                         borderBottom: '1px solid rgba(250,247,240,0.05)',
                         cursor: 'pointer',
@@ -309,7 +316,7 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
                         letterSpacing: '0.04em',
                         color:
                           searchParams.minPrice === r.min && searchParams.maxPrice === r.max
-                            ? 'var(--gold)'
+                            ? 'var(--gold-light)'
                             : 'rgba(250,247,240,0.4)',
                         background: 'none',
                         border: 'none',
@@ -380,7 +387,7 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
               <div
                 style={{
                   gap: '1px',
-                  background: 'rgba(250,247,240,0.04)',
+                  background: 'rgba(0,96,57,0.12)',
                 }}
                 className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ${filtersOpen ? '' : 'xl:grid-cols-4'}`}
               >
@@ -427,9 +434,9 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
                         fontFamily: "'DM Sans', sans-serif",
                         fontSize: '0.72rem',
                         letterSpacing: '0.06em',
-                        background: p === currentPage ? 'var(--gold)' : 'transparent',
-                        color: p === currentPage ? 'var(--obsidian)' : 'rgba(250,247,240,0.4)',
-                        border: `1px solid ${p === currentPage ? 'var(--gold)' : 'rgba(250,247,240,0.1)'}`,
+                        background: p === currentPage ? 'linear-gradient(135deg, var(--rolex-green), var(--forest))' : 'transparent',
+                        color: p === currentPage ? 'var(--ivory)' : 'rgba(250,247,240,0.4)',
+                        border: `1px solid ${p === currentPage ? 'rgba(228,199,124,0.55)' : 'rgba(0,96,57,0.18)'}`,
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
                         fontWeight: p === currentPage ? 600 : 300,

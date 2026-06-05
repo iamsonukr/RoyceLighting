@@ -65,10 +65,10 @@ export function Navbar() {
   }, [searchOpen]);
 
   const navBg = scrolled
-    ? 'rgba(15,12,8,0.92)'
+    ? 'rgba(3,32,22,0.92)'
     : 'rgba(8,6,4,0)';
   const navBorder = scrolled
-    ? 'rgba(250,247,240,0.07)'
+    ? 'rgba(0,96,57,0.28)'
     : 'transparent';
 
   return (
@@ -76,8 +76,9 @@ export function Navbar() {
       {/* Announcement bar */}
       <div
         style={{
-          background: 'var(--gold)',
-          color: 'var(--obsidian)',
+          background: 'linear-gradient(90deg, var(--forest), var(--rolex-green), var(--forest))',
+          color: 'var(--ivory)',
+          borderBottom: '1px solid rgba(228,199,124,0.24)',
           fontSize: '0.58rem',
           fontWeight: 500,
           letterSpacing: '0.3em',
@@ -119,7 +120,7 @@ export function Navbar() {
                 gap: '0.5rem',
               }}
             >
-              <span style={{ color: 'var(--gold)', fontSize: '0.7rem' }}>✦</span>
+              <span style={{ color: 'var(--gold-light)', fontSize: '0.7rem' }}>✦</span>
               Royce
               <span style={{ color: 'rgba(250,247,240,0.3)', fontWeight: 300 }}>·</span>
               Lighting
@@ -157,8 +158,8 @@ export function Navbar() {
                         left: '50%',
                         marginTop: '1.5rem',
                         width: '640px',
-                        background: 'rgba(15,12,8,0.97)',
-                        border: '1px solid rgba(250,247,240,0.08)',
+                        background: 'linear-gradient(180deg, rgba(6,47,36,0.98), rgba(15,12,8,0.97))',
+                        border: '1px solid rgba(0,96,57,0.28)',
                         backdropFilter: 'blur(24px)',
                         padding: '2rem',
                         display: 'grid',
@@ -272,8 +273,9 @@ export function Navbar() {
                       width: '14px',
                       height: '14px',
                       borderRadius: '50%',
-                      background: 'var(--gold)',
-                      color: 'var(--obsidian)',
+                      background: 'linear-gradient(135deg, var(--rolex-green), var(--forest))',
+                      color: 'var(--ivory)',
+                      border: '1px solid rgba(228,199,124,0.45)',
                       fontSize: '0.5rem',
                       fontWeight: 700,
                       display: 'flex',
@@ -301,8 +303,8 @@ export function Navbar() {
                   <div
                     className="absolute right-0 top-full mt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200"
                     style={{
-                      background: 'rgba(15,12,8,0.97)',
-                      border: '1px solid rgba(250,247,240,0.1)',
+                      background: 'linear-gradient(180deg, rgba(6,47,36,0.98), rgba(15,12,8,0.97))',
+                      border: '1px solid rgba(0,96,57,0.25)',
                       backdropFilter: 'blur(20px)',
                       boxShadow: '0 24px 48px rgba(8,6,4,0.5)',
                     }}
@@ -379,8 +381,8 @@ export function Navbar() {
         {mobileOpen && (
           <div
             style={{
-              background: 'rgba(15,12,8,0.98)',
-              borderTop: '1px solid rgba(250,247,240,0.08)',
+              background: 'linear-gradient(180deg, rgba(6,47,36,0.98), rgba(15,12,8,0.98))',
+              borderTop: '1px solid rgba(0,96,57,0.24)',
               padding: '1.5rem 1.5rem 2rem',
               animation: 'fadeUp 0.3s ease forwards',
             }}
@@ -448,15 +450,15 @@ export function Navbar() {
           >
             <div
               style={{
-                background: 'rgba(15,12,8,0.97)',
-                border: '1px solid rgba(0,96,57,0.2)',
+                background: 'linear-gradient(180deg, rgba(6,47,36,0.98), rgba(15,12,8,0.97))',
+                border: '1px solid rgba(0,96,57,0.3)',
                 backdropFilter: 'blur(24px)',
                 padding: '1.5rem',
                 boxShadow: '0 40px 80px rgba(8,6,4,0.7)',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <Search size={16} style={{ color: 'var(--gold)', flexShrink: 0 }} />
+                <Search size={16} style={{ color: 'var(--gold-light)', flexShrink: 0 }} />
                 <input
                   ref={searchRef}
                   value={searchQ}

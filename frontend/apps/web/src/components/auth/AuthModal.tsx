@@ -64,22 +64,22 @@ export function AuthModal() {
       {/* Overlay */}
       <div
         onClick={() => dispatch(closeAuthModal())}
-        style={{ position: 'absolute', inset: 0, background: 'rgba(8,6,4,0.8)', backdropFilter: 'blur(8px)', animation: 'fadeIn 0.25s ease forwards' }}
+        style={{ position: 'absolute', inset: 0, background: 'rgba(3,32,22,0.82)', backdropFilter: 'blur(8px)', animation: 'fadeIn 0.25s ease forwards' }}
       />
 
       {/* Modal */}
       <div
         style={{
           position: 'relative', width: '100%', maxWidth: '460px',
-          background: 'var(--charcoal-2)',
-          border: '1px solid rgba(250,247,240,0.09)',
+          background: 'linear-gradient(180deg, var(--forest-2), var(--charcoal-2) 62%, var(--coffee))',
+          border: '1px solid rgba(0,96,57,0.3)',
           boxShadow: '0 60px 120px rgba(8,6,4,0.7)',
           animation: 'scaleIn 0.3s cubic-bezier(0.16,1,0.3,1) forwards',
           overflow: 'hidden',
         }}
       >
-        {/* Gold accent top line */}
-        <div style={{ height: 2, background: 'linear-gradient(90deg, transparent, var(--gold), transparent)' }} />
+        {/* Accent top line */}
+        <div style={{ height: 2, background: 'linear-gradient(90deg, transparent, var(--rolex-green), var(--gold-light), transparent)' }} />
 
         <div style={{ padding: '2.5rem 2.5rem 3rem' }}>
           {/* Close */}
@@ -95,7 +95,7 @@ export function AuthModal() {
           {/* Logo mark */}
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <div style={{ fontFamily: "'Playfair Display',serif", fontSize: '0.65rem', fontWeight: 400, letterSpacing: '0.35em', color: 'rgba(250,247,240,0.5)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
-              <span style={{ color: 'var(--gold)', marginRight: '0.4rem' }}>✦</span>
+              <span style={{ color: 'var(--gold-light)', marginRight: '0.4rem' }}>✦</span>
               Royce Lighting
             </div>
             <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.85rem', fontWeight: 300, fontStyle: 'italic', color: 'var(--ivory)', marginBottom: '0.5rem' }}>
@@ -166,9 +166,9 @@ export function AuthModal() {
             {isLogin ? "New to Royce? " : "Already have an account? "}
             <button
               onClick={() => dispatch(openAuthModal(isLogin ? 'register' : 'login'))}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gold)', fontSize: '0.65rem', letterSpacing: '0.06em', transition: 'color 0.2s ease' }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gold-light)', fontSize: '0.65rem', letterSpacing: '0.06em', transition: 'color 0.2s ease' }}
               onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--gold-light)')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--gold)')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--gold-light)')}
             >
               {isLogin ? 'Create an account' : 'Sign in'}
             </button>

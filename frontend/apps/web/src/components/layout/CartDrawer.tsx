@@ -21,7 +21,7 @@ export function CartDrawer() {
   const { items } = useAppSelector((s) => s.cart);
   const { token } = useAppSelector((s) => s.auth);
   const subtotal = useAppSelector(selectCartTotal);
-  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace('/api', '');
+  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '');
 
   useEffect(() => {
     if (cartDrawerOpen && token) dispatch(fetchCartThunk(token));
@@ -59,7 +59,7 @@ export function CartDrawer() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <ShoppingBag size={16} style={{ color: 'var(--gold)' }} strokeWidth={1.5} />
+            <ShoppingBag size={16} style={{ color: 'var(--gold-light)' }} strokeWidth={1.5} />
             <span
               style={{
                 fontFamily: "'DM Sans', sans-serif",
@@ -74,8 +74,9 @@ export function CartDrawer() {
             {items.length > 0 && (
               <span
                 style={{
-                  background: 'var(--gold)',
-                  color: 'var(--obsidian)',
+                  background: 'linear-gradient(135deg, var(--rolex-green), var(--forest))',
+                  color: 'var(--ivory)',
+                  border: '1px solid rgba(228,199,124,0.35)',
                   fontSize: '0.52rem',
                   fontWeight: 700,
                   padding: '0.15rem 0.45rem',
@@ -106,7 +107,7 @@ export function CartDrawer() {
 
         {/* Free shipping bar */}
         {subtotal > 0 && (
-          <div style={{ padding: '0.875rem 1.75rem', borderBottom: '1px solid rgba(250,247,240,0.06)', background: 'rgba(0,96,57,0.04)' }}>
+          <div style={{ padding: '0.875rem 1.75rem', borderBottom: '1px solid rgba(0,96,57,0.18)', background: 'rgba(0,96,57,0.1)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
               <span style={{ fontSize: '0.6rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(250,247,240,0.4)' }}>
                 {freeShippingLeft > 0
@@ -119,7 +120,7 @@ export function CartDrawer() {
                 style={{
                   height: '100%',
                   width: `${freeShippingPct}%`,
-                  background: 'linear-gradient(90deg, var(--gold-deep), var(--gold-light))',
+                  background: 'linear-gradient(90deg, var(--rolex-green), var(--gold-light))',
                   transition: 'width 0.6s ease',
                   borderRadius: '1px',
                 }}
@@ -201,7 +202,7 @@ export function CartDrawer() {
                         height: '80px',
                         flexShrink: 0,
                         overflow: 'hidden',
-                        background: 'var(--charcoal-3)',
+                        background: 'linear-gradient(180deg, var(--forest-2), var(--charcoal-3))',
                       }}
                     >
                       {item.image ? (
@@ -305,7 +306,7 @@ export function CartDrawer() {
             style={{
               padding: '1.5rem 1.75rem',
               borderTop: '1px solid rgba(250,247,240,0.08)',
-              background: 'rgba(8,6,4,0.3)',
+              background: 'rgba(0,96,57,0.12)',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1.25rem' }}>

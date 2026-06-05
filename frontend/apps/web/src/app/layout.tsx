@@ -1,20 +1,12 @@
-'use client';
-
-import './globals.css';
+import type { Metadata } from 'next';
 import { ReactNode } from 'react';
-import { Provider } from 'react-redux';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { store } from '../store/store';
-import { Navbar } from '../components/layout/Navbar';
-import { Footer } from '../components/layout/Footer';
-import { AuthModal } from '../components/auth/AuthModal';
-import { Toaster } from '../components/ui/Toaster';
-import { CartDrawer } from '../components/layout/CartDrawer';
-import { PageTransition } from '../components/layout/PageTransition';
+import { Providers } from '@/components/Providers';
 
-const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 60 * 1000 } },
-});
+export const metadata: Metadata = {
+  title: 'Royce Lighting - Luxury Chandeliers & Handcrafted Lighting',
+  description:
+    'Bespoke chandeliers and luxury lighting for extraordinary interiors.',
+};
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -24,16 +16,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body>
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <Navbar />
-            <PageTransition>{children}</PageTransition>
-            <Footer />
-            <CartDrawer />
-            <AuthModal />
-            <Toaster />
-          </QueryClientProvider>
-        </Provider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

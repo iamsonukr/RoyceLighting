@@ -35,9 +35,9 @@ export function Toaster() {
         const isSuccess = toast.type === 'success';
         const isError = toast.type === 'error';
         const Icon = isSuccess ? Check : isError ? AlertCircle : Info;
-        const iconColor = isSuccess ? '#86efac' : isError ? '#fca5a5' : 'var(--gold)';
-        const borderColor = isSuccess ? 'rgba(34,197,94,0.25)' : isError ? 'rgba(239,68,68,0.25)' : 'rgba(0,96,57,0.25)';
-        const bgColor = isSuccess ? 'rgba(34,197,94,0.06)' : isError ? 'rgba(239,68,68,0.06)' : 'rgba(0,96,57,0.06)';
+        const iconColor = isSuccess ? 'var(--gold-light)' : isError ? '#fca5a5' : 'var(--gold-light)';
+        const borderColor = isSuccess ? 'rgba(0,96,57,0.32)' : isError ? 'rgba(239,68,68,0.25)' : 'rgba(0,96,57,0.25)';
+        const bgColor = isSuccess ? 'rgba(0,96,57,0.12)' : isError ? 'rgba(239,68,68,0.06)' : 'rgba(0,96,57,0.08)';
 
         return (
           <div
@@ -47,7 +47,7 @@ export function Toaster() {
               alignItems: 'flex-start',
               gap: '0.75rem',
               padding: '1rem 1.25rem',
-              background: `var(--charcoal-2)`,
+              background: 'linear-gradient(180deg, rgba(6,47,36,0.94), var(--charcoal-2))',
               border: `1px solid ${borderColor}`,
               backdropFilter: 'blur(16px)',
               boxShadow: '0 16px 40px rgba(8,6,4,0.5)',

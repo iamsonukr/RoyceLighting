@@ -9,7 +9,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // CSS variable-backed semantic tokens used in globals.css
+        // shadcn / web CSS variable tokens
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -31,31 +31,25 @@ module.exports = {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
         },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
-        },
-        // luxury brand palette
+        // Admin/Vendor shared brand palette (amber-based)
         brand: {
-          50:  '#f6fbf8',
-          100: '#dcefe7',
-          200: '#b5ddcd',
-          300: '#82c2a9',
-          400: '#3f9878',
-          500: '#006039',
-          600: '#004f32',
-          700: '#003d2b',
-          800: '#062f24',
-          900: '#051d17',
+          50:  '#fdf8f0',
+          100: '#faefd9',
+          200: '#f3d9a8',
+          300: '#eabc6d',
+          400: '#e09a38',
+          500: '#d4831c',
+          600: '#b96514',
+          700: '#974b13',
+          800: '#7c3c16',
+          900: '#663315',
         },
-        gold: '#C7A45A',
-        coffee: '#1D120B',
-        forest: '#003D2B',
         cream: '#fefcf8',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Inter', 'DM Sans', 'sans-serif'],
         serif: ['Playfair Display', 'serif'],
+        display: ['Cormorant', 'serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -64,5 +58,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwindcss-animate')],
 };

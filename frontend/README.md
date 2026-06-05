@@ -1,234 +1,149 @@
-# Royce Lighting — Full Stack E-Commerce
+# Royce Lighting — Unified Frontend
 
-A production-grade handcrafted jewellery & accessories platform built as a **Turborepo monorepo**.
+All three panels are now served from a **single Next.js app** on a single domain.
 
-## Tech Stack
-
-| Layer | Tech |
-|-------|------|
-| Monorepo | Turborepo |
-| Backend | NestJS + TypeScript |
-| Database | MongoDB + Mongoose |
-| Auth | JWT (shared across all panels) |
-| File Upload | Multer → local disk (`/uploads`) |
-| Payment | Razorpay |
-| Delivery | Delhivery API |
-| Email | Resend |
-| Website | Next.js 14 (App Router) + SSR/SSG |
-| Admin Panel | Next.js 14 (App Router) |
-| Vendor Panel | Next.js 14 (App Router) |
-| State | Redux Toolkit + TanStack Query |
-| Styling | Tailwind CSS + shadcn/ui |
+| URL | Panel |
+|-----|-------|
+| `/` | Public website (home, shop, product, cart, checkout, my-orders) |
+| `/admin` | Admin panel (dashboard, products, categories, orders, users, vendors, settings) |
+| `/vendor` | Vendor portal (dashboard, products, orders, settings) |
 
 ---
 
-## Project Structure
-
-```
-nasreen-crafts/
-├── apps/
-│   ├── api/          # NestJS backend (port 3001)
-│   ├── web/          # Customer website (port 3332)
-│   ├── admin/        # Admin panel (port 3002)
-│   └── vendor/       # Vendor panel (port 3003)
-├── packages/         # Shared packages (extend as needed)
-├── turbo.json
-└── package.json
-```
-
----
-
-## Setup & Installation
-
-### 1. Prerequisites
-
-- Node.js >= 18
-- MongoDB running locally or MongoDB Atlas URI
-- npm >= 10
-
-### 2. Clone & Install
+## Getting started
 
 ```bash
-git clone <your-repo-url> nasreen-crafts
-cd nasreen-crafts
+cd apps/web
 npm install
+cp ../../.env.example .env.local   # fill in values
+npm run dev                         # → http://localhost:3000
 ```
 
-### 3. Environment Variables
-
-Copy `.env.example` to `.env` in each app:
+Or from the repo root:
 
 ```bash
-cp .env.example apps/api/.env
-cp .env.example apps/web/.env.local
-cp .env.example apps/admin/.env.local
-cp .env.example apps/vendor/.env.local
-```
-
-Fill in all required values (MongoDB URI, Razorpay keys, Resend API key, Delhivery key).
-
-### 4. Create First Admin User
-
-After starting the API, run this in MongoDB shell or Compass:
-
-```js
-// Insert directly (password = "admin123" bcrypt hash)
-db.users.insertOne({
-  name: "Admin",
-  email: "admin@Royce Lighting.com",
-  password: "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lihO",
-  role: "admin",
-  isActive: true,
-  createdAt: new Date(),
-  updatedAt: new Date()
-})
-```
-
-Or use the API once started — register a user then manually set `role: "admin"` in DB.
-
----
-
-## Running the Project
-
-### All apps at once
-
-```bash
+npm install --workspace=apps/web
 npm run dev
 ```
 
-### Individual apps
+---
 
-```bash
-npm run dev:api      # NestJS API  → http://localhost:3001
-npm run dev:web      # Website     → http://localhost:3332
-npm run dev:admin    # Admin Panel → http://localhost:3002
-npm run dev:vendor   # Vendor Panel→ http://localhost:3003
+## Project structure
+
+```
+apps/web/src/
+├── app/
+│   ├── layout.tsx               ← Root layout (providers only, no nav/footer)
+│   ├── globals.css              ← Combined CSS (web + admin + vendor styles)
+│   │
+│   ├── (public)/                ← Route group: Navbar + Footer injected
+│   │   ├── layout.tsx
+│   │   ├── page.tsx             ← / (home)
+│   │   ├── shop/
+│   │   ├── cart/
+│   │   ├── checkout/
+│   │   ├── my-orders/
+│   │   └── product/[id]/
+│   │
+│   ├── (admin)/                 ← Route group: AdminShell injected
+│   │   ├── layout.tsx           ← Admin Redux store + React Query
+│   │   └── admin/
+│   │       ├── page.tsx         ← /admin (dashboard)
+│   │       ├── products/
+│   │       ├── categories/
+│   │       ├── orders/
+│   │       ├── users/
+│   │       ├── vendors/
+│   │       ├── settings/
+│   │       └── components/
+│   │           ├── auth/AdminLogin.tsx
+│   │           ├── layout/AdminShell.tsx
+│   │           └── Pagination.tsx
+│   │
+│   └── (vendor)/                ← Route group: VendorShell injected
+│       ├── layout.tsx           ← Vendor Redux store + React Query
+│       └── vendor/
+│           ├── page.tsx         ← /vendor (dashboard)
+│           ├── products/
+│           ├── orders/
+│           ├── settings/
+│           └── components/
+│               ├── auth/VendorLogin.tsx
+│               └── layout/VendorShell.tsx
+│
+├── components/
+│   ├── Providers.tsx            ← Web store + React Query wrapper
+│   ├── auth/
+│   ├── home/
+│   ├── layout/   (Navbar, Footer, CartDrawer…)
+│   ├── products/
+│   ├── shop/
+│   └── ui/
+│
+├── lib/
+│   ├── api.ts                   ← Public web axios client (nc_token)
+│   ├── adminApi.ts              ← Admin axios client (nc_admin_token)
+│   └── vendorApi.ts             ← Vendor axios client (nc_vendor_token)
+│
+└── store/
+    ├── store.ts                 ← Web Redux store
+    ├── slices/  (auth, cart, ui)
+    ├── admin/store.ts           ← Admin Redux store (isolated)
+    └── vendor/store.ts          ← Vendor Redux store (isolated)
 ```
 
 ---
 
-## API Endpoints
+## How route isolation works
 
-### Auth
-| Method | Endpoint | Access |
-|--------|----------|--------|
-| POST | `/api/auth/register` | Public |
-| POST | `/api/auth/login` | Public |
-| POST | `/api/auth/vendor/register` | Public |
-| GET  | `/api/auth/profile` | Auth |
-| PATCH | `/api/auth/change-password` | Auth |
+Next.js **Route Groups** (`(public)`, `(admin)`, `(vendor)`) let each section
+have its own layout without affecting the URL. This means:
 
-### Products
-| Method | Endpoint | Access |
-|--------|----------|--------|
-| GET | `/api/products` | Public |
-| GET | `/api/products/featured` | Public |
-| GET | `/api/products/:id` | Public |
-| GET | `/api/products/admin/all` | Admin |
-| POST | `/api/products` | Admin/Vendor |
-| PUT | `/api/products/:id` | Admin/Vendor (own) |
-| DELETE | `/api/products/:id` | Admin/Vendor (own) |
+- `/admin/products` uses the `(admin)/layout.tsx` which mounts the Admin Redux
+  store and `AdminShell` — no Navbar or Footer leaks in.
+- `/vendor/orders` uses the `(vendor)/layout.tsx` which mounts the Vendor Redux
+  store and `VendorShell`.
+- `/shop` uses the `(public)/layout.tsx` which adds Navbar, Footer, CartDrawer etc.
 
-### Orders
-| Method | Endpoint | Access |
-|--------|----------|--------|
-| POST | `/api/orders/create-razorpay-order` | Auth |
-| POST | `/api/orders/place` | Auth |
-| GET | `/api/orders/my-orders` | Auth |
-| GET | `/api/orders/:id` | Auth |
-| GET | `/api/orders/:id/track` | Auth |
-| GET | `/api/orders/admin/all` | Admin |
-| GET | `/api/orders/admin/stats` | Admin |
-| PATCH | `/api/orders/admin/:id/status` | Admin |
-
-### Cart
-| Method | Endpoint | Access |
-|--------|----------|--------|
-| GET | `/api/cart` | Auth |
-| POST | `/api/cart/add` | Auth |
-| PUT | `/api/cart/update` | Auth |
-| DELETE | `/api/cart/remove` | Auth |
-| DELETE | `/api/cart/clear` | Auth |
-
-### Vendor
-| Method | Endpoint | Access |
-|--------|----------|--------|
-| GET | `/api/vendor/dashboard` | Vendor |
-| GET | `/api/vendor/orders` | Vendor |
+Each panel has its own **isolated Redux store** (admin token ≠ vendor token ≠ web token)
+and its own **axios instance** with the correct `localStorage` key.
 
 ---
 
-## Delhivery Integration
+## Authentication & redirect behaviour
 
-Shipments are **automatically created** when an order's status is changed to **"Confirmed"** by admin.
-
-What happens:
-1. Admin changes order status → `Confirmed`
-2. Backend calls `DeliveryService.createShipment()`
-3. Delhivery returns AWB (waybill) number
-4. AWB & tracking URL saved to order
-5. Customer receives shipped email with tracking link when status → `Shipped`
-
-**Sandbox testing:** Set `DELHIVERY_BASE_URL=https://staging-express.delhivery.com` in `.env`
+| Panel | Token key | Unauthenticated redirect |
+|-------|-----------|--------------------------|
+| Public | `nc_token` | shows AuthModal in-page |
+| Admin | `nc_admin_token` | `/admin` (login page) |
+| Vendor | `nc_vendor_token` | `/vendor` (login page) |
 
 ---
 
-## Email Triggers (Resend)
+## Deployment (Vercel)
 
-| Event | Recipients |
-|-------|-----------|
-| Order Placed | Customer + Admin |
-| Order Shipped | Customer (with Delhivery tracking link) |
-| Order Delivered | Customer |
+`vercel.json` at the repo root points Vercel at `apps/web`:
 
----
-
-## Razorpay Payment Flow
-
-1. Frontend calls `POST /api/orders/create-razorpay-order` → gets `orderId`
-2. Razorpay checkout opens (UPI/Card/NetBanking)
-3. On payment success → `POST /api/orders/place` with Razorpay signature
-4. Backend verifies HMAC signature → creates order → clears cart → sends emails
-
----
-
-## Roles & Access
-
-| Role | Panels | Capabilities |
-|------|--------|-------------|
-| `user` | Website | Browse, cart, checkout, track orders |
-| `vendor` | Vendor Panel + Website | All user + manage own products, view own orders/earnings |
-| `admin` | Admin Panel | Full access — all users, all orders, all products, status updates |
-
----
-
-## Production Deployment
-
-### API (NestJS)
-```bash
-cd apps/api
-npm run build
-node dist/main.js
-```
-Use PM2: `pm2 start dist/main.js --name nasreen-api`
-
-### Next.js Apps
-```bash
-# In root
-npm run build
-# Then in each app
-npm run start
+```json
+{
+  "rootDirectory": "apps/web",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next"
+}
 ```
 
-**Recommended:** Deploy to Vercel (web/admin/vendor) + Railway/Render (API) + MongoDB Atlas
+Set `NEXT_PUBLIC_API_URL` in your Vercel environment variables.
 
 ---
 
-## Key Files
+## Environment variables
 
-- `apps/api/src/orders/orders.service.ts` — Order placement, Delhivery trigger, email hooks
-- `apps/api/src/delivery/delivery.service.ts` — Full Delhivery API integration
-- `apps/api/src/email/email.service.ts` — All email templates (Resend)
-- `apps/api/src/auth/guards/auth.guard.ts` — JWT, Admin, Vendor guards
-- `apps/web/src/app/checkout/page.tsx` — Razorpay checkout flow
-- `apps/web/src/store/` — Redux slices (auth, cart, ui)
+Copy `.env.example` to `apps/web/.env.local` and fill in:
+
+```
+NEXT_PUBLIC_API_URL=https://api.yourbackend.com/api
+NEXT_PUBLIC_APP_URL=https://yourdomain.com
+```
+
+The three separate `NEXT_PUBLIC_*_URL` variables from the old multi-port setup
+are no longer needed.

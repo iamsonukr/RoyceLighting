@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { setServers } from 'dns';
 
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
@@ -16,13 +17,40 @@ import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [join(__dirname, '..', '.env'), '.env'],
+    }),
 
     MongooseModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        uri: config.get<string>('MONGODB_URI'),
-      }),
+      useFactory: (config: ConfigService) => {
+        const uri = config.get<string>('MONGODB_URI');
+        const dnsServers = config.get<string>('DB_DNS_SERVERS');
+
+        if (!uri) {
+          throw new Error(
+            'Missing MONGODB_URI. Add it to backend/.env or run `npm run db:debug` from backend for details.',
+          );
+        }
+
+        if (dnsServers) {
+          const servers = dnsServers
+            .split(',')
+            .map((server) => server.trim())
+            .filter(Boolean);
+
+          if (servers.length) {
+            setServers(servers);
+          }
+        }
+
+        return {
+          uri,
+          serverSelectionTimeoutMS: 10000,
+          connectTimeoutMS: 10000,
+        };
+      },
     }),
 
     ServeStaticModule.forRoot({

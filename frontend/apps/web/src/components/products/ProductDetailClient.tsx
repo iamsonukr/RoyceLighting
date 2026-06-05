@@ -42,7 +42,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | null>('details');
 
-  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace('/api', '');
+  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '');
   const productImages = product.imageAssets?.length
     ? [...product.imageAssets]
         .sort((a: any, b: any) => Number(a.order || 0) - Number(b.order || 0))
@@ -124,7 +124,13 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
   ];
 
   return (
-    <div style={{ background: 'var(--charcoal)', minHeight: '100vh' }}>
+    <div
+      style={{
+        background:
+          'linear-gradient(180deg, var(--forest-2) 0%, var(--charcoal) 32%, var(--coffee) 100%)',
+        minHeight: '100vh',
+      }}
+    >
       {/* Breadcrumb */}
       <div style={{ padding: '1.5rem 1.5rem 0', maxWidth: '1280px', margin: '0 auto' }}>
         <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -174,7 +180,8 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
               position: 'relative',
               aspectRatio: '4/5',
               overflow: 'hidden',
-              background: 'var(--charcoal-2)',
+              background: 'linear-gradient(180deg, rgba(6,47,36,0.62), var(--charcoal-2))',
+              border: '1px solid rgba(0,96,57,0.2)',
               marginBottom: '0.75rem',
               cursor: 'zoom-in',
             }}
@@ -238,8 +245,8 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
                     position: 'relative',
                     aspectRatio: '1/1',
                     overflow: 'hidden',
-                    background: 'var(--charcoal-2)',
-                    border: `1px solid ${selectedImage === img ? 'var(--gold)' : 'rgba(250,247,240,0.08)'}`,
+                    background: 'var(--forest-2)',
+                    border: `1px solid ${selectedImage === img ? 'rgba(228,199,124,0.72)' : 'rgba(0,96,57,0.18)'}`,
                     cursor: 'pointer',
                     transition: 'border-color 0.2s ease',
                     padding: 0,
@@ -296,7 +303,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
                   style={{
                     fontSize: '0.68rem',
                     letterSpacing: '0.1em',
-                    color: 'var(--gold)',
+                  color: 'var(--gold-light)',
                     fontFamily: "'DM Sans', sans-serif",
                   }}
                 >
@@ -321,7 +328,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
                   marginBottom: '0.875rem',
                 }}
               >
-                Finish: <span style={{ color: 'var(--gold)' }}>{selectedColor}</span>
+                Finish: <span style={{ color: 'var(--gold-light)' }}>{selectedColor}</span>
               </p>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                 {product.colors.map((color: string) => (
@@ -399,9 +406,17 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
               style={{
                 flex: 1,
                 padding: '1rem',
-                background: added ? 'rgba(34,197,94,0.15)' : product.totalQuantity === 0 ? 'rgba(250,247,240,0.06)' : 'var(--gold)',
-                color: added ? '#86efac' : product.totalQuantity === 0 ? 'rgba(250,247,240,0.25)' : 'var(--obsidian)',
-                border: added ? '1px solid rgba(34,197,94,0.3)' : product.totalQuantity === 0 ? '1px solid rgba(250,247,240,0.1)' : '1px solid var(--gold)',
+                background: added
+                  ? 'rgba(0,96,57,0.22)'
+                  : product.totalQuantity === 0
+                    ? 'rgba(250,247,240,0.06)'
+                    : 'linear-gradient(135deg, var(--rolex-green), var(--forest))',
+                color: added ? 'var(--gold-light)' : product.totalQuantity === 0 ? 'rgba(250,247,240,0.25)' : 'var(--ivory)',
+                border: added
+                  ? '1px solid rgba(228,199,124,0.35)'
+                  : product.totalQuantity === 0
+                    ? '1px solid rgba(250,247,240,0.1)'
+                    : '1px solid rgba(228,199,124,0.55)',
                 cursor: product.totalQuantity === 0 ? 'not-allowed' : 'pointer',
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: '0.62rem',
@@ -446,8 +461,8 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
           {/* Delivery highlights */}
           <div
             style={{
-              background: 'var(--charcoal-2)',
-              border: '1px solid rgba(250,247,240,0.07)',
+              background: 'linear-gradient(180deg, rgba(6,47,36,0.68), var(--charcoal-2))',
+              border: '1px solid rgba(0,96,57,0.24)',
               padding: '1.5rem',
               marginBottom: '2.5rem',
               display: 'flex',
@@ -457,7 +472,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
           >
             {DELIVERY_HIGHLIGHTS.map(({ icon: Icon, title, desc }) => (
               <div key={title} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.875rem' }}>
-                <Icon size={15} style={{ color: 'var(--gold)', marginTop: '0.1rem', flexShrink: 0 }} strokeWidth={1.5} />
+                <Icon size={15} style={{ color: 'var(--gold-light)', marginTop: '0.1rem', flexShrink: 0 }} strokeWidth={1.5} />
                 <div>
                   <p
                     style={{
@@ -494,7 +509,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
                     style={{
                       transition: 'transform 0.3s ease',
                       transform: openAccordion === acc.id ? 'rotate(180deg)' : 'rotate(0)',
-                      color: openAccordion === acc.id ? 'var(--gold)' : 'rgba(250,247,240,0.4)',
+                      color: openAccordion === acc.id ? 'var(--gold-light)' : 'rgba(250,247,240,0.4)',
                     }}
                   />
                 </button>
@@ -581,7 +596,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(8,6,4,0.95)',
+            background: 'rgba(3,32,22,0.96)',
             zIndex: 300,
             display: 'flex',
             alignItems: 'center',

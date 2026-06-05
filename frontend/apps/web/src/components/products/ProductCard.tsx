@@ -41,7 +41,7 @@ export function ProductCard({ product }: ProductCardProps) {
       ? Math.round(((product.retailPrice - product.sellingPrice) / product.retailPrice) * 100)
       : 0;
 
-  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace('/api', '');
+  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '');
   const assetImages = product.imageAssets?.length
     ? [...product.imageAssets]
         .sort((a, b) => Number(a.order || 0) - Number(b.order || 0))
@@ -93,7 +93,7 @@ export function ProductCard({ product }: ProductCardProps) {
             position: 'relative',
             aspectRatio: '3/4',
             overflow: 'hidden',
-            background: 'var(--charcoal-3)',
+            background: 'linear-gradient(180deg, var(--forest-2), var(--charcoal-3))',
           }}
         >
           {primaryImg ? (
@@ -146,7 +146,7 @@ export function ProductCard({ product }: ProductCardProps) {
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(to bottom, transparent 50%, rgba(8,6,4,0.6) 100%)',
+              background: 'linear-gradient(to bottom, transparent 48%, rgba(6,47,36,0.5) 78%, rgba(8,6,4,0.82) 100%)',
               transition: 'opacity 0.4s ease',
               opacity: hovered ? 1 : 0.5,
             }}
@@ -181,8 +181,8 @@ export function ProductCard({ product }: ProductCardProps) {
               position: 'absolute',
               top: '1rem',
               right: '1rem',
-              background: 'rgba(8,6,4,0.6)',
-              border: '1px solid rgba(250,247,240,0.1)',
+              background: 'rgba(6,47,36,0.72)',
+              border: '1px solid rgba(0,96,57,0.34)',
               backdropFilter: 'blur(8px)',
               width: 36,
               height: 36,
@@ -223,9 +223,9 @@ export function ProductCard({ product }: ProductCardProps) {
               style={{
                 flex: 1,
                 padding: '0.875rem 1rem',
-                background: product.totalQuantity === 0 ? 'rgba(250,247,240,0.1)' : 'var(--gold)',
-                color: product.totalQuantity === 0 ? 'rgba(250,247,240,0.3)' : 'var(--obsidian)',
-                border: 'none',
+                background: product.totalQuantity === 0 ? 'rgba(250,247,240,0.1)' : 'linear-gradient(135deg, var(--rolex-green), var(--forest))',
+                color: product.totalQuantity === 0 ? 'rgba(250,247,240,0.3)' : 'var(--ivory)',
+                border: product.totalQuantity === 0 ? 'none' : '1px solid rgba(228,199,124,0.42)',
                 cursor: product.totalQuantity === 0 ? 'not-allowed' : 'pointer',
                 fontFamily: "'DM Sans', sans-serif",
                 fontSize: '0.58rem',
@@ -249,9 +249,9 @@ export function ProductCard({ product }: ProductCardProps) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'rgba(8,6,4,0.85)',
+                background: 'rgba(6,47,36,0.88)',
                 color: 'rgba(250,247,240,0.6)',
-                borderLeft: '1px solid rgba(250,247,240,0.1)',
+                borderLeft: '1px solid rgba(0,96,57,0.28)',
                 backdropFilter: 'blur(8px)',
                 transition: 'color 0.2s ease',
                 textDecoration: 'none',
@@ -274,7 +274,7 @@ export function ProductCard({ product }: ProductCardProps) {
               fontWeight: 500,
               letterSpacing: '0.25em',
               textTransform: 'uppercase',
-              color: 'var(--gold)',
+              color: 'var(--gold-light)',
               marginBottom: '0.5rem',
             }}
           >

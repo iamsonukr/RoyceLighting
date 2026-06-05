@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const path = require('path');
+
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 // Config
 const mongoUri = process.env.MONGODB_URI;
