@@ -72,7 +72,7 @@ export class CartService {
         quantity,
         color: color || '',
         size: size || '',
-        image: product.primaryImage || product.images?.[0] || product.image,
+        image: this.getProductDisplayImage(product),
       });
     }
 
@@ -142,5 +142,16 @@ export class CartService {
       { items: [] },
     );
     return { message: 'Cart cleared' };
+  }
+
+  private getProductDisplayImage(product: ProductDocument) {
+    const assets = Array.isArray(product.imageAssets)
+      ? [...product.imageAssets].sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
+      : [];
+    const primary = assets.find((asset) => asset.isPrimary) || assets[0];
+    if (primary) return primary.webpUrl || primary.url || '';
+
+    const legacyProduct = product as any;
+    return legacyProduct.primaryImage || legacyProduct.image || legacyProduct.images?.[0] || '';
   }
 }

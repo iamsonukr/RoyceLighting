@@ -59,7 +59,7 @@ export default async function ProductDetailPage({
   const categoryRef = typeof product.category === 'object'
     ? product.category?.slug || product.category?._id
     : product.category;
-  const related = await getRelated(categoryRef, id);
+  const related = await getRelated(categoryRef, product._id || id);
 
   return (
     <div>

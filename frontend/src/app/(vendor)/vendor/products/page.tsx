@@ -11,8 +11,9 @@ import { vendorApi } from '@/lib/vendorApi';
 const EMPTY_FORM = {
   name: '', description: '', costPrice: '', sellingPrice: '',
   retailPrice: '', category: '', totalQuantity: '',
-  colors: '', tags: '', materialUsed: '', suitableAges: '',
-  brand: '', weight: '',
+  sku: '', series: '', colors: '', tags: '', material: '',
+  size: '', dimension: { height: '', width: '', depth: '', raw: '' },
+  finish: '', lightSource: '', remark: '', weight: '',
 };
 
 export default function VendorProductsPage() {
@@ -77,6 +78,12 @@ export default function VendorProductsPage() {
   };
 
   const getProductImages = (product: any) => {
+    if (Array.isArray(product.imageAssets) && product.imageAssets.length) {
+      return [...product.imageAssets]
+        .sort((a: any, b: any) => Number(a.order || 0) - Number(b.order || 0))
+        .map((asset: any) => asset.webpUrl || asset.url)
+        .filter(Boolean);
+    }
     const images = Array.isArray(product.images) ? product.images.filter(Boolean) : [];
     return images.length ? images : product.image ? [product.image] : [];
   };
@@ -95,8 +102,20 @@ export default function VendorProductsPage() {
       totalQuantity: p.totalQuantity,
       colors: p.colors?.join(', ') || '',
       tags: p.tags?.join(', ') || '',
-      materialUsed: p.materialUsed?.join(', ') || '',
-      suitableAges: p.suitableAges || '', brand: p.brand || '', weight: p.weight || '',
+      sku: p.sku || p.productId || '',
+      series: p.series || '',
+      material: p.material?.join(', ') || p.materialUsed?.join(', ') || '',
+      size: p.size || p.dimension?.raw || '',
+      dimension: {
+        height: p.dimension?.height || '',
+        width: p.dimension?.width || '',
+        depth: p.dimension?.depth || '',
+        raw: p.dimension?.raw || p.size || '',
+      },
+      finish: p.finish || p.Fineshed || '',
+      lightSource: p.lightSource || p.LightSource || '',
+      remark: p.remark || p.Remark || '',
+      weight: p.weight || '',
     });
     setImagePreviews(getProductImages(p));
     setImageFiles([]);
@@ -114,10 +133,17 @@ export default function VendorProductsPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!form.sku.trim()) return;
     const fd = new FormData();
     Object.entries(form).forEach(([k, v]) => {
-      if (['colors', 'tags', 'materialUsed'].includes(k)) {
+      if (['colors', 'tags', 'material'].includes(k)) {
         fd.append(k, JSON.stringify(String(v).split(',').map((s) => s.trim()).filter(Boolean)));
+      } else if (k === 'dimension') {
+        const dimension = v as typeof EMPTY_FORM.dimension;
+        fd.append('dimension', JSON.stringify({
+          ...dimension,
+          raw: dimension.raw || form.size,
+        }));
       } else {
         fd.append(k, String(v));
       }
@@ -219,7 +245,8 @@ export default function VendorProductsPage() {
                       {p.isActive ? 'Active' : 'Off'}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-400 capitalize mb-3">{p.category?.name || p.category}</p>
+                  <p className="text-xs text-gray-400 capitalize mb-1">{p.category?.name || p.category}</p>
+                  {p.sku && <p className="text-xs text-gray-400 mb-3">{p.sku}</p>}
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="font-bold text-gray-900">₹{p.sellingPrice}</span>
@@ -304,6 +331,26 @@ export default function VendorProductsPage() {
                   />
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">SKU *</label>
+                  <input
+                    required value={form.sku}
+                    onChange={(e) => setForm({ ...form, sku: e.target.value })}
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    placeholder="e.g. RL188093-600D"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Series</label>
+                  <input
+                    value={form.series}
+                    onChange={(e) => setForm({ ...form, series: e.target.value })}
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    placeholder="e.g. RL188093"
+                  />
+                </div>
+
                 {[
                   { key: 'costPrice', label: 'Cost Price (₹) *' },
                   { key: 'sellingPrice', label: 'Selling Price (₹) *' },
@@ -334,20 +381,67 @@ export default function VendorProductsPage() {
                 {[
                   { key: 'colors', label: 'Available Colors (comma-separated)', placeholder: '#ff0000, blue, gold', full: true },
                   { key: 'tags', label: 'Tags (comma-separated)', placeholder: 'handmade, pearl, gift', full: true },
-                  { key: 'materialUsed', label: 'Materials (comma-separated)', placeholder: 'silver, gold, thread', full: true },
-                  { key: 'brand', label: 'Brand', placeholder: 'Your brand', full: false },
-                  { key: 'weight', label: 'Weight', placeholder: '50g', full: false },
-                  { key: 'suitableAges', label: 'Suitable Ages', placeholder: '18+', full: false },
+                  { key: 'material', label: 'Materials (comma-separated)', placeholder: 'stainless steel, acrylic, crystal', full: true },
+                  { key: 'finish', label: 'Finish', placeholder: 'CHROME+PINK', full: false },
+                  { key: 'lightSource', label: 'Light Source', placeholder: 'LED 3IN1 3K/4K/6K', full: false },
+                  { key: 'weight', label: 'Weight (g)', placeholder: '500', full: false },
+                  { key: 'remark', label: 'Remark', placeholder: 'Any remarks', full: false },
                 ].map(({ key, label, placeholder, full }) => (
                   <div key={key} className={full ? 'col-span-2' : ''}>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
                     <input
+                      type={key === 'weight' ? 'number' : 'text'}
+                      min={key === 'weight' ? '0' : undefined}
                       value={(form as any)[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })}
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                       placeholder={placeholder}
                     />
                   </div>
                 ))}
+
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Raw Size</label>
+                  <input
+                    value={form.size}
+                    onChange={(e) => setForm({
+                      ...form,
+                      size: e.target.value,
+                      dimension: { ...form.dimension, raw: e.target.value },
+                    })}
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    placeholder="e.g. 1200*180*H290"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Height</label>
+                  <input
+                    value={form.dimension.height}
+                    onChange={(e) => setForm({ ...form, dimension: { ...form.dimension, height: e.target.value } })}
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    placeholder="290mm"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Width</label>
+                  <input
+                    value={form.dimension.width}
+                    onChange={(e) => setForm({ ...form, dimension: { ...form.dimension, width: e.target.value } })}
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    placeholder="1200mm"
+                  />
+                </div>
+
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Depth</label>
+                  <input
+                    value={form.dimension.depth}
+                    onChange={(e) => setForm({ ...form, dimension: { ...form.dimension, depth: e.target.value } })}
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    placeholder="180mm"
+                  />
+                </div>
               </div>
 
               <div className="flex gap-3 pt-2">

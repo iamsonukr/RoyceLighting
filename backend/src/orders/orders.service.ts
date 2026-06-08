@@ -112,7 +112,7 @@ export class OrdersService {
         quantity,
         color: item.color || '',
         size: item.size || '',
-        image: product.primaryImage || product.images?.[0] || product.image || item.image || '',
+        image: this.getProductDisplayImage(product) || item.image || '',
         itemTotal,
       });
     }
@@ -338,5 +338,16 @@ export class OrdersService {
       cancelled,
       revenue: revenue[0]?.total || 0,
     };
+  }
+
+  private getProductDisplayImage(product: ProductDocument) {
+    const assets = Array.isArray(product.imageAssets)
+      ? [...product.imageAssets].sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
+      : [];
+    const primary = assets.find((asset) => asset.isPrimary) || assets[0];
+    if (primary) return primary.webpUrl || primary.url || '';
+
+    const legacyProduct = product as any;
+    return legacyProduct.primaryImage || legacyProduct.image || legacyProduct.images?.[0] || '';
   }
 }

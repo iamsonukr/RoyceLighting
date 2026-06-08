@@ -8,10 +8,11 @@ import Pagination from '@/components/Pagination';
 
 const EMPTY_FORM = {
   name: '', description: '', costPrice: '', sellingPrice: '', retailPrice: '',
-  category: '', totalQuantity: '', colors: '', tags: '', materialUsed: '',
-  size: { height: '', width: '' },
+  category: '', totalQuantity: '', colors: '', tags: '', material: '',
+  size: '',
+  dimension: { height: '', width: '', depth: '', raw: '' },
   weight: '', isActive: true,
-  productId: '', Fineshed: '', LightSource: '', Remark: '',
+  sku: '', slug: '', series: '', finish: '', lightSource: '', remark: '',
 };
 
 type ImageItem = {
@@ -132,10 +133,21 @@ export default function AdminProductsPage() {
       totalQuantity: product.totalQuantity,
       colors: product.colors?.join(', ') || '',
       tags: product.tags?.join(', ') || '',
-      materialUsed: product.materialUsed?.join(', ') || product.material?.join(', ') || '',
-      size: product.size || product.dimension || { height: '', width: '' },
+      material: product.material?.join(', ') || product.materialUsed?.join(', ') || '',
+      size: product.size || product.dimension?.raw || '',
+      dimension: {
+        height: product.dimension?.height || '',
+        width: product.dimension?.width || '',
+        depth: product.dimension?.depth || '',
+        raw: product.dimension?.raw || product.size || '',
+      },
       weight: product.weight || '', isActive: product.isActive,
-      productId: product.productId || '', Fineshed: product.Fineshed || '', LightSource: product.LightSource || '', Remark: product.Remark || '',
+      sku: product.sku || product.productId || '',
+      slug: product.slug || '',
+      series: product.series || '',
+      finish: product.finish || product.Fineshed || '',
+      lightSource: product.lightSource || product.LightSource || '',
+      remark: product.remark || product.Remark || '',
     });
     const nextImages = getProductImages(product).map((src: string) => ({
       id: src,
@@ -207,16 +219,24 @@ export default function AdminProductsPage() {
       setFormError('Please select a category.');
       return;
     }
+    if (!form.sku.trim()) {
+      setFormError('Please enter a SKU.');
+      return;
+    }
     if (!editingProduct && imageItems.length === 0) {
       setFormError('Please add at least one product image.');
       return;
     }
     const fd = new FormData();
     Object.entries(form).forEach(([k, v]) => {
-      if (k === 'colors' || k === 'tags' || k === 'materialUsed') {
+      if (k === 'colors' || k === 'tags' || k === 'material') {
         fd.append(k, JSON.stringify(String(v).split(',').map((s) => s.trim()).filter(Boolean)));
-      } else if (k === 'size') {
-        fd.append(k, JSON.stringify(v));
+      } else if (k === 'dimension') {
+        const dimension = v as typeof EMPTY_FORM.dimension;
+        fd.append('dimension', JSON.stringify({
+          ...dimension,
+          raw: dimension.raw || form.size,
+        }));
       } else {
         fd.append(k, String(v));
       }
@@ -304,6 +324,9 @@ export default function AdminProductsPage() {
                           </div>
                           <div className="min-w-0">
                             <span className="block text-sm font-medium text-gray-900 max-w-[160px] truncate">{p.name}</span>
+                            {p.sku && (
+                              <span className="block text-xs text-gray-400 max-w-[160px] truncate">{p.sku}</span>
+                            )}
                             {productImages.length > 1 && (
                               <span className="text-xs text-gray-400">{productImages.length} images</span>
                             )}
@@ -518,17 +541,37 @@ export default function AdminProductsPage() {
                   </select>
                 </div>
 
-                <div className="col-span-2 grid grid-cols-2 gap-4">
+                <div className="col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Raw Size</label>
+                  <input
+                    value={form.size}
+                    onChange={(e) => setForm({
+                      ...form,
+                      size: e.target.value,
+                      dimension: { ...form.dimension, raw: e.target.value },
+                    })}
+                    placeholder="e.g. 1200*180*H290"
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+                  />
+                </div>
+
+                <div className="col-span-2 grid grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Height</label>
-                    <input value={(form as any).size?.height} onChange={(e) => setForm({ ...form, size: { ...(form as any).size, height: e.target.value } })}
-                      placeholder="e.g. 20cm"
+                    <input value={form.dimension.height} onChange={(e) => setForm({ ...form, dimension: { ...form.dimension, height: e.target.value } })}
+                      placeholder="e.g. 290mm"
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Width</label>
-                    <input value={(form as any).size?.width} onChange={(e) => setForm({ ...form, size: { ...(form as any).size, width: e.target.value } })}
-                      placeholder="e.g. 10cm"
+                    <input value={form.dimension.width} onChange={(e) => setForm({ ...form, dimension: { ...form.dimension, width: e.target.value } })}
+                      placeholder="e.g. 1200mm"
+                      className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Depth</label>
+                    <input value={form.dimension.depth} onChange={(e) => setForm({ ...form, dimension: { ...form.dimension, depth: e.target.value } })}
+                      placeholder="e.g. 180mm"
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900" />
                   </div>
                 </div>
@@ -536,12 +579,12 @@ export default function AdminProductsPage() {
                 {[
                   { key: 'colors', label: 'Colors (comma-separated)', placeholder: '#ff0000, #00ff00, blue' },
                   { key: 'tags', label: 'Tags (comma-separated)', placeholder: 'handmade, pearl, gift' },
-                  { key: 'materialUsed', label: 'Materials (comma-separated)', placeholder: 'silver, pearl, thread' },
-                  { key: 'weight', label: 'Weight', placeholder: '50g' },
+                  { key: 'material', label: 'Materials (comma-separated)', placeholder: 'stainless steel, acrylic, crystal' },
+                  { key: 'weight', label: 'Weight (g)', placeholder: '500' },
                 ].map(({ key, label, placeholder }) => (
-                  <div key={key} className={key === 'colors' || key === 'tags' || key === 'materialUsed' ? 'col-span-2' : ''}>
+                  <div key={key} className={key === 'colors' || key === 'tags' || key === 'material' ? 'col-span-2' : ''}>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
-                    <input value={(form as any)[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                    <input type={key === 'weight' ? 'number' : 'text'} min={key === 'weight' ? '0' : undefined} value={(form as any)[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })}
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
                       placeholder={placeholder} />
                   </div>
@@ -549,15 +592,30 @@ export default function AdminProductsPage() {
 
                 <div className="col-span-2 grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Product ID</label>
-                    <input value={(form as any).productId} onChange={(e) => setForm({ ...form, productId: e.target.value })}
-                      placeholder="SKU or product id"
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">SKU *</label>
+                    <input required value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })}
+                      placeholder="e.g. RL188093-600D"
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900" />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Fineshed</label>
-                    <input value={(form as any).Fineshed} onChange={(e) => setForm({ ...form, Fineshed: e.target.value })}
-                      placeholder="e.g. Polished"
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Slug</label>
+                    <input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })}
+                      placeholder="Auto-generated from SKU"
+                      className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900" />
+                  </div>
+                </div>
+
+                <div className="col-span-2 grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Series</label>
+                    <input value={form.series} onChange={(e) => setForm({ ...form, series: e.target.value })}
+                      placeholder="e.g. RL188093"
+                      className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Finish</label>
+                    <input value={form.finish} onChange={(e) => setForm({ ...form, finish: e.target.value })}
+                      placeholder="e.g. CHROME+PINK"
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900" />
                   </div>
                 </div>
@@ -565,13 +623,13 @@ export default function AdminProductsPage() {
                 <div className="col-span-2 grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Light Source</label>
-                    <input value={(form as any).LightSource} onChange={(e) => setForm({ ...form, LightSource: e.target.value })}
-                      placeholder="e.g. LED"
+                    <input value={form.lightSource} onChange={(e) => setForm({ ...form, lightSource: e.target.value })}
+                      placeholder="e.g. LED 3IN1 3K/4K/6K"
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1.5">Remark</label>
-                    <input value={(form as any).Remark} onChange={(e) => setForm({ ...form, Remark: e.target.value })}
+                    <input value={form.remark} onChange={(e) => setForm({ ...form, remark: e.target.value })}
                       placeholder="Any remarks"
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900" />
                   </div>

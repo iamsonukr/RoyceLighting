@@ -12,7 +12,7 @@ import { CreateProductDto, UpdateProductDto, ProductQueryDto } from './dto/produ
 import { UserRole } from '../users/schemas/user.schema';
 import * as fs from 'fs';
 import * as path from 'path';
-import sharp from 'sharp';
+import * as sharp from 'sharp';
 
 const MAX_OPTIMIZED_IMAGE_SIZE = 500 * 1024;
 
@@ -45,20 +45,11 @@ export class ProductsService {
   }
 
   async create(dto: CreateProductDto, uploadedAssets: ProductImageAsset[] = [], vendorId?: string) {
-    const payload: any = { ...dto };
-    if (dto.category) payload.category = await this.resolveCategory(dto.category);
+    const payload = await this.buildProductPayload(dto, true);
 
     const orderedAssets = this.resolveImageAssets([], uploadedAssets, dto);
     payload.imageAssets = orderedAssets;
-    payload.images = orderedAssets.map((asset) => this.getDisplayImage(asset));
-    payload.primaryImage = this.getPrimaryImage(orderedAssets);
-    payload.image = payload.primaryImage || payload.images[0] || null;
     payload.vendorId = vendorId ? new Types.ObjectId(vendorId) : null;
-
-    if ((dto as any).materialUsed) payload.material = (dto as any).materialUsed;
-    if ((dto as any).size) payload.dimension = (dto as any).size;
-    if ((dto as any).colors) payload.colors = (dto as any).colors;
-    this.stripImageDtoFields(payload);
 
     return this.productModel.create(payload);
   }
@@ -84,8 +75,7 @@ export class ProductsService {
       if (maxPrice) filter.sellingPrice.$lte = +maxPrice;
     }
 
-    const sortOrder = order === 'asc' ? 1 : -1;
-    const sortField: any = { [sortBy]: sortOrder };
+    const sortField = this.resolveSort(sortBy, order);
 
     const [products, total] = await Promise.all([
       this.productModel
@@ -100,8 +90,11 @@ export class ProductsService {
     return { products, total, page: +page, pages: Math.ceil(total / +limit) };
   }
 
-  async findOne(id: string) {
-    const product = await this.productModel.findById(id).populate('category', 'name slug');
+  async findOne(idOrSlug: string) {
+    const filter = Types.ObjectId.isValid(idOrSlug)
+      ? { _id: new Types.ObjectId(idOrSlug) }
+      : { slug: idOrSlug };
+    const product = await this.productModel.findOne(filter).populate('category', 'name slug');
     if (!product || !product.isActive) throw new NotFoundException('Product not found');
     return product;
   }
@@ -120,7 +113,7 @@ export class ProductsService {
       throw new ForbiddenException('You can only edit your own products');
     }
 
-    const updateData: any = { ...dto };
+    const updateData = await this.buildProductPayload(dto, false);
     const shouldUpdateImages =
       uploadedAssets.length > 0 ||
       Array.isArray(dto.imageOrder) ||
@@ -135,16 +128,7 @@ export class ProductsService {
 
       this.removeImageFiles(previousPaths.filter((imagePath) => !nextPaths.includes(imagePath)));
       updateData.imageAssets = nextAssets;
-      updateData.images = nextAssets.map((asset) => this.getDisplayImage(asset));
-      updateData.primaryImage = this.getPrimaryImage(nextAssets);
-      updateData.image = updateData.primaryImage || updateData.images[0] || null;
     }
-
-    if (updateData.category) updateData.category = await this.resolveCategory(updateData.category);
-    if ((updateData as any).materialUsed) updateData.material = (updateData as any).materialUsed;
-    if ((updateData as any).size) updateData.dimension = (updateData as any).size;
-    if ((updateData as any).colors) updateData.colors = (updateData as any).colors;
-    this.stripImageDtoFields(updateData);
 
     return this.productModel.findByIdAndUpdate(id, updateData, { new: true });
   }
@@ -215,6 +199,143 @@ export class ProductsService {
       .populate('category', 'name slug');
   }
 
+  private async buildProductPayload(
+    dto: CreateProductDto | UpdateProductDto,
+    requireSku: boolean,
+  ) {
+    const payload: any = { ...dto };
+
+    if (payload.category) payload.category = await this.resolveCategory(payload.category);
+
+    const sku = this.cleanString(payload.sku || payload.productId);
+    if (sku) {
+      payload.sku = sku;
+    } else if (requireSku) {
+      throw new BadRequestException('SKU is required');
+    }
+
+    if (payload.slug || sku || payload.name) {
+      payload.slug = this.toSlug(payload.slug || sku || payload.name);
+    }
+
+    if (sku && !this.cleanString(payload.series)) {
+      payload.series = this.extractSeries(sku);
+    } else if (payload.series) {
+      payload.series = this.cleanString(payload.series);
+    }
+
+    if (payload.Fineshed && !payload.finish) payload.finish = payload.Fineshed;
+    if (payload.LightSource && !payload.lightSource) payload.lightSource = payload.LightSource;
+    if (payload.Remark && !payload.remark) payload.remark = payload.Remark;
+
+    if (Object.prototype.hasOwnProperty.call(payload, 'material') ||
+        Object.prototype.hasOwnProperty.call(payload, 'materialUsed')) {
+      payload.material = this.normalizeStringArray(payload.material ?? payload.materialUsed) || [];
+    }
+
+    if (Object.prototype.hasOwnProperty.call(payload, 'colors')) {
+      payload.colors = this.normalizeStringArray(payload.colors) || [];
+    }
+
+    if (Object.prototype.hasOwnProperty.call(payload, 'tags')) {
+      payload.tags = this.normalizeStringArray(payload.tags) || [];
+    }
+
+    if (
+      Object.prototype.hasOwnProperty.call(payload, 'size') ||
+      Object.prototype.hasOwnProperty.call(payload, 'dimension')
+    ) {
+      const normalized = this.normalizeSizeAndDimension(payload.size, payload.dimension);
+      if (normalized.size !== undefined) payload.size = normalized.size;
+      if (normalized.dimension !== undefined) payload.dimension = normalized.dimension;
+    }
+
+    this.stripProductDtoFields(payload);
+    return payload;
+  }
+
+  private normalizeStringArray(value: unknown): string[] | undefined {
+    if (value === undefined || value === null) return undefined;
+    if (Array.isArray(value)) {
+      return value.map((item) => String(item).trim()).filter(Boolean);
+    }
+    if (typeof value === 'string') {
+      return value.split(',').map((item) => item.trim()).filter(Boolean);
+    }
+    return undefined;
+  }
+
+  private normalizeSizeAndDimension(sizeValue: unknown, dimensionValue: unknown) {
+    const dimensionSource =
+      dimensionValue && typeof dimensionValue === 'object'
+        ? dimensionValue as Record<string, unknown>
+        : sizeValue && typeof sizeValue === 'object'
+        ? sizeValue as Record<string, unknown>
+        : undefined;
+
+    const rawSize = typeof sizeValue === 'string'
+      ? this.cleanString(sizeValue)
+      : this.cleanString(dimensionSource?.raw);
+
+    const dimension = dimensionSource
+      ? {
+          height: this.cleanString(dimensionSource.height),
+          width: this.cleanString(dimensionSource.width),
+          depth: this.cleanString(dimensionSource.depth),
+          raw: this.cleanString(dimensionSource.raw) || rawSize,
+        }
+      : rawSize
+      ? { raw: rawSize }
+      : undefined;
+
+    const cleanedDimension = dimension
+      ? Object.fromEntries(
+          Object.entries(dimension).filter(([, value]) => value !== undefined && value !== ''),
+        )
+      : undefined;
+
+    return {
+      size: rawSize,
+      dimension: cleanedDimension && Object.keys(cleanedDimension).length
+        ? cleanedDimension
+        : undefined,
+    };
+  }
+
+  private cleanString(value: unknown) {
+    if (typeof value !== 'string') return undefined;
+    const trimmed = value.trim();
+    return trimmed || undefined;
+  }
+
+  private toSlug(value: string) {
+    return value
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+  }
+
+  private extractSeries(sku: string) {
+    return sku.split(/[-_\s]/)[0] || sku;
+  }
+
+  private resolveSort(sortBy = 'createdAt', order: 'asc' | 'desc' = 'desc') {
+    const allowedFields = new Set([
+      'createdAt',
+      'name',
+      'sellingPrice',
+      'retailPrice',
+      'salesCount',
+      'totalQuantity',
+      'sku',
+    ]);
+    const field = allowedFields.has(sortBy) ? sortBy : 'createdAt';
+    const direction: 1 | -1 = order === 'asc' ? 1 : -1;
+    return { [field]: direction };
+  }
+
   private async resolveCategory(value: string) {
     if (Types.ObjectId.isValid(value)) return new Types.ObjectId(value);
     const category = await this.categoryModel.findOne({ slug: value });
@@ -240,11 +361,16 @@ export class ProductsService {
         .sort((a, b) => a.order - b.order);
     }
 
-    const paths = [...(product.images || []), product.image].filter(Boolean) as string[];
+    const legacyProduct = product as any;
+    const paths = [
+      ...(Array.isArray(legacyProduct.images) ? legacyProduct.images : []),
+      legacyProduct.primaryImage,
+      legacyProduct.image,
+    ].filter(Boolean) as string[];
     return [...new Set(paths)].map((url, index) => ({
       url,
       order: index,
-      isPrimary: url === (product.primaryImage || product.image || paths[0]),
+      isPrimary: url === (legacyProduct.primaryImage || legacyProduct.image || paths[0]),
     }));
   }
 
@@ -308,11 +434,6 @@ export class ProductsService {
     return asset.webpUrl || asset.url;
   }
 
-  private getPrimaryImage(assets: ProductImageAsset[]) {
-    const primary = assets.find((asset) => asset.isPrimary) || assets[0];
-    return primary ? this.getDisplayImage(primary) : null;
-  }
-
   private normalizeImageToken(value: string) {
     if (!value) return '';
     if (value.startsWith('new:')) return value;
@@ -323,7 +444,12 @@ export class ProductsService {
     }
   }
 
-  private stripImageDtoFields(payload: any) {
+  private stripProductDtoFields(payload: any) {
+    delete payload.productId;
+    delete payload.Fineshed;
+    delete payload.LightSource;
+    delete payload.Remark;
+    delete payload.materialUsed;
     delete payload.existingImages;
     delete payload.imageOrder;
     delete payload.primaryImage;

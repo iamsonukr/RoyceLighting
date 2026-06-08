@@ -12,6 +12,8 @@ import { openAuthModal, openCartDrawer, addToast } from '../../store/slices/uiSl
 interface Product {
   _id: string;
   name: string;
+  slug?: string;
+  sku?: string;
   sellingPrice: number;
   retailPrice: number;
   image?: string;
@@ -43,9 +45,15 @@ export function ProductCard({ product }: ProductCardProps) {
       : 0;
 
   const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '');
-  const assetImages = product.imageAssets?.length
-    ? [...product.imageAssets]
-        .sort((a, b) => Number(a.order || 0) - Number(b.order || 0))
+  const orderedAssets = product.imageAssets?.length
+    ? [...product.imageAssets].sort((a, b) => Number(a.order || 0) - Number(b.order || 0))
+    : [];
+  const primaryAsset = orderedAssets.find((asset) => asset.isPrimary);
+  const assetImages = orderedAssets.length
+    ? [
+        ...(primaryAsset ? [primaryAsset] : []),
+        ...orderedAssets.filter((asset) => asset !== primaryAsset),
+      ]
         .map((asset) => asset.webpUrl || asset.url)
         .filter(Boolean)
     : [];
@@ -83,7 +91,7 @@ export function ProductCard({ product }: ProductCardProps) {
     setWishlisted(!wishlisted);
   };
 
-  const productHref = `/product/${product._id}`;
+  const productHref = `/product/${product.slug || product._id}`;
 
   const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target instanceof HTMLElement && e.target.closest('a,button,input,select,textarea')) {

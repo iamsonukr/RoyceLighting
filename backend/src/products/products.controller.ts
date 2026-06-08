@@ -113,9 +113,9 @@ export class ProductsController {
     return { success: true, data };
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    const data = await this.productsService.findOne(id);
+  @Get(':idOrSlug')
+  async findOne(@Param('idOrSlug') idOrSlug: string) {
+    const data = await this.productsService.findOne(idOrSlug);
     return { success: true, data };
   }
 }

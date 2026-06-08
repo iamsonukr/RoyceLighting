@@ -1,0 +1,154 @@
+[
+  {
+    "name": "Decorative Chandelier",
+    "slug": "decorative-chandelier",
+    "description": "Statement chandeliers for living rooms, lobbies, and grand interiors.",
+    "emoji": "✨",
+    "sortOrder": 1,
+    "isActive": true
+  },
+  {
+    "name": "Decorative Double Height Chandelier",
+    "slug": "decorative-double-height-chandelier",
+    "description": "Large-scale chandeliers designed for double height and high-ceiling spaces.",
+    "emoji": "🏛️",
+    "sortOrder": 2,
+    "isActive": true
+  },
+  {
+    "name": "Decorative Dining Chandelier",
+    "slug": "decorative-dining-chandelier",
+    "description": "Elegant chandelier fixtures crafted for dining rooms and formal spaces.",
+    "emoji": "🍽️",
+    "sortOrder": 3,
+    "isActive": true
+  },
+  {
+    "name": "Decorative Pendant Light",
+    "slug": "decorative-pendant-light",
+    "description": "Suspended pendant lights for kitchens, bedrooms, and accent spaces.",
+    "emoji": "💡",
+    "sortOrder": 4,
+    "isActive": true
+  },
+  {
+    "name": "Decorative Dining Pendant Light",
+    "slug": "decorative-dining-pendant-light",
+    "description": "Pendant lights specifically designed for over-table dining installations.",
+    "emoji": "🍴",
+    "sortOrder": 5,
+    "isActive": true
+  },
+  {
+    "name": "Decorative Dining Light",
+    "slug": "decorative-dining-light",
+    "description": "Linear and surface dining lights for modern dining areas.",
+    "emoji": "🕯️",
+    "sortOrder": 6,
+    "isActive": true
+  },
+  {
+    "name": "Decorative Wall Light",
+    "slug": "decorative-wall-light",
+    "description": "Wall-mounted decorative sconces for corridors, living rooms, and bedrooms.",
+    "emoji": "🪔",
+    "sortOrder": 7,
+    "isActive": true
+  },
+  {
+    "name": "Indoor Decorative Wall Light",
+    "slug": "indoor-decorative-wall-light",
+    "description": "Specialty indoor wall lights with decorative detailing.",
+    "emoji": "🏠",
+    "sortOrder": 8,
+    "isActive": true
+  },
+  {
+    "name": "Decorative Surface Light",
+    "slug": "decorative-surface-light",
+    "description": "Flush and semi-flush surface-mounted decorative ceiling lights.",
+    "emoji": "⭕",
+    "sortOrder": 9,
+    "isActive": true
+  },
+  {
+    "name": "Indoor Decorative Surface Light",
+    "slug": "indoor-decorative-surface-light",
+    "description": "Indoor ceiling surface lights with decorative finishes.",
+    "emoji": "🔆",
+    "sortOrder": 10,
+    "isActive": true
+  },
+  {
+    "name": "Decorative Office Pendant Light",
+    "slug": "decorative-office-pendant-light",
+    "description": "Linear and geometric pendant lights suited for office and commercial spaces.",
+    "emoji": "🏢",
+    "sortOrder": 11,
+    "isActive": true
+  },
+  {
+    "name": "Decorative Bar Counter Light",
+    "slug": "decorative-bar-counter-light",
+    "description": "Stylish lighting fixtures designed for bar counters and hospitality settings.",
+    "emoji": "🍸",
+    "sortOrder": 12,
+    "isActive": true
+  },
+  {
+    "name": "Decorative Table Lamp",
+    "slug": "decorative-table-lamp",
+    "description": "Ornate table lamps for bedside, console, and accent table styling.",
+    "emoji": "🛋️",
+    "sortOrder": 13,
+    "isActive": true
+  },
+  {
+    "name": "Decorative Floor Lamp",
+    "slug": "decorative-floor-lamp",
+    "description": "Freestanding floor lamps for living spaces and reading corners.",
+    "emoji": "🪑",
+    "sortOrder": 14,
+    "isActive": true
+  },
+  {
+    "name": "Outdoor Wall Light",
+    "slug": "outdoor-wall-light",
+    "description": "Weather-resistant wall lights for building facades and entrances.",
+    "emoji": "🌿",
+    "sortOrder": 15,
+    "isActive": true
+  },
+  {
+    "name": "Outdoor Garden Light",
+    "slug": "outdoor-garden-light",
+    "description": "Decorative lights for gardens, pathways, and landscaped areas.",
+    "emoji": "🌳",
+    "sortOrder": 16,
+    "isActive": true
+  },
+  {
+    "name": "Outdoor Garden Wall Light",
+    "slug": "outdoor-garden-wall-light",
+    "description": "Wall-mounted lights built for outdoor garden and perimeter installations.",
+    "emoji": "🌺",
+    "sortOrder": 17,
+    "isActive": true
+  },
+  {
+    "name": "Outdoor Garden Floor Lamp",
+    "slug": "outdoor-garden-floor-lamp",
+    "description": "Tall floor-standing lamps for garden and outdoor landscape lighting.",
+    "emoji": "🌙",
+    "sortOrder": 18,
+    "isActive": true
+  },
+  {
+    "name": "Outdoor Garden Mini Bollard Light",
+    "slug": "outdoor-garden-mini-bollard-light",
+    "description": "Low-profile bollard lights for pathways, driveways, and garden borders.",
+    "emoji": "🔦",
+    "sortOrder": 19,
+    "isActive": true
+  }
+]

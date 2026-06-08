@@ -1,9 +1,72 @@
-import { IsString, IsNumber, IsOptional, IsBoolean } from 'class-validator';
+import { IsArray, IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
+
+const parseJsonValue = (value: unknown) => {
+  if (typeof value !== 'string') return value;
+  if (!value.trim()) return undefined;
+
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
+};
+
+const parseStringArray = (value: unknown) => {
+  const parsed = parseJsonValue(value);
+  if (Array.isArray(parsed)) {
+    return parsed.map((item) => String(item).trim()).filter(Boolean);
+  }
+
+  if (typeof parsed === 'string') {
+    return parsed.split(',').map((item) => item.trim()).filter(Boolean);
+  }
+
+  return parsed;
+};
+
+const parseObject = (value: unknown) => parseJsonValue(value);
+
+const parseOptionalNumber = (value: unknown) => {
+  if (value === '' || value === null || value === undefined) return undefined;
+  return Number(value);
+};
+
+export class ProductDimensionDto {
+  @IsOptional() @IsString()
+  height?: string;
+
+  @IsOptional() @IsString()
+  width?: string;
+
+  @IsOptional() @IsString()
+  depth?: string;
+
+  @IsOptional() @IsString()
+  raw?: string;
+}
 
 export class CreateProductDto {
   @IsString() name: string;
   @IsString() description: string;
+
+  @IsString()
+  sku: string;
+
+  @IsOptional() @IsString()
+  slug?: string;
+
+  @IsOptional() @IsString()
+  series?: string;
+
+  @IsOptional() @IsString()
+  finish?: string;
+
+  @IsOptional() @IsString()
+  lightSource?: string;
+
+  @IsOptional() @IsString()
+  remark?: string;
 
   @IsOptional() @IsString()
   productId?: string;
@@ -30,43 +93,52 @@ export class CreateProductDto {
 
   @Transform(({ value }) => Number(value))
   @IsNumber() totalQuantity: number;
-  
-  @IsOptional() @IsString() weight?: string;
 
   @IsOptional()
-  @Transform(({ value }) =>
-    typeof value === 'string' ? JSON.parse(value) : value,
-  )
+  @Transform(({ value }) => parseOptionalNumber(value))
+  @IsNumber()
+  salesCount?: number;
+  
+  @IsOptional()
+  @Transform(({ value }) => parseOptionalNumber(value))
+  @IsNumber()
+  weight?: number;
+
+  @IsOptional() @IsString()
+  size?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => parseObject(value))
+  dimension?: ProductDimensionDto;
+
+  @IsOptional()
+  @Transform(({ value }) => parseStringArray(value))
+  @IsArray()
   colors?: string[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    typeof value === 'string' ? JSON.parse(value) : value,
-  )
-  size?: { height: string; width: string };
-
-  @IsOptional()
-  @Transform(({ value }) =>
-    typeof value === 'string' ? JSON.parse(value) : value,
-  )
+  @Transform(({ value }) => parseStringArray(value))
+  @IsArray()
   tags?: string[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    typeof value === 'string' ? JSON.parse(value) : value,
-  )
+  @Transform(({ value }) => parseStringArray(value))
+  @IsArray()
+  material?: string[];
+
+  @IsOptional()
+  @Transform(({ value }) => parseStringArray(value))
+  @IsArray()
   materialUsed?: string[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    typeof value === 'string' ? JSON.parse(value) : value,
-  )
+  @Transform(({ value }) => parseStringArray(value))
+  @IsArray()
   existingImages?: string[];
 
   @IsOptional()
-  @Transform(({ value }) =>
-    typeof value === 'string' ? JSON.parse(value) : value,
-  )
+  @Transform(({ value }) => parseStringArray(value))
+  @IsArray()
   imageOrder?: string[];
 
   @IsOptional() @IsString()

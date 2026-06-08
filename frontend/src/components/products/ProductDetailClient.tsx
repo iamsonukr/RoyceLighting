@@ -43,9 +43,15 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
   const [openAccordion, setOpenAccordion] = useState<string | null>('details');
 
   const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '');
-  const productImages = product.imageAssets?.length
-    ? [...product.imageAssets]
-        .sort((a: any, b: any) => Number(a.order || 0) - Number(b.order || 0))
+  const orderedAssets = product.imageAssets?.length
+    ? [...product.imageAssets].sort((a: any, b: any) => Number(a.order || 0) - Number(b.order || 0))
+    : [];
+  const primaryAsset = orderedAssets.find((asset: any) => asset.isPrimary);
+  const productImages = orderedAssets.length
+    ? [
+        ...(primaryAsset ? [primaryAsset] : []),
+        ...orderedAssets.filter((asset: any) => asset !== primaryAsset),
+      ]
         .map((asset: any) => asset.webpUrl || asset.url)
         .filter(Boolean)
     : [...new Set([product.primaryImage, ...(product.images || []), product.image].filter(Boolean))];
@@ -89,18 +95,32 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
     dispatch(addToast({ message: 'Link copied to clipboard', type: 'info' }));
   };
 
+  const dimensionParts = [
+    product.dimension?.height,
+    product.dimension?.width,
+    product.dimension?.depth,
+  ].filter(Boolean);
+  const dimensionValue = dimensionParts.length
+    ? dimensionParts.join(' x ')
+    : product.dimension?.raw || product.size || '';
+  const materials = product.material?.length ? product.material : product.materialUsed || [];
+
   const specDetails = [
+    product.sku && { label: 'SKU', value: product.sku },
+    product.series && { label: 'Series', value: product.series },
     { label: 'Category', value: categoryLabel },
-    product.brand && { label: 'Brand', value: product.brand },
-    product.weight && { label: 'Weight', value: product.weight },
-    (product.size?.height || product.dimension?.height) && {
+    product.finish && { label: 'Finish', value: product.finish },
+    product.lightSource && { label: 'Light Source', value: product.lightSource },
+    product.weight && { label: 'Weight', value: `${product.weight} g` },
+    dimensionValue && {
       label: 'Dimensions',
-      value: `${product.size?.height || product.dimension?.height} x ${product.size?.width || product.dimension?.width}`,
+      value: dimensionValue,
     },
-    (product.materialUsed?.length > 0 || product.material?.length > 0) && {
+    materials.length > 0 && {
       label: 'Materials',
-      value: (product.materialUsed || product.material).join(', '),
+      value: materials.join(', '),
     },
+    product.remark && { label: 'Remark', value: product.remark },
   ].filter(Boolean);
 
   const accordions = [
