@@ -4,16 +4,7 @@ import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, SlidersHorizontal, X, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { ProductCard } from '../products/ProductCard';
-
-const CATEGORIES = [
-  { label: 'All Pieces', value: '' },
-  { label: 'Chandeliers', value: 'chandeliers' },
-  { label: 'Pendants', value: 'pendants' },
-  { label: 'Sconces', value: 'sconces' },
-  { label: 'Table Lamps', value: 'table-lamps' },
-  { label: 'Floor Lamps', value: 'floor-lamps' },
-  { label: 'Ceiling Lights', value: 'ceiling-lights' },
-];
+import type { PublicCategory } from '@/lib/publicCategories';
 
 const PRICE_RANGES = [
   { label: 'Under ₹10,000', min: '', max: '10000' },
@@ -32,9 +23,10 @@ const SORT_OPTIONS = [
 interface ShopClientProps {
   initialData: { products: any[]; total: number; pages: number };
   searchParams: Record<string, string | undefined>;
+  categories: PublicCategory[];
 }
 
-export function ShopClient({ initialData, searchParams }: ShopClientProps) {
+export function ShopClient({ initialData, searchParams, categories }: ShopClientProps) {
   const router = useRouter();
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -62,7 +54,14 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
   };
 
   const { products, total, pages } = initialData;
-  const collectionLabel = CATEGORIES.find((c) => c.value === currentCategory)?.label || 'All Pieces';
+  const categoryOptions = [
+    { label: 'All Pieces', value: '' },
+    ...categories.map((category) => ({
+      label: category.name,
+      value: category.slug || category._id || '',
+    })),
+  ];
+  const collectionLabel = categoryOptions.find((c) => c.value === currentCategory)?.label || 'All Pieces';
 
   return (
     <div
@@ -183,7 +182,7 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
             </span>
             {currentCategory && (
               <button
-                onClick={() => updateUrl({ category: undefined })}
+                onClick={() => updateUrl({ category: undefined, collection: undefined })}
                 className="filter-chip active"
               >
                 {collectionLabel} <X size={10} />
@@ -206,7 +205,7 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
               </button>
             )}
             <button
-              onClick={() => updateUrl({ category: undefined, search: undefined, minPrice: undefined, maxPrice: undefined })}
+              onClick={() => updateUrl({ category: undefined, collection: undefined, search: undefined, minPrice: undefined, maxPrice: undefined })}
               style={{
                 background: 'none',
                 border: 'none',
@@ -260,10 +259,10 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
                   Category
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-                  {CATEGORIES.map((cat) => (
+                  {categoryOptions.map((cat) => (
                     <button
                       key={cat.value}
-                      onClick={() => updateUrl({ category: cat.value || undefined, page: undefined })}
+                      onClick={() => updateUrl({ category: cat.value || undefined, collection: undefined, page: undefined })}
                       style={{
                         textAlign: 'left',
                         padding: '0.65rem 0',
@@ -376,7 +375,7 @@ export function ShopClient({ initialData, searchParams }: ShopClientProps) {
                   Try adjusting your filters or explore our full collection
                 </p>
                 <button
-                  onClick={() => updateUrl({ category: undefined, search: undefined, minPrice: undefined, maxPrice: undefined })}
+                  onClick={() => updateUrl({ category: undefined, collection: undefined, search: undefined, minPrice: undefined, maxPrice: undefined })}
                   className="btn-outline"
                   style={{ fontSize: '0.58rem', padding: '0.75rem 1.75rem' }}
                 >

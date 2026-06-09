@@ -260,7 +260,7 @@ export default function AdminProductsPage() {
     saveProduct.mutate(fd);
   };
 
-  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '');
+  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace('/api', '');
 
   return (
     <div className="space-y-5">

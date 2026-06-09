@@ -1,40 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingBag, Search, User, Menu, X, ChevronDown, Sparkles } from 'lucide-react';
+import { ShoppingBag, Search, User, Menu, X, ChevronDown } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { openAuthModal } from '../../store/slices/uiSlice';
 import { logout } from '../../store/slices/authSlice';
 import { selectCartCount } from '../../store/slices/cartSlice';
 import { openCartDrawer } from '../../store/slices/uiSlice';
-import { useState, useEffect, useRef } from 'react';
-
-const COLLECTIONS = [
-  {
-    label: 'Grand Chandeliers',
-    href: '/shop?collection=chandeliers',
-    desc: 'Ballrooms & foyers',
-    image: 'https://source.unsplash.com/featured/?grand-chandelier,luxury-lighting',
-  },
-  {
-    label: 'Pendant Lights',
-    href: '/shop?collection=pendants',
-    desc: 'Dining & living',
-    image: 'https://source.unsplash.com/featured/?pendant-light,decorative-lighting',
-  },
-  {
-    label: 'Wall Sconces',
-    href: '/shop?collection=sconces',
-    desc: 'Hallways & bedrooms',
-    image: 'https://source.unsplash.com/featured/?wall-sconce,decorative-lighting',
-  },
-  {
-    label: 'Table Lamps',
-    href: '/shop?collection=table-lamps',
-    desc: 'Intimate spaces',
-    image: 'https://source.unsplash.com/featured/?table-lamp,decorative-lighting',
-  },
-];
+import { useMemo, useState, useEffect, useRef } from 'react';
+import { usePublicCategories } from '@/hooks/usePublicCategories';
+import { categoryHref, FALLBACK_CATEGORIES } from '@/lib/publicCategories';
 
 const NAV_LINKS = [
   { label: 'Collections', href: '#', hasMega: true },
@@ -53,6 +28,19 @@ export function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQ, setSearchQ] = useState('');
   const searchRef = useRef<HTMLInputElement>(null);
+  const { data: fetchedCategories } = usePublicCategories();
+
+  const collectionItems = useMemo(() => {
+    const source = fetchedCategories?.length ? fetchedCategories : FALLBACK_CATEGORIES;
+    return source.map((category) => ({
+      label: category.name,
+      href: categoryHref(category),
+      desc: category.description || 'Explore curated decorative lighting.',
+      image: category.image,
+    }));
+  }, [fetchedCategories]);
+
+  const browseItems = collectionItems.slice(0, 6);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -157,13 +145,15 @@ export function Navbar() {
                         top: '100%',
                         left: '50%',
                         marginTop: '1.5rem',
-                        width: '640px',
+                        width: 'min(840px, calc(100vw - 3rem))',
+                        maxHeight: 'calc(100vh - 150px)',
+                        overflowY: 'auto',
                         background: 'linear-gradient(180deg, rgba(6,47,36,0.98), rgba(15,12,8,0.97))',
                         border: '1px solid rgba(0,96,57,0.28)',
                         backdropFilter: 'blur(24px)',
                         padding: '2rem',
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(4, 1fr)',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(138px, 1fr))',
                         gap: '1rem',
                         opacity: megaOpen ? 1 : 0,
                         visibility: megaOpen ? 'visible' : 'hidden',
@@ -174,7 +164,7 @@ export function Navbar() {
                         boxShadow: '0 40px 80px rgba(8,6,4,0.6)',
                       }}
                     >
-                      {COLLECTIONS.map((col) => (
+                      {collectionItems.map((col) => (
                         <Link
                           key={col.href}
                           href={col.href}
@@ -184,7 +174,7 @@ export function Navbar() {
                           <div
                             style={{
                               position: 'relative',
-                              aspectRatio: '3/4',
+                              aspectRatio: '4/3',
                               overflow: 'hidden',
                               marginBottom: '0.6rem',
                             }}
@@ -388,10 +378,7 @@ export function Navbar() {
             }}
           >
             {[
-              { label: 'Chandeliers', href: '/shop?collection=chandeliers' },
-              { label: 'Pendants', href: '/shop?collection=pendants' },
-              { label: 'Sconces', href: '/shop?collection=sconces' },
-              { label: 'Table Lamps', href: '/shop?collection=table-lamps' },
+              ...collectionItems.map((item) => ({ label: item.label, href: item.href })),
               { label: 'Bespoke', href: '/bespoke' },
               { label: 'About', href: '/about' },
               { label: 'Contact', href: '/contact-us' },
@@ -500,10 +487,10 @@ export function Navbar() {
                 <span style={{ fontSize: '0.55rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(250,247,240,0.25)', marginRight: '0.25rem' }}>
                   Browse:
                 </span>
-                {['Chandeliers', 'Pendants', 'Sconces', 'Table Lamps'].map((cat) => (
+                {browseItems.map((cat) => (
                   <Link
-                    key={cat}
-                    href={`/shop?collection=${cat.toLowerCase().replace(' ', '-')}`}
+                    key={cat.href}
+                    href={cat.href}
                     onClick={() => setSearchOpen(false)}
                     style={{
                       fontSize: '0.58rem',
@@ -518,7 +505,7 @@ export function Navbar() {
                     onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--gold)'; e.currentTarget.style.borderColor = 'rgba(0,96,57,0.3)'; }}
                     onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(250,247,240,0.4)'; e.currentTarget.style.borderColor = 'rgba(250,247,240,0.08)'; }}
                   >
-                    {cat}
+                    {cat.label}
                   </Link>
                 ))}
               </div>

@@ -2,14 +2,9 @@
 
 import Link from 'next/link';
 import { Instagram, Facebook, Twitter, Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react';
-
-const COLLECTIONS = [
-  { label: 'Grand Chandeliers', href: '/shop?collection=chandeliers' },
-  { label: 'Pendant Lights', href: '/shop?collection=pendants' },
-  { label: 'Wall Sconces', href: '/shop?collection=sconces' },
-  { label: 'Table Lamps', href: '/shop?collection=table-lamps' },
-  { label: 'Bespoke Commissions', href: '/bespoke' },
-];
+import { useMemo } from 'react';
+import { usePublicCategories } from '@/hooks/usePublicCategories';
+import { categoryHref, FALLBACK_CATEGORIES } from '@/lib/publicCategories';
 
 const INFO_LINKS = [
   { label: 'About Royce', href: '/about' },
@@ -22,6 +17,18 @@ const INFO_LINKS = [
 ];
 
 export function Footer() {
+  const { data: fetchedCategories } = usePublicCategories();
+  const collections = useMemo(() => {
+    const source = fetchedCategories?.length ? fetchedCategories : FALLBACK_CATEGORIES;
+    return [
+      ...source.map((category) => ({
+        label: category.name,
+        href: categoryHref(category),
+      })),
+      { label: 'Bespoke Commissions', href: '/bespoke' },
+    ];
+  }, [fetchedCategories]);
+
   return (
     <footer style={{ background: 'var(--obsidian)', borderTop: '1px solid rgba(250,247,240,0.06)' }}>
       {/* Top CTA band */}
@@ -127,7 +134,7 @@ export function Footer() {
             Collections
           </h4>
           <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
-            {COLLECTIONS.map((item) => (
+            {collections.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}

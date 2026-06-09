@@ -42,7 +42,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | null>('details');
 
-  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '');
+  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace('/api', '');
   const orderedAssets = product.imageAssets?.length
     ? [...product.imageAssets].sort((a: any, b: any) => Number(a.order || 0) - Number(b.order || 0))
     : [];

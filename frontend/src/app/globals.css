@@ -1050,7 +1050,8 @@
   }
 
   .category-card {
-    min-height: 520px;
+    aspect-ratio: 1 / 1;
+    min-height: 0;
     position: relative;
     display: flex;
     align-items: flex-end;
@@ -1094,16 +1095,20 @@
   .category-card h3 {
     margin-top: 0.6rem;
     color: var(--ivory);
-    font-size: 1.55rem;
+    font-size: clamp(1.15rem, 2vw, 1.55rem);
     font-style: italic;
+    line-height: 1.14;
   }
 
   .category-card p {
-    min-height: 74px;
     margin-top: 0.65rem;
     color: rgba(250,247,240,0.68);
     font-size: 0.78rem;
     line-height: 1.65;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
   }
 
   .category-card strong {
@@ -1431,7 +1436,8 @@
   }
 
   .category-card {
-    min-height: 430px;
+    aspect-ratio: 1 / 1;
+    padding: 1.25rem;
   }
 
   .collection-showcase {

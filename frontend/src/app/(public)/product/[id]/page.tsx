@@ -4,11 +4,12 @@ import { ProductDetailClient } from '@/components/products/ProductDetailClient';
 import { ProductCard } from '@/components/products/ProductCard';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { PUBLIC_API_URL } from '@/lib/publicCategories';
 
 async function getProduct(id: string) {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/products/${id}`,
+      `${PUBLIC_API_URL}/products/${id}`,
       { next: { revalidate: 300 } },
     );
     if (!res.ok) return null;
@@ -23,7 +24,7 @@ async function getRelated(category: string | undefined, excludeId: string) {
   if (!category) return [];
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/products?category=${encodeURIComponent(category)}&limit=4`,
+      `${PUBLIC_API_URL}/products?category=${encodeURIComponent(category)}&limit=4`,
       { next: { revalidate: 300 } },
     );
     const data = await res.json();

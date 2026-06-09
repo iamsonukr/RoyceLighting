@@ -1,0 +1,1091 @@
+{
+  "info": {
+    "_postman_id": "c4b204b7-5b65-4f78-9c89-8b624ef2a011",
+    "name": "Royce Lighting API",
+    "description": "Postman collection for the Royce Lighting NestJS backend. Import this file into Postman, run the login/register requests to save tokens, then use the protected customer, admin, and vendor requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3001/api", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "adminToken", "value": "", "type": "string" },
+    { "key": "vendorToken", "value": "", "type": "string" },
+    { "key": "customerName", "value": "Royce Customer", "type": "string" },
+    { "key": "customerEmail", "value": "customer@example.com", "type": "string" },
+    { "key": "customerPassword", "value": "password123", "type": "string" },
+    { "key": "vendorName", "value": "Royce Vendor", "type": "string" },
+    { "key": "vendorEmail", "value": "vendor@example.com", "type": "string" },
+    { "key": "vendorPassword", "value": "password123", "type": "string" },
+    { "key": "adminEmail", "value": "admin@example.com", "type": "string" },
+    { "key": "adminPassword", "value": "admin123", "type": "string" },
+    { "key": "userId", "value": "", "type": "string" },
+    { "key": "vendorId", "value": "", "type": "string" },
+    { "key": "categoryId", "value": "", "type": "string" },
+    { "key": "categorySlug", "value": "chandeliers", "type": "string" },
+    { "key": "productId", "value": "", "type": "string" },
+    { "key": "productSlug", "value": "rl-demo-chandelier", "type": "string" },
+    { "key": "orderId", "value": "", "type": "string" },
+    { "key": "page", "value": "1", "type": "string" },
+    { "key": "limit", "value": "20", "type": "string" },
+    { "key": "search", "value": "", "type": "string" },
+    { "key": "sortBy", "value": "createdAt", "type": "string" },
+    { "key": "sortOrder", "value": "desc", "type": "string" },
+    { "key": "minPrice", "value": "", "type": "string" },
+    { "key": "maxPrice", "value": "", "type": "string" },
+    { "key": "orderStatus", "value": "Confirmed", "type": "string" },
+    { "key": "razorpayOrderId", "value": "", "type": "string" },
+    { "key": "razorpayPaymentId", "value": "", "type": "string" },
+    { "key": "razorpaySignature", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 400) {",
+                  "  const json = pm.response.json();",
+                  "  if (json.data?.token) pm.collectionVariables.set('token', json.data.token);",
+                  "  if (json.data?.userId) pm.collectionVariables.set('userId', json.data.userId);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{customerName}}\",\n  \"email\": \"{{customerEmail}}\",\n  \"password\": \"{{customerPassword}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "Creates a customer account and saves token/userId into collection variables."
+          },
+          "response": []
+        },
+        {
+          "name": "Login Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 400) {",
+                  "  const json = pm.response.json();",
+                  "  if (json.data?.token) pm.collectionVariables.set('token', json.data.token);",
+                  "  if (json.data?.userId) pm.collectionVariables.set('userId', json.data.userId);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{customerEmail}}\",\n  \"password\": \"{{customerPassword}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Logs in a customer and saves token/userId into collection variables."
+          },
+          "response": []
+        },
+        {
+          "name": "Register Vendor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 400) {",
+                  "  const json = pm.response.json();",
+                  "  if (json.data?.token) pm.collectionVariables.set('vendorToken', json.data.token);",
+                  "  if (json.data?.userId) pm.collectionVariables.set('vendorId', json.data.userId);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{vendorName}}\",\n  \"email\": \"{{vendorEmail}}\",\n  \"password\": \"{{vendorPassword}}\",\n  \"shopName\": \"Royce Partner Studio\",\n  \"shopDescription\": \"Decorative lighting vendor\",\n  \"phone\": \"+919999999999\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/vendor/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "vendor", "register"]
+            },
+            "description": "Creates a vendor account and saves vendorToken/vendorId into collection variables."
+          },
+          "response": []
+        },
+        {
+          "name": "Login Vendor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 400) {",
+                  "  const json = pm.response.json();",
+                  "  if (json.data?.token) pm.collectionVariables.set('vendorToken', json.data.token);",
+                  "  if (json.data?.userId) pm.collectionVariables.set('vendorId', json.data.userId);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{vendorEmail}}\",\n  \"password\": \"{{vendorPassword}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Logs in a vendor and saves vendorToken/vendorId into collection variables."
+          },
+          "response": []
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 400) {",
+                  "  const json = pm.response.json();",
+                  "  if (json.data?.token) pm.collectionVariables.set('adminToken', json.data.token);",
+                  "  if (json.data?.userId) pm.collectionVariables.set('userId', json.data.userId);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Logs in an admin user and saves adminToken into collection variables. Create/seed the admin with the backend seed script first if needed."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "profile"]
+            },
+            "description": "Gets the authenticated user's profile."
+          },
+          "response": []
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"{{customerPassword}}\",\n  \"newPassword\": \"newPassword123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/change-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "change-password"]
+            },
+            "description": "Changes password for the authenticated user."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "List Active Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            },
+            "description": "Public list of active categories."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Category by Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/slug/{{categorySlug}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "slug", "{{categorySlug}}"]
+            },
+            "description": "Public category lookup by slug."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin List All Categories",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/admin/all?page={{page}}&limit={{limit}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "admin", "all"],
+              "query": [
+                { "key": "page", "value": "{{page}}" },
+                { "key": "limit", "value": "{{limit}}" }
+              ]
+            },
+            "description": "Admin list of all categories, including inactive categories."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Seed Default Categories",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/admin/seed",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "admin", "seed"]
+            },
+            "description": "Seeds the default category list."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Reorder Categories",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"id\": \"{{categoryId}}\",\n      \"sortOrder\": 1\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories/admin/reorder",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "admin", "reorder"]
+            },
+            "description": "Bulk updates category sort order."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Create Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 400) {",
+                  "  const json = pm.response.json();",
+                  "  if (json.data?._id) pm.collectionVariables.set('categoryId', json.data._id);",
+                  "  if (json.data?.slug) pm.collectionVariables.set('categorySlug', json.data.slug);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "Demo Chandeliers", "type": "text" },
+                { "key": "slug", "value": "demo-chandeliers", "type": "text" },
+                { "key": "description", "value": "Premium chandelier category for API testing.", "type": "text" },
+                { "key": "emoji", "value": "Light", "type": "text" },
+                { "key": "sortOrder", "value": "1", "type": "text" },
+                { "key": "image", "type": "file", "src": [] }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories"]
+            },
+            "description": "Creates a category. Multipart field name for image upload is image."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Update Category",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "Updated Demo Chandeliers", "type": "text" },
+                { "key": "slug", "value": "updated-demo-chandeliers", "type": "text" },
+                { "key": "description", "value": "Updated category description.", "type": "text" },
+                { "key": "emoji", "value": "Light", "type": "text" },
+                { "key": "sortOrder", "value": "2", "type": "text" },
+                { "key": "isActive", "value": "true", "type": "text" },
+                { "key": "image", "type": "file", "src": [] }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "{{categoryId}}"]
+            },
+            "description": "Updates a category. Multipart image is optional."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Toggle Category Active",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/{{categoryId}}/toggle",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "{{categoryId}}", "toggle"]
+            },
+            "description": "Toggles category active/inactive state."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Delete Category",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["categories", "{{categoryId}}"]
+            },
+            "description": "Deletes a category."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List Products",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 400) {",
+                  "  const json = pm.response.json();",
+                  "  const product = json.data?.products?.[0];",
+                  "  if (product?._id) pm.collectionVariables.set('productId', product._id);",
+                  "  if (product?.slug) pm.collectionVariables.set('productSlug', product.slug);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?page={{page}}&limit={{limit}}&category={{categorySlug}}&search={{search}}&minPrice={{minPrice}}&maxPrice={{maxPrice}}&sortBy={{sortBy}}&order={{sortOrder}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "page", "value": "{{page}}" },
+                { "key": "limit", "value": "{{limit}}" },
+                { "key": "category", "value": "{{categorySlug}}" },
+                { "key": "search", "value": "{{search}}" },
+                { "key": "minPrice", "value": "{{minPrice}}" },
+                { "key": "maxPrice", "value": "{{maxPrice}}" },
+                { "key": "sortBy", "value": "{{sortBy}}" },
+                { "key": "order", "value": "{{sortOrder}}" }
+              ]
+            },
+            "description": "Public product listing with pagination, category, search, price, and sort filters."
+          },
+          "response": []
+        },
+        {
+          "name": "Featured Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/featured?limit=8",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "featured"],
+              "query": [
+                { "key": "limit", "value": "8" }
+              ]
+            },
+            "description": "Public featured products."
+          },
+          "response": []
+        },
+        {
+          "name": "Products by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/category/{{categorySlug}}?limit=12",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "category", "{{categorySlug}}"],
+              "query": [
+                { "key": "limit", "value": "12" }
+              ]
+            },
+            "description": "Public products filtered by category id or slug."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID or Slug",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productSlug}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "{{productSlug}}"]
+            },
+            "description": "Public product lookup by Mongo ObjectId or slug."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin List All Products",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/admin/all?page={{page}}&limit={{limit}}&category={{categorySlug}}&search={{search}}&vendorId={{vendorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "admin", "all"],
+              "query": [
+                { "key": "page", "value": "{{page}}" },
+                { "key": "limit", "value": "{{limit}}" },
+                { "key": "category", "value": "{{categorySlug}}" },
+                { "key": "search", "value": "{{search}}" },
+                { "key": "vendorId", "value": "{{vendorId}}" }
+              ]
+            },
+            "description": "Admin product listing, including inactive products and optional vendor filter."
+          },
+          "response": []
+        },
+        {
+          "name": "Vendor My Products",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{vendorToken}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/vendor/my-products?page={{page}}&limit={{limit}}&category={{categorySlug}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "vendor", "my-products"],
+              "query": [
+                { "key": "page", "value": "{{page}}" },
+                { "key": "limit", "value": "{{limit}}" },
+                { "key": "category", "value": "{{categorySlug}}" }
+              ]
+            },
+            "description": "Vendor-owned products for the authenticated vendor. Admin token also works on this guarded route."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Product",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 400) {",
+                  "  const json = pm.response.json();",
+                  "  if (json.data?._id) pm.collectionVariables.set('productId', json.data._id);",
+                  "  if (json.data?.slug) pm.collectionVariables.set('productSlug', json.data.slug);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{vendorToken}}", "type": "string" }] },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "RL Demo Chandelier", "type": "text" },
+                { "key": "description", "value": "Luxury decorative chandelier created from Postman.", "type": "text" },
+                { "key": "sku", "value": "RL-DEMO-001", "type": "text" },
+                { "key": "slug", "value": "rl-demo-chandelier", "type": "text" },
+                { "key": "series", "value": "RL-DEMO", "type": "text" },
+                { "key": "category", "value": "{{categorySlug}}", "type": "text" },
+                { "key": "costPrice", "value": "12000", "type": "text" },
+                { "key": "sellingPrice", "value": "24999", "type": "text" },
+                { "key": "retailPrice", "value": "32999", "type": "text" },
+                { "key": "totalQuantity", "value": "10", "type": "text" },
+                { "key": "salesCount", "value": "0", "type": "text" },
+                { "key": "weight", "value": "2500", "type": "text" },
+                { "key": "size", "value": "600*600*H450", "type": "text" },
+                { "key": "dimension", "value": "{\"height\":\"450mm\",\"width\":\"600mm\",\"depth\":\"600mm\",\"raw\":\"600*600*H450\"}", "type": "text" },
+                { "key": "colors", "value": "Gold, Clear", "type": "text" },
+                { "key": "tags", "value": "chandelier,luxury,decorative", "type": "text" },
+                { "key": "material", "value": "Metal, Crystal, Glass", "type": "text" },
+                { "key": "finish", "value": "Gold", "type": "text" },
+                { "key": "lightSource", "value": "LED 3IN1 3K/4K/6K", "type": "text" },
+                { "key": "remark", "value": "Demo product for API testing", "type": "text" },
+                { "key": "enableCompression", "value": "true", "type": "text" },
+                { "key": "image", "type": "file", "src": [] },
+                { "key": "images", "type": "file", "src": [] }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
+            },
+            "description": "Creates a product. Requires vendorToken or adminToken. Multipart image fields are image and images."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{vendorToken}}", "type": "string" }] },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "name", "value": "Updated RL Demo Chandelier", "type": "text" },
+                { "key": "description", "value": "Updated luxury chandelier from Postman.", "type": "text" },
+                { "key": "sku", "value": "RL-DEMO-001", "type": "text" },
+                { "key": "slug", "value": "updated-rl-demo-chandelier", "type": "text" },
+                { "key": "category", "value": "{{categorySlug}}", "type": "text" },
+                { "key": "costPrice", "value": "12000", "type": "text" },
+                { "key": "sellingPrice", "value": "25999", "type": "text" },
+                { "key": "retailPrice", "value": "33999", "type": "text" },
+                { "key": "totalQuantity", "value": "8", "type": "text" },
+                { "key": "isActive", "value": "true", "type": "text" },
+                { "key": "existingImages", "value": "[]", "type": "text" },
+                { "key": "imageOrder", "value": "[\"new:0\"]", "type": "text" },
+                { "key": "primaryImage", "value": "new:0", "type": "text" },
+                { "key": "image", "type": "file", "src": [] },
+                { "key": "images", "type": "file", "src": [] }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Updates a product. Vendors can update only their own products; admins can update any product."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{vendorToken}}", "type": "string" }] },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "{{productId}}"]
+            },
+            "description": "Deletes a product. Vendors can delete only their own products; admins can delete any product."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "Get Cart",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cart",
+              "host": ["{{baseUrl}}"],
+              "path": ["cart"]
+            },
+            "description": "Gets or creates the authenticated user's cart."
+          },
+          "response": []
+        },
+        {
+          "name": "Add to Cart",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 1,\n  \"color\": \"Gold\",\n  \"size\": \"600mm\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cart/add",
+              "host": ["{{baseUrl}}"],
+              "path": ["cart", "add"]
+            },
+            "description": "Adds a product to the authenticated user's cart."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Cart Item",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"quantity\": 2,\n  \"color\": \"Gold\",\n  \"size\": \"600mm\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cart/update",
+              "host": ["{{baseUrl}}"],
+              "path": ["cart", "update"]
+            },
+            "description": "Sets cart item quantity. Use quantity 0 to remove."
+          },
+          "response": []
+        },
+        {
+          "name": "Remove Cart Item",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "DELETE",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\",\n  \"color\": \"Gold\",\n  \"size\": \"600mm\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/cart/remove",
+              "host": ["{{baseUrl}}"],
+              "path": ["cart", "remove"]
+            },
+            "description": "Removes a matching product/color/size item from cart."
+          },
+          "response": []
+        },
+        {
+          "name": "Clear Cart",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/cart/clear",
+              "host": ["{{baseUrl}}"],
+              "path": ["cart", "clear"]
+            },
+            "description": "Clears the authenticated user's cart."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Razorpay Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 400) {",
+                  "  const json = pm.response.json();",
+                  "  if (json.data?.orderId) pm.collectionVariables.set('razorpayOrderId', json.data.orderId);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 24999\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/create-razorpay-order",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "create-razorpay-order"]
+            },
+            "description": "Creates a Razorpay order before online payment. Requires Razorpay env keys."
+          },
+          "response": []
+        },
+        {
+          "name": "Place COD Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 400) {",
+                  "  const json = pm.response.json();",
+                  "  if (json.data?._id) pm.collectionVariables.set('orderId', json.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 1,\n      \"color\": \"Gold\",\n      \"size\": \"600mm\"\n    }\n  ],\n  \"amount\": 24999,\n  \"deliveryFees\": 0,\n  \"totalAmount\": 24999,\n  \"paymentMethod\": \"cod\",\n  \"address\": {\n    \"fullName\": \"Royce Customer\",\n    \"addressLineOne\": \"House 1, MG Road\",\n    \"addressLineTwo\": \"Near City Centre\",\n    \"city\": \"New Delhi\",\n    \"state\": \"Delhi\",\n    \"pinCode\": \"110001\",\n    \"country\": \"India\",\n    \"phone\": \"+919999999999\",\n    \"landmark\": \"Metro Station\"\n  },\n  \"deliveryMethod\": \"standard\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/place",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "place"]
+            },
+            "description": "Places a COD order. The amount must match current product selling price plus delivery fee."
+          },
+          "response": []
+        },
+        {
+          "name": "Place Razorpay Paid Order",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code < 400) {",
+                  "  const json = pm.response.json();",
+                  "  if (json.data?._id) pm.collectionVariables.set('orderId', json.data._id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 1,\n      \"color\": \"Gold\",\n      \"size\": \"600mm\"\n    }\n  ],\n  \"amount\": 24999,\n  \"deliveryFees\": 0,\n  \"totalAmount\": 24999,\n  \"paymentMethod\": \"razorpay\",\n  \"razorpayOrderId\": \"{{razorpayOrderId}}\",\n  \"razorpayPaymentId\": \"{{razorpayPaymentId}}\",\n  \"razorpaySignature\": \"{{razorpaySignature}}\",\n  \"address\": {\n    \"fullName\": \"Royce Customer\",\n    \"addressLineOne\": \"House 1, MG Road\",\n    \"addressLineTwo\": \"Near City Centre\",\n    \"city\": \"New Delhi\",\n    \"state\": \"Delhi\",\n    \"pinCode\": \"110001\",\n    \"country\": \"India\",\n    \"phone\": \"+919999999999\",\n    \"landmark\": \"Metro Station\"\n  },\n  \"deliveryMethod\": \"standard\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/place",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "place"]
+            },
+            "description": "Places an online-paid order after Razorpay payment verification."
+          },
+          "response": []
+        },
+        {
+          "name": "My Orders",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders/my-orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "my-orders"]
+            },
+            "description": "Gets orders for the authenticated customer."
+          },
+          "response": []
+        },
+        {
+          "name": "Track Order",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}/track",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}", "track"]
+            },
+            "description": "Tracks an order shipment if Delhivery waybill exists."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders/{{orderId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "{{orderId}}"]
+            },
+            "description": "Gets a single order. Admin can access any order; customers can access their own orders."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin List All Orders",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders/admin/all?page={{page}}&limit={{limit}}&status=",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "admin", "all"],
+              "query": [
+                { "key": "page", "value": "{{page}}" },
+                { "key": "limit", "value": "{{limit}}" },
+                { "key": "status", "value": "" }
+              ]
+            },
+            "description": "Admin order listing. Status values include Placed, Confirmed, Processing, Shipped, Out for Delivery, Delivered, Cancelled, Returned."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Order Stats",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/orders/admin/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "admin", "stats"]
+            },
+            "description": "Admin order stats and revenue summary."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Update Order Status",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"{{orderStatus}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders/admin/{{orderId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders", "admin", "{{orderId}}", "status"]
+            },
+            "description": "Updates order status. Confirmed status can trigger Delhivery shipment creation if delivery env keys are configured."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Admin List Users",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users?role=user&page={{page}}&limit={{limit}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"],
+              "query": [
+                { "key": "role", "value": "user" },
+                { "key": "page", "value": "{{page}}" },
+                { "key": "limit", "value": "{{limit}}" }
+              ]
+            },
+            "description": "Admin list users. Role can be user, admin, or vendor; omit role to list all."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin List Vendors",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/vendors",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "vendors"]
+            },
+            "description": "Admin list vendor accounts."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Get User by ID",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            },
+            "description": "Admin gets a single user."
+          },
+          "response": []
+        },
+        {
+          "name": "Admin Toggle User Active",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{adminToken}}", "type": "string" }] },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}/toggle-active",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}", "toggle-active"]
+            },
+            "description": "Admin toggles user account active/deactivated state."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Vendor",
+      "item": [
+        {
+          "name": "Vendor Dashboard",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{vendorToken}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vendor/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["vendor", "dashboard"]
+            },
+            "description": "Vendor dashboard stats for authenticated vendor."
+          },
+          "response": []
+        },
+        {
+          "name": "Vendor Orders",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{vendorToken}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vendor/orders?page={{page}}&limit={{limit}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["vendor", "orders"],
+              "query": [
+                { "key": "page", "value": "{{page}}" },
+                { "key": "limit", "value": "{{limit}}" }
+              ]
+            },
+            "description": "Vendor order listing for products owned by the authenticated vendor."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

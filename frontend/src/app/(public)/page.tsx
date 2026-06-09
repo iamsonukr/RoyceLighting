@@ -7,6 +7,7 @@ import { HeroSection } from '@/components/home/HeroSection';
 import { NewsletterSection } from '@/components/home/NewsletterSection';
 import { Testimonials } from '@/components/home/Testimonials';
 import { WhyChooseUs } from '@/components/home/WhyChooseUs';
+import { PUBLIC_API_URL } from '@/lib/publicCategories';
 
 export const metadata: Metadata = {
   title: 'Royce Lighting - Luxury Chandeliers & Handcrafted Lighting',
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
 async function getFeaturedProducts() {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/products/featured?limit=8`,
+      `${PUBLIC_API_URL}/products/featured?limit=8`,
       { next: { revalidate: 300 } },
     );
     const data = await res.json();
