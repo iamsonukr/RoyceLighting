@@ -1581,3 +1581,471 @@
     letter-spacing: 0.08em !important;
   }
 }
+
+/* Legal and contact pages */
+.legal-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 82% 8%, rgba(199,164,90,0.12), transparent 28%),
+    radial-gradient(circle at 12% 24%, rgba(0,96,57,0.2), transparent 26%),
+    linear-gradient(180deg, var(--obsidian) 0%, var(--charcoal) 44%, var(--forest-2) 100%);
+  color: var(--ivory);
+}
+
+.legal-hero {
+  padding: clamp(5.5rem, 9vw, 8rem) 1.5rem clamp(3rem, 6vw, 4.8rem);
+  border-bottom: 1px solid rgba(228,199,124,0.14);
+}
+
+.legal-hero > div {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+.legal-hero h1 {
+  max-width: 900px;
+  color: var(--ivory);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.9rem, 7vw, 6.4rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.02;
+}
+
+.legal-hero > div > p:not(.luxury-kicker) {
+  max-width: 760px;
+  margin-top: 1.25rem;
+  color: rgba(250,247,240,0.74);
+  font-size: clamp(0.95rem, 1.45vw, 1.08rem);
+  line-height: 1.9;
+}
+
+.legal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.legal-meta div {
+  min-width: 180px;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(228,199,124,0.18);
+  background: rgba(250,247,240,0.045);
+}
+
+.legal-meta dt {
+  color: var(--gold-light);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.legal-meta dd {
+  margin-top: 0.35rem;
+  color: rgba(250,247,240,0.86);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.legal-shell {
+  width: min(1240px, 100%);
+  margin: 0 auto;
+  padding: clamp(3rem, 6vw, 5rem) 1.5rem clamp(5rem, 8vw, 7rem);
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+
+.legal-sidebar {
+  position: sticky;
+  top: 110px;
+  display: grid;
+  gap: 1rem;
+}
+
+.legal-toc,
+.legal-contact-card,
+.legal-summary,
+.legal-section,
+.contact-card,
+.contact-form-panel,
+.contact-faq-card,
+.map-placeholder {
+  border: 1px solid rgba(228,199,124,0.16);
+  background: linear-gradient(180deg, rgba(250,247,240,0.06), rgba(250,247,240,0.025));
+  box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+}
+
+.legal-toc,
+.legal-contact-card {
+  padding: 1.25rem;
+}
+
+.legal-toc h2,
+.legal-contact-card h2,
+.legal-summary h2 {
+  color: var(--gold-light);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.legal-toc ol {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1rem;
+  padding-left: 1rem;
+}
+
+.legal-toc a {
+  color: rgba(250,247,240,0.64);
+  font-size: 0.74rem;
+  line-height: 1.55;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.legal-toc a:hover {
+  color: var(--gold-light);
+}
+
+.legal-contact-card p,
+.legal-contact-card address {
+  margin-top: 0.9rem;
+  color: rgba(250,247,240,0.66);
+  font-size: 0.76rem;
+  font-style: normal;
+  line-height: 1.8;
+}
+
+.legal-content {
+  min-width: 0;
+  display: grid;
+  gap: 1.1rem;
+}
+
+.legal-summary,
+.legal-section {
+  padding: clamp(1.35rem, 3vw, 2.25rem);
+}
+
+.legal-summary ul,
+.legal-section ul,
+.legal-section ol {
+  display: grid;
+  gap: 0.72rem;
+  margin-top: 1rem;
+  padding-left: 1.2rem;
+}
+
+.legal-summary li,
+.legal-section li {
+  color: rgba(250,247,240,0.72);
+  font-size: 0.88rem;
+  line-height: 1.78;
+}
+
+.legal-section {
+  scroll-margin-top: 120px;
+}
+
+.legal-section h2 {
+  color: var(--ivory);
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  font-style: italic;
+  line-height: 1.16;
+}
+
+.legal-subsection {
+  margin-top: 1.45rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(228,199,124,0.1);
+}
+
+.legal-subsection h3 {
+  color: var(--gold-light);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.legal-section p {
+  margin-top: 1rem;
+  color: rgba(250,247,240,0.72);
+  font-size: 0.9rem;
+  line-height: 1.9;
+}
+
+.legal-note {
+  margin-top: 1.2rem;
+  padding: 1rem 1.1rem;
+  border-left: 2px solid var(--gold-light);
+  background: rgba(199,164,90,0.08);
+  color: rgba(250,247,240,0.82);
+  font-size: 0.86rem;
+  line-height: 1.75;
+}
+
+.legal-table-wrap {
+  width: 100%;
+  margin-top: 1.35rem;
+  overflow-x: auto;
+  border: 1px solid rgba(228,199,124,0.12);
+}
+
+.legal-table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+}
+
+.legal-table th,
+.legal-table td {
+  padding: 0.95rem 1rem;
+  border-bottom: 1px solid rgba(228,199,124,0.1);
+  text-align: left;
+  vertical-align: top;
+}
+
+.legal-table th {
+  background: rgba(0,96,57,0.18);
+  color: var(--gold-light);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.legal-table td {
+  color: rgba(250,247,240,0.7);
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+.contact-shell {
+  width: min(1240px, 100%);
+  margin: 0 auto;
+  padding: clamp(3rem, 6vw, 5rem) 1.5rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 430px);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+}
+
+.contact-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.contact-card {
+  min-height: 210px;
+  padding: 1.35rem;
+}
+
+.contact-card svg,
+.contact-form-heading svg,
+.map-placeholder svg {
+  color: var(--gold-light);
+}
+
+.contact-card h3,
+.contact-faq-card h3 {
+  margin-top: 1rem;
+  color: var(--ivory);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.45;
+  text-transform: uppercase;
+}
+
+.contact-card p,
+.contact-faq-card p,
+.map-placeholder p,
+.contact-form-help {
+  margin-top: 0.75rem;
+  color: rgba(250,247,240,0.64);
+  font-size: 0.8rem;
+  line-height: 1.75;
+}
+
+.contact-card .contact-card-detail {
+  color: rgba(250,247,240,0.88);
+  font-size: 0.88rem;
+}
+
+.map-placeholder {
+  margin-top: 1rem;
+  min-height: 320px;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  text-align: center;
+  background:
+    linear-gradient(135deg, rgba(6,47,36,0.72), rgba(16,11,7,0.86)),
+    repeating-linear-gradient(45deg, rgba(228,199,124,0.04) 0, rgba(228,199,124,0.04) 1px, transparent 1px, transparent 18px);
+}
+
+.map-placeholder h2 {
+  color: var(--ivory);
+  font-size: clamp(1.45rem, 2.6vw, 2rem);
+  font-style: italic;
+}
+
+.contact-form-panel {
+  position: sticky;
+  top: 110px;
+  padding: clamp(1.35rem, 3vw, 2rem);
+}
+
+.contact-form-heading {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px solid rgba(228,199,124,0.12);
+}
+
+.contact-form-heading h2 {
+  margin-top: 0.2rem;
+  color: var(--ivory);
+  font-size: clamp(1.45rem, 2.4vw, 2rem);
+  font-style: italic;
+}
+
+.contact-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.contact-form label {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--gold-light);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+  width: 100%;
+  border: 1px solid rgba(228,199,124,0.18);
+  background: rgba(5,4,3,0.54);
+  color: var(--ivory);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  outline: none;
+  padding: 0.9rem 0.95rem;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-form textarea {
+  resize: vertical;
+}
+
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+  border-color: rgba(228,199,124,0.52);
+  background: rgba(0,96,57,0.16);
+  box-shadow: 0 0 0 3px rgba(199,164,90,0.08);
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: rgba(250,247,240,0.32);
+}
+
+.contact-form-wide,
+.contact-form-help,
+.contact-form button {
+  grid-column: 1 / -1;
+}
+
+.contact-form button {
+  width: 100%;
+}
+
+.contact-faq-section {
+  width: min(1240px, 100%);
+  margin: 0 auto;
+  padding: 0 1.5rem clamp(5rem, 8vw, 7rem);
+}
+
+.contact-faq-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.contact-faq-card {
+  min-height: 250px;
+  padding: 1.35rem;
+}
+
+@media (max-width: 1023px) {
+  .legal-shell,
+  .contact-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .legal-sidebar,
+  .contact-form-panel {
+    position: static;
+  }
+
+  .contact-faq-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .legal-hero {
+    padding: 4.5rem 1rem 2.7rem;
+  }
+
+  .legal-meta {
+    display: grid;
+  }
+
+  .legal-shell,
+  .contact-shell,
+  .contact-faq-section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .contact-card-grid,
+  .contact-form,
+  .contact-faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-card,
+  .contact-faq-card {
+    min-height: auto;
+  }
+
+  .map-placeholder {
+    min-height: 260px;
+  }
+}

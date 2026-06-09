@@ -14,9 +14,11 @@ const COLLECTIONS = [
 const INFO_LINKS = [
   { label: 'About Royce', href: '/about' },
   { label: 'Our Atelier', href: '/atelier' },
-  { label: 'Contact', href: '/contact' },
-  { label: 'Privacy Policy', href: '/privacy' },
-  { label: 'Shipping & Returns', href: '/shipping' },
+  { label: 'Contact Us', href: '/contact-us' },
+  { label: 'Privacy Policy', href: '/privacy-policy' },
+  { label: 'Terms & Conditions', href: '/terms-and-conditions' },
+  { label: 'Refund & Cancellation', href: '/refund-and-cancellation-policy' },
+  { label: 'Shipping & Delivery', href: '/shipping-and-delivery-policy' },
 ];
 
 export function Footer() {

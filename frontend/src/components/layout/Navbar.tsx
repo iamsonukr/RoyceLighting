@@ -40,7 +40,7 @@ const NAV_LINKS = [
   { label: 'Collections', href: '#', hasMega: true },
   { label: 'Bespoke', href: '/bespoke' },
   { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Contact', href: '/contact-us' },
 ];
 
 export function Navbar() {
@@ -394,7 +394,7 @@ export function Navbar() {
               { label: 'Table Lamps', href: '/shop?collection=table-lamps' },
               { label: 'Bespoke', href: '/bespoke' },
               { label: 'About', href: '/about' },
-              { label: 'Contact', href: '/contact' },
+              { label: 'Contact', href: '/contact-us' },
             ].map((link) => (
               <Link
                 key={link.href}
