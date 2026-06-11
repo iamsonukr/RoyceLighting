@@ -109,7 +109,7 @@ export function Navbar() {
               }}
             >
               <span style={{ color: 'var(--gold-light)', fontSize: '0.7rem' }}>✦</span>
-              Royce
+              Royace
               <span style={{ color: 'rgba(250,247,240,0.3)', fontWeight: 300 }}>·</span>
               Lighting
             </Link>

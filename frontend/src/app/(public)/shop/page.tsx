@@ -3,7 +3,7 @@ import { ShopClient } from '@/components/shop/ShopClient';
 import { fetchPublicCategories, PUBLIC_API_URL } from '@/lib/publicCategories';
 
 export const metadata: Metadata = {
-  title: 'Collections — Royce Lighting',
+  title: 'Collections — Royace Lighting',
   description: 'Browse our full collection of handcrafted luxury chandeliers, pendants, sconces, and table lamps.',
 };
 

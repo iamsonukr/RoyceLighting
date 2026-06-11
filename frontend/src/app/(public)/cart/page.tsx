@@ -21,7 +21,7 @@ export default function CartPage() {
   const { token } = useAppSelector((s) => s.auth);
   const subtotal = useAppSelector(selectCartTotal);
   const freeInstall = subtotal >= FREE_THRESHOLD;
-  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace('/api', '');
+  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '');
 
   useEffect(() => {
     if (token) dispatch(fetchCartThunk(token));

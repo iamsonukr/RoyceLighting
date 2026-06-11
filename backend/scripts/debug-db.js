@@ -18,7 +18,7 @@ main().catch(async (error) => {
 });
 
 async function main() {
-  header('Royce Lighting database debugger');
+  header('Royace Lighting database debugger');
   line('cwd', process.cwd());
   line('env file', envFile);
   line('timeout', `${timeoutMs}ms`);
@@ -61,7 +61,7 @@ async function main() {
 
   if (!details.database) {
     warn('No database name is present in MONGODB_URI.');
-    note('Use a URI like mongodb+srv://user:pass@host/royce-lighting?retryWrites=true&w=majority');
+    note('Use a URI like mongodb+srv://user:pass@host/Royace-lighting?retryWrites=true&w=majority');
   }
 
   await runDnsChecks(details);

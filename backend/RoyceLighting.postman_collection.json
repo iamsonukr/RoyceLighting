@@ -1,8 +1,8 @@
 {
   "info": {
     "_postman_id": "c4b204b7-5b65-4f78-9c89-8b624ef2a011",
-    "name": "Royce Lighting API",
-    "description": "Postman collection for the Royce Lighting NestJS backend. Import this file into Postman, run the login/register requests to save tokens, then use the protected customer, admin, and vendor requests.",
+    "name": "Royace Lighting API",
+    "description": "Postman collection for the Royace Lighting NestJS backend. Import this file into Postman, run the login/register requests to save tokens, then use the protected customer, admin, and vendor requests.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -10,10 +10,10 @@
     { "key": "token", "value": "", "type": "string" },
     { "key": "adminToken", "value": "", "type": "string" },
     { "key": "vendorToken", "value": "", "type": "string" },
-    { "key": "customerName", "value": "Royce Customer", "type": "string" },
+    { "key": "customerName", "value": "Royace Customer", "type": "string" },
     { "key": "customerEmail", "value": "customer@example.com", "type": "string" },
     { "key": "customerPassword", "value": "password123", "type": "string" },
-    { "key": "vendorName", "value": "Royce Vendor", "type": "string" },
+    { "key": "vendorName", "value": "Royace Vendor", "type": "string" },
     { "key": "vendorEmail", "value": "vendor@example.com", "type": "string" },
     { "key": "vendorPassword", "value": "password123", "type": "string" },
     { "key": "adminEmail", "value": "admin@example.com", "type": "string" },
@@ -131,7 +131,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"{{vendorName}}\",\n  \"email\": \"{{vendorEmail}}\",\n  \"password\": \"{{vendorPassword}}\",\n  \"shopName\": \"Royce Partner Studio\",\n  \"shopDescription\": \"Decorative lighting vendor\",\n  \"phone\": \"+919999999999\"\n}",
+              "raw": "{\n  \"name\": \"{{vendorName}}\",\n  \"email\": \"{{vendorEmail}}\",\n  \"password\": \"{{vendorPassword}}\",\n  \"shopName\": \"Royace Partner Studio\",\n  \"shopDescription\": \"Decorative lighting vendor\",\n  \"phone\": \"+919999999999\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -830,7 +830,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 1,\n      \"color\": \"Gold\",\n      \"size\": \"600mm\"\n    }\n  ],\n  \"amount\": 24999,\n  \"deliveryFees\": 0,\n  \"totalAmount\": 24999,\n  \"paymentMethod\": \"cod\",\n  \"address\": {\n    \"fullName\": \"Royce Customer\",\n    \"addressLineOne\": \"House 1, MG Road\",\n    \"addressLineTwo\": \"Near City Centre\",\n    \"city\": \"New Delhi\",\n    \"state\": \"Delhi\",\n    \"pinCode\": \"110001\",\n    \"country\": \"India\",\n    \"phone\": \"+919999999999\",\n    \"landmark\": \"Metro Station\"\n  },\n  \"deliveryMethod\": \"standard\"\n}",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 1,\n      \"color\": \"Gold\",\n      \"size\": \"600mm\"\n    }\n  ],\n  \"amount\": 24999,\n  \"deliveryFees\": 0,\n  \"totalAmount\": 24999,\n  \"paymentMethod\": \"cod\",\n  \"address\": {\n    \"fullName\": \"Royace Customer\",\n    \"addressLineOne\": \"House 1, MG Road\",\n    \"addressLineTwo\": \"Near City Centre\",\n    \"city\": \"New Delhi\",\n    \"state\": \"Delhi\",\n    \"pinCode\": \"110001\",\n    \"country\": \"India\",\n    \"phone\": \"+919999999999\",\n    \"landmark\": \"Metro Station\"\n  },\n  \"deliveryMethod\": \"standard\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {
@@ -864,7 +864,7 @@
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 1,\n      \"color\": \"Gold\",\n      \"size\": \"600mm\"\n    }\n  ],\n  \"amount\": 24999,\n  \"deliveryFees\": 0,\n  \"totalAmount\": 24999,\n  \"paymentMethod\": \"razorpay\",\n  \"razorpayOrderId\": \"{{razorpayOrderId}}\",\n  \"razorpayPaymentId\": \"{{razorpayPaymentId}}\",\n  \"razorpaySignature\": \"{{razorpaySignature}}\",\n  \"address\": {\n    \"fullName\": \"Royce Customer\",\n    \"addressLineOne\": \"House 1, MG Road\",\n    \"addressLineTwo\": \"Near City Centre\",\n    \"city\": \"New Delhi\",\n    \"state\": \"Delhi\",\n    \"pinCode\": \"110001\",\n    \"country\": \"India\",\n    \"phone\": \"+919999999999\",\n    \"landmark\": \"Metro Station\"\n  },\n  \"deliveryMethod\": \"standard\"\n}",
+              "raw": "{\n  \"items\": [\n    {\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 1,\n      \"color\": \"Gold\",\n      \"size\": \"600mm\"\n    }\n  ],\n  \"amount\": 24999,\n  \"deliveryFees\": 0,\n  \"totalAmount\": 24999,\n  \"paymentMethod\": \"razorpay\",\n  \"razorpayOrderId\": \"{{razorpayOrderId}}\",\n  \"razorpayPaymentId\": \"{{razorpayPaymentId}}\",\n  \"razorpaySignature\": \"{{razorpaySignature}}\",\n  \"address\": {\n    \"fullName\": \"Royace Customer\",\n    \"addressLineOne\": \"House 1, MG Road\",\n    \"addressLineTwo\": \"Near City Centre\",\n    \"city\": \"New Delhi\",\n    \"state\": \"Delhi\",\n    \"pinCode\": \"110001\",\n    \"country\": \"India\",\n    \"phone\": \"+919999999999\",\n    \"landmark\": \"Metro Station\"\n  },\n  \"deliveryMethod\": \"standard\"\n}",
               "options": { "raw": { "language": "json" } }
             },
             "url": {

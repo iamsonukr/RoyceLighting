@@ -74,7 +74,7 @@ export default function AdminOrdersPage() {
           <table className="w-full">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
-                {['Order ID', 'Customer', 'Items', 'Amount', 'Date', 'Status', 'Delivery', 'Action'].map((h) => (
+                {['Order ID', 'Customer', 'Items', 'Amount', 'Payment', 'Date', 'Status', 'Delivery', 'Action'].map((h) => (
                   <th key={h} className="text-left px-5 py-3.5 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                     {h}
                   </th>
@@ -85,7 +85,7 @@ export default function AdminOrdersPage() {
               {isLoading
                 ? Array.from({ length: 8 }).map((_, i) => (
                     <tr key={i} className="border-b border-gray-50">
-                      {Array.from({ length: 8 }).map((_, j) => (
+                      {Array.from({ length: 9 }).map((_, j) => (
                         <td key={j} className="px-5 py-4">
                           <div className="h-3 bg-gray-100 rounded animate-pulse w-20" />
                         </td>
@@ -105,6 +105,11 @@ export default function AdminOrdersPage() {
                         </td>
                         <td className="px-5 py-4 text-sm text-gray-600">{order.items.length} item(s)</td>
                         <td className="px-5 py-4 text-sm font-semibold text-gray-900">₹{order.amount}</td>
+                        <td className="px-5 py-4">
+                          <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${order.payment ? 'bg-green-50 text-green-700 border-green-200' : 'bg-gray-100 text-gray-600 border-gray-200'}`}>
+                            {order.payment ? 'Paid Online' : 'COD'}
+                          </span>
+                        </td>
                         <td className="px-5 py-4 text-sm text-gray-500">
                           {new Date(order.orderDate || order.createdAt).toLocaleDateString('en-IN', {
                             day: 'numeric', month: 'short',
@@ -146,7 +151,7 @@ export default function AdminOrdersPage() {
                       {/* Expanded row */}
                       {expandedOrder === order._id && (
                         <tr key={`${order._id}-expanded`} className="bg-gray-50">
-                          <td colSpan={8} className="px-5 py-4">
+                          <td colSpan={9} className="px-5 py-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                               {/* Items */}
                               <div>
@@ -167,8 +172,17 @@ export default function AdminOrdersPage() {
                                 </div>
                               </div>
 
-                              {/* Address */}
+                              {/* Payment and address */}
                               <div>
+                                <p className="text-xs font-semibold text-gray-500 uppercase mb-3">Payment Details</p>
+                                <div className="bg-white rounded-lg px-4 py-3 border border-gray-100 text-sm text-gray-600 space-y-1 mb-4">
+                                  <p><span className="font-medium text-gray-800">Method:</span> {order.paymentMethod === 'online' || order.paymentMethod === 'razorpay' ? 'Online Payment' : 'Cash on Delivery'}</p>
+                                  <p><span className="font-medium text-gray-800">Status:</span> {order.payment ? 'Paid' : 'Pending'}</p>
+                                  <p><span className="font-medium text-gray-800">Amount:</span> ₹{Number(order.amount || 0).toLocaleString('en-IN')}</p>
+                                  {order.paymentId && <p><span className="font-medium text-gray-800">Payment ID:</span> {order.paymentId}</p>}
+                                  {order.razorpayOrderId && <p><span className="font-medium text-gray-800">Razorpay Order ID:</span> {order.razorpayOrderId}</p>}
+                                </div>
+
                                 <p className="text-xs font-semibold text-gray-500 uppercase mb-3">Delivery Address</p>
                                 <div className="bg-white rounded-lg px-4 py-3 border border-gray-100 text-sm text-gray-600 space-y-1">
                                   <p>{order.address.addressLineOne}</p>

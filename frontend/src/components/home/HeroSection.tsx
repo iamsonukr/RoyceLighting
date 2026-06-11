@@ -22,7 +22,7 @@ export function HeroSection() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
       >
-        <span className="luxury-kicker">Royce Lighting Atelier</span>
+        <span className="luxury-kicker">Royace Lighting Atelier</span>
         <h1>
           Precision light for
           <span> extraordinary interiors.</span>

@@ -96,13 +96,13 @@ export function AuthModal() {
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <div style={{ fontFamily: "'Playfair Display',serif", fontSize: '0.65rem', fontWeight: 400, letterSpacing: '0.35em', color: 'rgba(250,247,240,0.5)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
               <span style={{ color: 'var(--gold-light)', marginRight: '0.4rem' }}>✦</span>
-              Royce Lighting
+              Royace Lighting
             </div>
             <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: '1.85rem', fontWeight: 300, fontStyle: 'italic', color: 'var(--ivory)', marginBottom: '0.5rem' }}>
               {isLogin ? 'Welcome Back' : 'Create Account'}
             </h2>
             <p style={{ fontSize: '0.68rem', color: 'rgba(250,247,240,0.35)', letterSpacing: '0.06em' }}>
-              {isLogin ? 'Sign in to your account' : 'Join the Royce circle'}
+              {isLogin ? 'Sign in to your account' : 'Join the Royace circle'}
             </p>
           </div>
 
@@ -163,7 +163,7 @@ export function AuthModal() {
           </form>
 
           <p style={{ marginTop: '1.75rem', textAlign: 'center', fontSize: '0.65rem', color: 'rgba(250,247,240,0.3)', letterSpacing: '0.06em' }}>
-            {isLogin ? "New to Royce? " : "Already have an account? "}
+            {isLogin ? "New to Royace? " : "Already have an account? "}
             <button
               onClick={() => dispatch(openAuthModal(isLogin ? 'register' : 'login'))}
               style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gold-light)', fontSize: '0.65rem', letterSpacing: '0.06em', transition: 'color 0.2s ease' }}

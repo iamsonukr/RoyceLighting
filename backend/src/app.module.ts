@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { setServers } from 'dns';
 
@@ -51,11 +50,6 @@ import { CategoriesModule } from './categories/categories.module';
           connectTimeoutMS: 10000,
         };
       },
-    }),
-
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
-      serveRoot: '/uploads',
     }),
 
     AuthModule,

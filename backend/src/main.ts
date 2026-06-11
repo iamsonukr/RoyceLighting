@@ -48,11 +48,11 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
-  const port = process.env.PORT || 3001;
+  const port = process.env.PORT || 5000;
   await app.listen(port);
 
   console.log(
-    `🚀 Royce Lighting API running on http://localhost:${port}/api`,
+    `🚀 Royace Lighting API running on http://localhost:${port}/api`,
   );
 }
 

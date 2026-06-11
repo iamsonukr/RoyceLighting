@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 export const api = axios.create({
   baseURL: BASE_URL,
@@ -32,8 +32,8 @@ export async function placeOrderAPI(token: string, orderData: any) {
   return res.data.data || res.data;
 }
 
-export async function createRazorpayOrderAPI(token: string, amount: number) {
-  const res = await api.post('/orders/create-razorpay-order', { amount }, {
+export async function createRazorpayOrderAPI(token: string, amount: number, orderData?: any) {
+  const res = await api.post('/orders/create-razorpay-order', { amount, ...orderData }, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data.data || res.data;

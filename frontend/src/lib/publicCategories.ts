@@ -13,7 +13,7 @@ type CategoryFetchOptions = RequestInit & {
 };
 
 export const PUBLIC_API_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 const PUBLIC_ASSET_URL = PUBLIC_API_URL.replace(/\/api\/?$/, '');
 

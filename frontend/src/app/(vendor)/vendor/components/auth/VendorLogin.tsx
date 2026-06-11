@@ -53,7 +53,7 @@ export function VendorLogin() {
           <h2 className="text-2xl font-bold text-gray-900">
             {mode === 'login' ? 'Vendor Sign In' : 'Become a Vendor'}
           </h2>
-          <p className="text-gray-500 text-sm mt-1">Royce Lighting Vendor Portal</p>
+          <p className="text-gray-500 text-sm mt-1">Royace Lighting Vendor Portal</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

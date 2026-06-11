@@ -3,9 +3,9 @@ import { Clock, Mail, MapPin, MessageSquare, Phone } from 'lucide-react';
 import { LEGAL_CONTACT } from '@/components/legal/PolicyPage';
 
 export const metadata: Metadata = {
-  title: 'Contact Us | Royce Lighting',
+  title: 'Contact Us | Royace Lighting',
   description:
-    'Contact Royce Lighting for luxury chandeliers, pendant lights, decorative lighting orders, custom lighting consultations, shipping support, returns, refunds, and warranty assistance.',
+    'Contact Royace Lighting for luxury chandeliers, pendant lights, decorative lighting orders, custom lighting consultations, shipping support, returns, refunds, and warranty assistance.',
 };
 
 const contactCards = [
@@ -37,7 +37,7 @@ const contactCards = [
 
 const faqs = [
   {
-    question: 'How quickly will Royce Lighting respond to my enquiry?',
+    question: 'How quickly will Royace Lighting respond to my enquiry?',
     answer:
       'We aim to respond during stated support timings. Order, payment, shipping, and damaged-product queries are prioritised when you include your order ID, registered phone number, invoice copy, and photographs where relevant.',
   },
@@ -57,7 +57,7 @@ const faqs = [
       'Contact us within 48 hours of delivery with order ID, invoice copy, outer packaging photographs, inner packaging photographs, product photographs, and a continuous unboxing video wherever possible. Do not install or discard packaging until our team has reviewed the claim.',
   },
   {
-    question: 'Does Royce Lighting provide installation?',
+    question: 'Does Royace Lighting provide installation?',
     answer:
       'Installation is available only where expressly mentioned in writing and may depend on city serviceability, product type, site access, ceiling readiness, electrical readiness, and appointment availability. Product prices do not automatically include installation.',
   },
@@ -74,7 +74,7 @@ export default function ContactUsPage() {
       <section className="legal-hero">
         <div>
           <p className="luxury-kicker">Contact Us</p>
-          <h1>Contact Royce Lighting</h1>
+          <h1>Contact Royace Lighting</h1>
           <p>
             Speak with our team for decorative lighting orders, luxury chandeliers,
             pendant lights, made-to-order commissions, payment support, delivery

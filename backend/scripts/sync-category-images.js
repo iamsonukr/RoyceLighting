@@ -173,7 +173,7 @@ function configureDns() {
 }
 
 function readWorkbookRows(filePath) {
-  const extractDir = path.join(os.tmpdir(), `royce-category-sync-${Date.now()}`);
+  const extractDir = path.join(os.tmpdir(), `Royace-category-sync-${Date.now()}`);
   const zipPath = path.join(extractDir, 'workbook.zip');
   fs.mkdirSync(extractDir, { recursive: true });
 

@@ -41,10 +41,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   const product = await getProduct(id);
-  if (!product) return { title: 'Product — Royce Lighting' };
+  if (!product) return { title: 'Product — Royace Lighting' };
   return {
-    title: `${product.name} — Royce Lighting`,
-    description: product.description?.substring(0, 160) || `${product.name} — Handcrafted luxury lighting by Royce.`,
+    title: `${product.name} — Royace Lighting`,
+    description: product.description?.substring(0, 160) || `${product.name} — Handcrafted luxury lighting by Royace.`,
   };
 }
 

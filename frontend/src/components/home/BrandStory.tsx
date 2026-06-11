@@ -18,7 +18,7 @@ export function BrandStory() {
       <div className="brand-story-grid">
         <div className="brand-story-copy">
           <p>
-            Royce creates lighting for rooms where every surface has been considered. Deep green
+            Royace creates lighting for rooms where every surface has been considered. Deep green
             lacquer tones, coffee-brown shadows, and restrained gold details create a shopping
             experience that feels collected, private, and precise.
           </p>
@@ -51,7 +51,7 @@ export function BrandStory() {
         >
           <Image
             src="https://images.unsplash.com/photo-1561780648-dc38ba20699b"
-            alt="Royce atelier chandelier craft"
+            alt="Royace atelier chandelier craft"
             fill
             sizes="(max-width: 768px) 100vw, 44vw"
           />

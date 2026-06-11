@@ -13,8 +13,8 @@ export class OrdersController {
   // Create Razorpay order (pre-payment)
   @UseGuards(JwtAuthGuard)
   @Post('create-razorpay-order')
-  async createRazorpayOrder(@Body('amount') amount: number) {
-    const data = await this.ordersService.createRazorpayOrder(amount);
+  async createRazorpayOrder(@Body() body: CreateOrderDto & { amount: number }) {
+    const data = await this.ordersService.createRazorpayOrder(body.amount, body);
     return { success: true, data };
   }
 

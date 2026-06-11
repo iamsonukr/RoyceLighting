@@ -10,7 +10,7 @@ import { WhyChooseUs } from '@/components/home/WhyChooseUs';
 import { PUBLIC_API_URL } from '@/lib/publicCategories';
 
 export const metadata: Metadata = {
-  title: 'Royce Lighting - Luxury Chandeliers & Handcrafted Lighting',
+  title: 'Royace Lighting - Luxury Chandeliers & Handcrafted Lighting',
   description:
     'Bespoke chandeliers and luxury lighting for extraordinary interiors. Crafted by master artisans for discerning homes.',
 };

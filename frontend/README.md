@@ -1,4 +1,4 @@
-# Royce Lighting Frontend
+# Royace Lighting Frontend
 
 This is the single Next.js app for the public website, admin panel, and vendor portal.
 

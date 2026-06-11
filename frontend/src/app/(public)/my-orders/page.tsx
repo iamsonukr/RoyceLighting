@@ -32,7 +32,7 @@ export default function MyOrdersPage() {
       .finally(() => setLoading(false));
   }, [token]);
 
-  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace('/api', '');
+  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '');
 
   if (!token) {
     return (
@@ -108,7 +108,8 @@ export default function MyOrdersPage() {
             const orderDate = new Date(order.createdAt || Date.now()).toLocaleDateString('en-IN', {
               day: 'numeric', month: 'long', year: 'numeric',
             });
-            const orderTotal = order.totalAmount || order.items?.reduce((s: number, i: any) => s + (i.price || 0) * i.quantity, 0) || 0;
+            const orderTotal = order.amount || order.totalAmount || order.items?.reduce((s: number, i: any) => s + (i.price || 0) * i.quantity, 0) || 0;
+            const isOnlinePayment = order.paymentMethod === 'online' || order.paymentMethod === 'razorpay';
 
             return (
               <div
@@ -201,15 +202,16 @@ export default function MyOrdersPage() {
                   <div style={{ borderTop: '1px solid rgba(250,247,240,0.06)', padding: '1.75rem 2rem', animation: 'fadeUp 0.3s ease forwards' }}>
                     {/* Items */}
                     {order.items?.map((item: any, ii: number) => {
-                      const imgUrl = item.product?.image?.startsWith('http') ? item.product?.image : `${imageBase}${item.product?.image}`;
+                      const itemImage = item.image || item.product?.image;
+                      const imgUrl = itemImage?.startsWith('http') ? itemImage : `${imageBase}${itemImage}`;
                       return (
                         <div key={ii} style={{ display: 'flex', gap: '1rem', paddingBottom: '1rem', marginBottom: '1rem', borderBottom: '1px solid rgba(250,247,240,0.05)' }}>
                           <div style={{ width: 56, height: 64, background: 'linear-gradient(180deg, var(--forest-2), var(--charcoal-3))', flexShrink: 0, overflow: 'hidden' }}>
-                            {item.product?.image && <img src={imgUrl} alt={item.product?.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                            {itemImage && <img src={imgUrl} alt={item.name || item.product?.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
                           </div>
                           <div style={{ flex: 1 }}>
                             <p style={{ fontFamily: "'Playfair Display',serif", fontSize: '0.9rem', fontStyle: 'italic', color: 'var(--ivory)', marginBottom: '0.2rem' }}>
-                              {item.product?.name || 'Product'}
+                              {item.name || item.product?.name || 'Product'}
                             </p>
                             {item.color && <p style={{ fontSize: '0.58rem', color: 'rgba(250,247,240,0.3)', letterSpacing: '0.1em', marginBottom: '0.25rem' }}>Finish: {item.color}</p>}
                             <p style={{ fontSize: '0.62rem', color: 'rgba(250,247,240,0.35)', letterSpacing: '0.05em' }}>Qty: {item.quantity}</p>
@@ -218,6 +220,30 @@ export default function MyOrdersPage() {
                         </div>
                       );
                     })}
+
+                    {/* Payment */}
+                    <div style={{ marginTop: '0.5rem', paddingBottom: '1rem', marginBottom: '1rem', borderBottom: '1px solid rgba(250,247,240,0.05)' }}>
+                      <p style={{ fontSize: '0.55rem', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--gold-light)', marginBottom: '0.6rem' }}>
+                        Payment Details
+                      </p>
+                      <p style={{ fontSize: '0.7rem', color: 'rgba(250,247,240,0.45)', lineHeight: 1.8, letterSpacing: '0.04em' }}>
+                        Method: {isOnlinePayment ? 'Online Payment' : 'Cash on Delivery'}<br />
+                        Status: {order.payment ? 'Paid' : 'Pending'}<br />
+                        Amount: ₹{orderTotal.toLocaleString('en-IN')}
+                        {order.paymentId && (
+                          <>
+                            <br />
+                            Payment ID: {order.paymentId}
+                          </>
+                        )}
+                        {order.razorpayOrderId && (
+                          <>
+                            <br />
+                            Razorpay Order ID: {order.razorpayOrderId}
+                          </>
+                        )}
+                      </p>
+                    </div>
 
                     {/* Address */}
                     {order.shippingAddress && (

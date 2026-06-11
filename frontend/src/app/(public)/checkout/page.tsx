@@ -49,9 +49,15 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState<Partial<AddressForm>>({});
   const [paymentMethod, setPaymentMethod] = useState<'cod' | 'online'>('cod');
   const [placing, setPlacing] = useState(false);
-  const [orderPlaced, setOrderPlaced] = useState<{ orderId: string } | null>(null);
+  const [orderPlaced, setOrderPlaced] = useState<{
+    orderId: string;
+    paymentMethod?: string;
+    paymentId?: string;
+    razorpayOrderId?: string;
+    amount?: number;
+  } | null>(null);
 
-  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace('/api', '');
+  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '');
 
   useEffect(() => {
     if (!token) return;
@@ -111,6 +117,10 @@ export default function CheckoutPage() {
         </h2>
         <p style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.4)', letterSpacing: '0.08em', maxWidth: 400, lineHeight: 1.8 }}>
           Order ID: <span style={{ color: 'var(--gold)' }}>{orderPlaced.orderId}</span><br />
+          Payment: <span style={{ color: 'var(--gold)' }}>{orderPlaced.paymentMethod === 'online' ? 'Online Payment' : 'Cash on Delivery'}</span><br />
+          {orderPlaced.amount ? <>Amount: <span style={{ color: 'var(--gold)' }}>₹{orderPlaced.amount.toLocaleString('en-IN')}</span><br /></> : null}
+          {orderPlaced.paymentId ? <>Payment ID: <span style={{ color: 'var(--gold)' }}>{orderPlaced.paymentId}</span><br /></> : null}
+          {orderPlaced.razorpayOrderId ? <>Razorpay Order ID: <span style={{ color: 'var(--gold)' }}>{orderPlaced.razorpayOrderId}</span><br /></> : null}
           Our team will contact you within 24 hours to schedule white-glove delivery and installation.
         </p>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
@@ -228,21 +238,21 @@ export default function CheckoutPage() {
     ...paymentFields,
   });
 
-  const collectOnlinePayment = async () => {
+  const collectOnlinePayment = async (orderData: ReturnType<typeof getOrderPayload>) => {
     const key = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
     if (!key) throw new Error('Online payment is not configured');
 
     const loaded = await loadRazorpayScript();
     if (!loaded) throw new Error('Unable to load payment gateway');
 
-    const razorpayOrder = await createRazorpayOrderAPI(token!, subtotal);
+    const razorpayOrder = await createRazorpayOrderAPI(token!, subtotal, orderData);
     return new Promise<Record<string, string>>((resolve, reject) => {
       const Razorpay = (window as any).Razorpay;
       const checkout = new Razorpay({
         key,
         amount: razorpayOrder.amount,
         currency: razorpayOrder.currency || 'INR',
-        name: 'Royce Lighting',
+        name: 'Royace Lighting',
         description: 'Lighting order payment',
         order_id: razorpayOrder.orderId,
         prefill: {
@@ -274,11 +284,18 @@ export default function CheckoutPage() {
 
     setPlacing(true);
     try {
-      const paymentFields = paymentMethod === 'online' ? await collectOnlinePayment() : {};
-      const orderData = getOrderPayload(paymentFields);
+      const baseOrderData = getOrderPayload();
+      const paymentFields = paymentMethod === 'online' ? await collectOnlinePayment(baseOrderData) : {};
+      const orderData = { ...baseOrderData, ...paymentFields };
       const res = await placeOrderAPI(token, orderData);
       dispatch(clearCart());
-      setOrderPlaced({ orderId: res.order?._id || res._id || 'RL-' + Date.now() });
+      setOrderPlaced({
+        orderId: res.order?._id || res._id || 'RL-' + Date.now(),
+        paymentMethod: res.paymentMethod || orderData.paymentMethod,
+        paymentId: res.paymentId,
+        razorpayOrderId: res.razorpayOrderId,
+        amount: res.amount || orderData.amount,
+      });
       dispatch(addToast({ message: 'Order placed successfully!', type: 'success' }));
     } catch (err: any) {
       dispatch(addToast({ message: err.response?.data?.message || err.message || 'Order failed. Please try again.', type: 'error' }));

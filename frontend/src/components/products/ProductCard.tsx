@@ -44,7 +44,7 @@ export function ProductCard({ product }: ProductCardProps) {
       ? Math.round(((product.retailPrice - product.sellingPrice) / product.retailPrice) * 100)
       : 0;
 
-  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace('/api', '');
+  const imageBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '');
   const orderedAssets = product.imageAssets?.length
     ? [...product.imageAssets].sort((a, b) => Number(a.order || 0) - Number(b.order || 0))
     : [];

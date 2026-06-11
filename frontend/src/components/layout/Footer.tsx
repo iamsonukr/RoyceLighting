@@ -7,7 +7,7 @@ import { usePublicCategories } from '@/hooks/usePublicCategories';
 import { categoryHref, FALLBACK_CATEGORIES } from '@/lib/publicCategories';
 
 const INFO_LINKS = [
-  { label: 'About Royce', href: '/about' },
+  { label: 'About Royace', href: '/about' },
   { label: 'Our Atelier', href: '/atelier' },
   { label: 'Contact Us', href: '/contact-us' },
   { label: 'Privacy Policy', href: '/privacy-policy' },
@@ -81,7 +81,7 @@ export function Footer() {
             }}
           >
             <span style={{ color: 'var(--gold)', fontSize: '0.65rem' }}>✦</span>
-            Royce
+            Royace
             <span style={{ color: 'rgba(250,247,240,0.25)' }}>·</span>
             Lighting
           </div>
@@ -216,7 +216,7 @@ export function Footer() {
             <li style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
               <Mail size={13} style={{ color: 'var(--gold)', marginTop: '0.15rem', flexShrink: 0 }} strokeWidth={1.5} />
               <span style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.9)', letterSpacing: '0.04em', fontWeight: 300 }}>
-                atelier@roycelighting.com
+                atelier@Royacelighting.com
               </span>
             </li>
             <li style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
@@ -251,7 +251,7 @@ export function Footer() {
         }}
       >
         <p style={{ fontSize: '0.62rem', color: 'rgba(250,247,240,0.2)', letterSpacing: '0.1em' }}>
-          © 2024 Royce Lighting. All rights reserved.
+          © 2024 Royace Lighting. All rights reserved.
         </p>
         <p style={{ fontSize: '0.62rem', color: 'rgba(250,247,240,0.2)', letterSpacing: '0.1em' }}>
           Handcrafted with devotion in New Delhi, India

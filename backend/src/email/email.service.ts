@@ -16,8 +16,8 @@ export class EmailService {
     } else {
       this.logger.warn('RESEND_API_KEY not set — email sending disabled');
     }
-    this.fromEmail = config.get<string>('RESEND_FROM_EMAIL') || 'noreply@Royce Lighting.com';
-    this.adminEmail = config.get<string>('ADMIN_EMAIL') || 'admin@Royce Lighting.com';
+    this.fromEmail = config.get<string>('RESEND_FROM_EMAIL') || 'noreply@Royace Lighting.com';
+    this.adminEmail = config.get<string>('ADMIN_EMAIL') || 'admin@Royace Lighting.com';
   }
 
   private baseTemplate(content: string, preheader = '') {
@@ -26,13 +26,13 @@ export class EmailService {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Royce Lighting</title>
+  <title>Royace Lighting</title>
 </head>
 <body style="margin:0;padding:0;background:#f9f9f7;font-family:'Segoe UI',Arial,sans-serif;">
   <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
     <!-- Header -->
     <div style="background:#1a1a1a;padding:28px 32px;">
-      <h1 style="margin:0;color:#e8d5b7;font-size:24px;font-weight:600;letter-spacing:1px;">Royce Lighting</h1>
+      <h1 style="margin:0;color:#e8d5b7;font-size:24px;font-weight:600;letter-spacing:1px;">Royace Lighting</h1>
       <p style="margin:4px 0 0;color:#9ca3af;font-size:13px;">Handcrafted with love</p>
     </div>
     <!-- Body -->
@@ -41,7 +41,7 @@ export class EmailService {
     </div>
     <!-- Footer -->
     <div style="background:#f3f4f6;padding:20px 32px;text-align:center;">
-      <p style="margin:0;color:#9ca3af;font-size:12px;">© 2024 Royce Lighting. All rights reserved.</p>
+      <p style="margin:0;color:#9ca3af;font-size:12px;">© 2024 Royace Lighting. All rights reserved.</p>
       <p style="margin:4px 0 0;color:#9ca3af;font-size:12px;">This is an automated email, please do not reply.</p>
     </div>
   </div>
@@ -114,7 +114,7 @@ export class EmailService {
       await this.resend.emails.send({
         from: this.fromEmail,
         to,
-        subject: `Order Confirmed - #${String(order._id).slice(-8).toUpperCase()} | Royce Lighting`,
+        subject: `Order Confirmed - #${String(order._id).slice(-8).toUpperCase()} | Royace Lighting`,
         html: this.baseTemplate(content),
       });
       this.logger.log(`Order placed email sent to ${to}`);
@@ -155,7 +155,7 @@ export class EmailService {
       await this.resend.emails.send({
         from: this.fromEmail,
         to,
-        subject: `Your Order Has Shipped - #${String(order._id).slice(-8).toUpperCase()} | Royce Lighting`,
+        subject: `Your Order Has Shipped - #${String(order._id).slice(-8).toUpperCase()} | Royace Lighting`,
         html: this.baseTemplate(content),
       });
       this.logger.log(`Order shipped email sent to ${to}`);
@@ -167,7 +167,7 @@ export class EmailService {
   async sendOrderDeliveredEmail(to: string, order: any) {
     const content = `
       <h2 style="color:#1a1a1a;margin:0 0 8px;">Order Delivered! 🎁</h2>
-      <p style="color:#6b7280;margin:0 0 24px;">Your Royce Lighting order has been delivered. We hope you love it!</p>
+      <p style="color:#6b7280;margin:0 0 24px;">Your Royace Lighting order has been delivered. We hope you love it!</p>
 
       <div style="background:#fafaf9;border:1px solid #e5e7eb;border-radius:6px;padding:16px;margin-bottom:24px;">
         <p style="margin:0 0 4px;font-size:13px;color:#9ca3af;">Order ID</p>
@@ -178,7 +178,7 @@ export class EmailService {
         <p style="margin:0;font-size:16px;color:#713f12;">Loved your purchase? Share it with friends! ✨</p>
       </div>
 
-      <p style="color:#6b7280;font-size:13px;margin-top:24px;">If you have any issues with your order, please contact us at support@Royce Lighting.com</p>`;
+      <p style="color:#6b7280;font-size:13px;margin-top:24px;">If you have any issues with your order, please contact us at support@Royace Lighting.com</p>`;
 
     if (!this.resend) {
       this.logger.warn(`Skipping delivered email to ${to}: Resend not configured`);
@@ -189,7 +189,7 @@ export class EmailService {
       await this.resend.emails.send({
         from: this.fromEmail,
         to,
-        subject: `Order Delivered - #${String(order._id).slice(-8).toUpperCase()} | Royce Lighting`,
+        subject: `Order Delivered - #${String(order._id).slice(-8).toUpperCase()} | Royace Lighting`,
         html: this.baseTemplate(content),
       });
       this.logger.log(`Order delivered email sent to ${to}`);
@@ -201,7 +201,7 @@ export class EmailService {
   async sendAdminNewOrderEmail(order: any, customerName: string, customerEmail: string) {
     const content = `
       <h2 style="color:#1a1a1a;margin:0 0 8px;">New Order Received 🛍️</h2>
-      <p style="color:#6b7280;margin:0 0 24px;">A new order has been placed on Royce Lighting.</p>
+      <p style="color:#6b7280;margin:0 0 24px;">A new order has been placed on Royace Lighting.</p>
 
       <div style="display:grid;gap:12px;">
         <div style="background:#fafaf9;border:1px solid #e5e7eb;border-radius:6px;padding:16px;">

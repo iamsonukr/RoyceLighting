@@ -50,7 +50,7 @@ export const reasons = [
 
 export const testimonials = [
   {
-    quote: 'The chandelier Royce created for our foyer has become the defining feature of our home.',
+    quote: 'The chandelier Royace created for our foyer has become the defining feature of our home.',
     author: 'Priya Mehta',
     role: 'Art Collector, Mumbai',
   },

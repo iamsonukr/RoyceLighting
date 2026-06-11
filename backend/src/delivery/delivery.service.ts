@@ -41,7 +41,7 @@ export class DeliveryService {
   constructor(private config: ConfigService) {
     this.apiKey = config.get<string>('DELHIVERY_API_KEY');
     this.baseUrl = config.get<string>('DELHIVERY_BASE_URL') || 'https://track.delhivery.com';
-    this.warehouseName = config.get<string>('DELHIVERY_WAREHOUSE_NAME') || 'Royce Lighting';
+    this.warehouseName = config.get<string>('DELHIVERY_WAREHOUSE_NAME') || 'Royace Lighting';
   }
 
   // ─── Create a new shipment ─────────────────────────────────

@@ -5,7 +5,7 @@ const LAST_UPDATED = '9 June 2026';
 export const privacyPolicy: LegalPolicy = {
   title: 'Privacy Policy',
   description:
-    'This Privacy Policy explains how Royce Lighting collects, uses, protects, and shares customer information when you browse, enquire, purchase, or request custom decorative lighting products from us.',
+    'This Privacy Policy explains how Royace Lighting collects, uses, protects, and shares customer information when you browse, enquire, purchase, or request custom decorative lighting products from us.',
   effectiveDate: LAST_UPDATED,
   lastUpdated: LAST_UPDATED,
   summary: [
@@ -208,7 +208,7 @@ export const privacyPolicy: LegalPolicy = {
 export const termsPolicy: LegalPolicy = {
   title: 'Terms & Conditions',
   description:
-    'These Terms & Conditions govern browsing, enquiries, purchases, payments, shipping, custom orders, installation support, and use of the Royce Lighting website and services.',
+    'These Terms & Conditions govern browsing, enquiries, purchases, payments, shipping, custom orders, installation support, and use of the Royace Lighting website and services.',
   effectiveDate: LAST_UPDATED,
   lastUpdated: LAST_UPDATED,
   summary: [
@@ -271,7 +271,7 @@ export const termsPolicy: LegalPolicy = {
       blocks: [
         {
           type: 'paragraph',
-          text: 'Royce Lighting sells decorative lighting products including chandeliers, pendant lights, wall lights, table lamps, ceiling lights, bespoke lighting, and related accessories. Products may be ready-stock, pre-order, made-to-order, customised, imported, vendor-supplied, or project-specific depending on the listing and written confirmation.',
+          text: 'Royace Lighting sells decorative lighting products including chandeliers, pendant lights, wall lights, table lamps, ceiling lights, bespoke lighting, and related accessories. Products may be ready-stock, pre-order, made-to-order, customised, imported, vendor-supplied, or project-specific depending on the listing and written confirmation.',
         },
         {
           type: 'list',
@@ -403,7 +403,7 @@ export const termsPolicy: LegalPolicy = {
       blocks: [
         {
           type: 'paragraph',
-          text: 'All website content, brand names, logos, product photographs, catalogue descriptions, design concepts, layouts, graphics, videos, text, and other materials are owned by or licensed to Royce Lighting. No intellectual property rights are transferred to you except the limited right to view and use the website for personal or authorised business purchasing purposes.',
+          text: 'All website content, brand names, logos, product photographs, catalogue descriptions, design concepts, layouts, graphics, videos, text, and other materials are owned by or licensed to Royace Lighting. No intellectual property rights are transferred to you except the limited right to view and use the website for personal or authorised business purchasing purposes.',
         },
         {
           type: 'paragraph',
@@ -417,7 +417,7 @@ export const termsPolicy: LegalPolicy = {
       blocks: [
         {
           type: 'paragraph',
-          text: 'To the maximum extent permitted by law, Royce Lighting and its owners, directors, employees, vendors, suppliers, logistics partners, and service providers will not be liable for indirect, incidental, special, punitive, or consequential losses, including loss of profit, project delay, business interruption, interior work delay, or loss of goodwill.',
+          text: 'To the maximum extent permitted by law, Royace Lighting and its owners, directors, employees, vendors, suppliers, logistics partners, and service providers will not be liable for indirect, incidental, special, punitive, or consequential losses, including loss of profit, project delay, business interruption, interior work delay, or loss of goodwill.',
         },
         {
           type: 'paragraph',
@@ -553,7 +553,7 @@ export const refundPolicy: LegalPolicy = {
     },
     {
       id: 'company-cancellation',
-      title: 'Cancellation by Royce Lighting',
+      title: 'Cancellation by Royace Lighting',
       blocks: [
         {
           type: 'paragraph',
@@ -677,7 +677,7 @@ export const refundPolicy: LegalPolicy = {
 export const shippingPolicy: LegalPolicy = {
   title: 'Shipping & Delivery Policy',
   description:
-    'This Shipping & Delivery Policy explains order processing, dispatch timelines, delivery timelines, freight handling, inspection, failed delivery, and damaged-in-transit procedures for Royce Lighting orders.',
+    'This Shipping & Delivery Policy explains order processing, dispatch timelines, delivery timelines, freight handling, inspection, failed delivery, and damaged-in-transit procedures for Royace Lighting orders.',
   effectiveDate: LAST_UPDATED,
   lastUpdated: LAST_UPDATED,
   summary: [

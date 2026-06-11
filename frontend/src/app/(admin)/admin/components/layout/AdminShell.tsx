@@ -68,7 +68,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
         </div>
         {!collapsed && (
           <div>
-            <p className="font-bold text-gray-900 text-sm">Royce Lighting</p>
+            <p className="font-bold text-gray-900 text-sm">Royace Lighting</p>
             <p className="text-xs text-gray-400">Admin Panel</p>
           </div>
         )}

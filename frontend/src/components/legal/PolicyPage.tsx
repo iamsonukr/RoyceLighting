@@ -1,5 +1,5 @@
 export const LEGAL_CONTACT = {
-  brandName: 'Royce Lighting',
+  brandName: 'Royace Lighting',
   companyName: '[Company Name]',
   gstNumber: '[GST Number]',
   email: '[Email Address]',

@@ -29,10 +29,14 @@ export class OrdersService {
   ) {}
 
   // ─── Create Razorpay Order ────────────────────────────────
-  async createRazorpayOrder(amount: number) {
+  async createRazorpayOrder(amount: number, dto?: Partial<CreateOrderDto>) {
     const normalizedAmount = Number(amount);
     if (!Number.isFinite(normalizedAmount) || normalizedAmount <= 0) {
       throw new BadRequestException('Invalid payment amount');
+    }
+
+    if (dto?.items?.length) {
+      await this.validateOrderItems(dto as CreateOrderDto);
     }
 
     const keyId = this.config.get<string>('RAZORPAY_KEY_ID');
@@ -77,56 +81,7 @@ export class OrdersService {
     const user = await this.userModel.findById(userId);
     if (!user) throw new NotFoundException('User not found');
 
-    if (!dto.items?.length) {
-      throw new BadRequestException('Order must contain at least one item');
-    }
-
-    const normalizedItems = [];
-    let subtotal = 0;
-
-    for (const item of dto.items) {
-      const productId = item.productId || item.product;
-      if (!productId || !Types.ObjectId.isValid(productId)) {
-        throw new BadRequestException('Invalid product in order');
-      }
-
-      const quantity = Number(item.quantity);
-      if (!Number.isInteger(quantity) || quantity < 1) {
-        throw new BadRequestException('Invalid item quantity');
-      }
-
-      const product = await this.productModel.findById(productId);
-      if (!product) throw new NotFoundException('Product not found');
-      if (!product.isActive) throw new BadRequestException(`${product.name} is not available`);
-      if (product.totalQuantity < quantity) {
-        throw new BadRequestException(`Only ${product.totalQuantity} piece(s) available for ${product.name}`);
-      }
-
-      const price = Number(product.sellingPrice);
-      const itemTotal = price * quantity;
-      subtotal += itemTotal;
-      normalizedItems.push({
-        productId: String(product._id),
-        name: product.name,
-        price,
-        quantity,
-        color: item.color || '',
-        size: item.size || '',
-        image: this.getProductDisplayImage(product) || item.image || '',
-        itemTotal,
-      });
-    }
-
-    const deliveryFees = Number(dto.deliveryFees || 0);
-    if (!Number.isFinite(deliveryFees) || deliveryFees < 0) {
-      throw new BadRequestException('Invalid delivery fee');
-    }
-
-    const amount = subtotal + deliveryFees;
-    const clientAmount = Number(dto.amount ?? dto.totalAmount ?? 0);
-    if (!Number.isFinite(clientAmount) || Math.abs(clientAmount - amount) > 1) {
-      throw new BadRequestException('Order amount does not match current product prices');
-    }
+    const { normalizedItems, amount, deliveryFees } = await this.validateOrderItems(dto);
 
     if (paymentMethod === 'online') {
       const valid = this.verifyPayment(razorpayOrderId, razorpayPaymentId, razorpaySignature);
@@ -349,5 +304,60 @@ export class OrdersService {
 
     const legacyProduct = product as any;
     return legacyProduct.primaryImage || legacyProduct.image || legacyProduct.images?.[0] || '';
+  }
+
+  private async validateOrderItems(dto: CreateOrderDto) {
+    if (!dto.items?.length) {
+      throw new BadRequestException('Order must contain at least one item');
+    }
+
+    const normalizedItems = [];
+    let subtotal = 0;
+
+    for (const item of dto.items) {
+      const productId = item.productId || item.product;
+      if (!productId || !Types.ObjectId.isValid(productId)) {
+        throw new BadRequestException('Invalid product in order');
+      }
+
+      const quantity = Number(item.quantity);
+      if (!Number.isInteger(quantity) || quantity < 1) {
+        throw new BadRequestException('Invalid item quantity');
+      }
+
+      const product = await this.productModel.findById(productId);
+      if (!product) throw new NotFoundException('Product not found');
+      if (!product.isActive) throw new BadRequestException(`${product.name} is not available`);
+      if (product.totalQuantity < quantity) {
+        throw new BadRequestException(`Only ${product.totalQuantity} piece(s) available for ${product.name}`);
+      }
+
+      const price = Number(product.sellingPrice);
+      const itemTotal = price * quantity;
+      subtotal += itemTotal;
+      normalizedItems.push({
+        productId: String(product._id),
+        name: product.name,
+        price,
+        quantity,
+        color: item.color || '',
+        size: item.size || '',
+        image: this.getProductDisplayImage(product) || item.image || '',
+        itemTotal,
+      });
+    }
+
+    const deliveryFees = Number(dto.deliveryFees || 0);
+    if (!Number.isFinite(deliveryFees) || deliveryFees < 0) {
+      throw new BadRequestException('Invalid delivery fee');
+    }
+
+    const amount = subtotal + deliveryFees;
+    const clientAmount = Number(dto.amount ?? dto.totalAmount ?? 0);
+    if (!Number.isFinite(clientAmount) || Math.abs(clientAmount - amount) > 1) {
+      throw new BadRequestException('Order amount does not match current product prices');
+    }
+
+    return { normalizedItems, amount, deliveryFees };
   }
 }
