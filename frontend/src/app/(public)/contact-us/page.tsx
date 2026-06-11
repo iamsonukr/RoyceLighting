@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
-import { Clock, Mail, MapPin, MessageSquare, Phone } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowUpRight, Clock, Mail, MapPin, MessageSquare, Phone } from 'lucide-react';
 import { LEGAL_CONTACT } from '@/components/legal/PolicyPage';
+import { mailTo } from '@/lib/contact';
 
 export const metadata: Metadata = {
   title: 'Contact Us | Royace Lighting',
@@ -13,24 +15,28 @@ const contactCards = [
     title: 'Customer Support',
     detail: LEGAL_CONTACT.email,
     helper: 'Order updates, payment queries, returns, refunds, and warranty support.',
+    href: mailTo('Royace Lighting customer support enquiry'),
     Icon: Mail,
   },
   {
     title: 'Phone Support',
     detail: LEGAL_CONTACT.phone,
     helper: 'For urgent delivery, damage reporting, and custom project coordination.',
+    href: LEGAL_CONTACT.phoneHref,
     Icon: Phone,
   },
   {
     title: 'Registered Office',
     detail: LEGAL_CONTACT.registeredAddress,
     helper: `GSTIN: ${LEGAL_CONTACT.gstNumber}`,
+    href: LEGAL_CONTACT.mapUrl,
     Icon: MapPin,
   },
   {
     title: 'Business Hours',
     detail: LEGAL_CONTACT.supportTimings,
     helper: 'Responses may be slower on Sundays, public holidays, and peak festive periods.',
+    href: mailTo('Royace Lighting appointment request'),
     Icon: Clock,
   },
 ];
@@ -106,24 +112,36 @@ export default function ContactUsPage() {
           </div>
 
           <div className="contact-card-grid">
-            {contactCards.map(({ title, detail, helper, Icon }) => (
+            {contactCards.map(({ title, detail, helper, href, Icon }) => (
               <article className="contact-card" key={title}>
                 <Icon size={20} strokeWidth={1.5} />
                 <h3>{title}</h3>
-                <p className="contact-card-detail">{detail}</p>
+                <Link className="contact-card-detail" href={href}>
+                  {detail}
+                </Link>
                 <p>{helper}</p>
               </article>
             ))}
           </div>
 
-          <div className="map-placeholder" role="img" aria-label="Google Maps location placeholder">
-            <MapPin size={30} strokeWidth={1.4} />
-            <h2>Google Maps Placeholder</h2>
+          <div className="map-placeholder" role="region" aria-label="Royace Lighting location">
+            <div>
+              <MapPin size={30} strokeWidth={1.4} />
+            </div>
+            <h2>Visit by Appointment</h2>
             <p>
-              Replace this panel with the embedded Google Maps location for
-              {` ${LEGAL_CONTACT.registeredAddress}`} after the registered office
-              or showroom address is finalised.
+              Our team can help schedule showroom visits, project meetings, and
+              trade consultations at the confirmed Royace Lighting location.
             </p>
+            <Link
+              className="rl-button rl-button-outline contact-map-link"
+              href={LEGAL_CONTACT.mapUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Get Directions
+              <ArrowUpRight size={14} strokeWidth={1.5} />
+            </Link>
           </div>
         </div>
 
@@ -138,7 +156,7 @@ export default function ContactUsPage() {
 
           <form
             className="contact-form"
-            action={`mailto:${LEGAL_CONTACT.email}`}
+            action={mailTo('Royace Lighting website enquiry')}
             method="post"
             encType="text/plain"
           >

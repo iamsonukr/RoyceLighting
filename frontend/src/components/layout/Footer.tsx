@@ -1,10 +1,11 @@
 "use client";
 
 import Link from 'next/link';
-import { Instagram, Facebook, Twitter, Mail, Phone, MapPin, ArrowUpRight } from 'lucide-react';
+import { Instagram, Facebook, Twitter, Mail, Phone, MapPin } from 'lucide-react';
 import { useMemo } from 'react';
 import { usePublicCategories } from '@/hooks/usePublicCategories';
 import { categoryHref, FALLBACK_CATEGORIES } from '@/lib/publicCategories';
+import { SITE_CONTACT, mailTo } from '@/lib/contact';
 
 const INFO_LINKS = [
   { label: 'About Royace', href: '/about' },
@@ -215,21 +216,32 @@ export function Footer() {
           <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
             <li style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
               <Mail size={13} style={{ color: 'var(--gold)', marginTop: '0.15rem', flexShrink: 0 }} strokeWidth={1.5} />
-              <span style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.9)', letterSpacing: '0.04em', fontWeight: 300 }}>
-                atelier@Royacelighting.com
-              </span>
+              <Link
+                href={mailTo('Royace Lighting enquiry')}
+                style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.9)', letterSpacing: '0.04em', fontWeight: 300, textDecoration: 'none' }}
+              >
+                {SITE_CONTACT.email}
+              </Link>
             </li>
             <li style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
               <Phone size={13} style={{ color: 'var(--gold)', marginTop: '0.15rem', flexShrink: 0 }} strokeWidth={1.5} />
-              <span style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.9)', letterSpacing: '0.04em', fontWeight: 300 }}>
-                +91 98765 43210
-              </span>
+              <Link
+                href={SITE_CONTACT.phoneHref}
+                style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.9)', letterSpacing: '0.04em', fontWeight: 300, textDecoration: 'none' }}
+              >
+                {SITE_CONTACT.phone}
+              </Link>
             </li>
             <li style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
               <MapPin size={13} style={{ color: 'var(--gold)', marginTop: '0.15rem', flexShrink: 0 }} strokeWidth={1.5} />
-              <span style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.9)', letterSpacing: '0.04em', fontWeight: 300, lineHeight: 1.7 }}>
+              <Link
+                href={SITE_CONTACT.mapUrl}
+                target="_blank"
+                rel="noreferrer"
+                style={{ fontSize: '0.72rem', color: 'rgba(250,247,240,0.9)', letterSpacing: '0.04em', fontWeight: 300, lineHeight: 1.7, textDecoration: 'none' }}
+              >
                 Mehrauli Road, Qutub Area<br />New Delhi, 110030
-              </span>
+              </Link>
             </li>
           </ul>
         </div>

@@ -129,7 +129,7 @@ export function ProductCard({ product }: ProductCardProps) {
             position: 'relative',
             aspectRatio: '3/4',
             overflow: 'hidden',
-            background: 'linear-gradient(180deg, var(--forest-2), var(--charcoal-3))',
+            background: 'var(--ivory)',
           }}
         >
           {primaryImg ? (
@@ -182,7 +182,7 @@ export function ProductCard({ product }: ProductCardProps) {
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(to bottom, transparent 48%, rgba(6,47,36,0.5) 78%, rgba(8,6,4,0.82) 100%)',
+              background: 'linear-gradient(to bottom, transparent 48%, rgba(250,247,240,0.6) 78%, rgba(250,247,240,0.95) 100%)',
               transition: 'opacity 0.4s ease',
               opacity: hovered ? 1 : 0.5,
             }}

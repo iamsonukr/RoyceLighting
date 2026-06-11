@@ -177,6 +177,7 @@ export function Navbar() {
                               aspectRatio: '4/3',
                               overflow: 'hidden',
                               marginBottom: '0.6rem',
+                              background: 'var(--ivory)',
                             }}
                           >
                             <img

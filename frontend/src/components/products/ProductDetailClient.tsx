@@ -200,14 +200,14 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
           {/* Main image */}
           <div
             style={{
-              position: 'relative',
-              aspectRatio: '4/5',
-              overflow: 'hidden',
-              background: 'linear-gradient(180deg, rgba(6,47,36,0.62), var(--charcoal-2))',
-              border: '1px solid rgba(0,96,57,0.2)',
-              marginBottom: '0.75rem',
-              cursor: 'zoom-in',
-            }}
+                position: 'relative',
+                aspectRatio: '4/5',
+                overflow: 'hidden',
+                background: 'var(--ivory)',
+                border: '1px solid rgba(0,96,57,0.2)',
+                marginBottom: '0.75rem',
+                cursor: 'zoom-in',
+              }}
             onClick={() => setLightboxOpen(true)}
           >
             {selectedImage ? (
@@ -265,15 +265,15 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
                   key={i}
                   onClick={() => setSelectedImage(img)}
                   style={{
-                    position: 'relative',
-                    aspectRatio: '1/1',
-                    overflow: 'hidden',
-                    background: 'var(--forest-2)',
-                    border: `1px solid ${selectedImage === img ? 'rgba(228,199,124,0.72)' : 'rgba(0,96,57,0.18)'}`,
-                    cursor: 'pointer',
-                    transition: 'border-color 0.2s ease',
-                    padding: 0,
-                  }}
+                      position: 'relative',
+                      aspectRatio: '1/1',
+                      overflow: 'hidden',
+                      background: 'var(--ivory)',
+                      border: `1px solid ${selectedImage === img ? 'rgba(228,199,124,0.72)' : 'rgba(0,96,57,0.18)'}`,
+                      cursor: 'pointer',
+                      transition: 'border-color 0.2s ease',
+                      padding: 0,
+                    }}
                 >
                   <Image
                     src={getImageUrl(img)}

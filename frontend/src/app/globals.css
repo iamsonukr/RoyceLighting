@@ -1888,8 +1888,24 @@
 }
 
 .contact-card .contact-card-detail {
+  display: inline-block;
+  margin-top: 0.75rem;
   color: rgba(250,247,240,0.88);
   font-size: 0.88rem;
+  line-height: 1.55;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.contact-card .contact-card-detail:hover {
+  color: var(--gold-light);
+}
+
+.contact-map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 1.35rem;
 }
 
 .map-placeholder {

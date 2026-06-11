@@ -1,12 +1,6 @@
-export const LEGAL_CONTACT = {
-  brandName: 'Royace Lighting',
-  companyName: '[Company Name]',
-  gstNumber: '[GST Number]',
-  email: '[Email Address]',
-  phone: '[Phone Number]',
-  registeredAddress: '[Registered Address]',
-  supportTimings: '[Support Timings]',
-};
+import { SITE_CONTACT } from '@/lib/contact';
+
+export const LEGAL_CONTACT = SITE_CONTACT;
 
 export type LegalBlock =
   | { type: 'paragraph'; text: string }
