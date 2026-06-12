@@ -11,6 +11,7 @@
     "db:debug": "node scripts/debug-db.js",
     "seed:admin": "node scripts/seed-admin.js",
     "seed:categories": "node scripts/seed-categories.js",
+    "import:royace-data": "node scripts/import-royace-data.js",
     "sync:category-images": "node scripts/sync-category-images.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
     "type-check": "tsc --noEmit"
@@ -38,7 +39,8 @@
     "reflect-metadata": "^0.2.2",
     "resend": "^3.4.0",
     "rxjs": "^7.8.1",
-    "sharp": "^0.33.5"
+    "sharp": "^0.33.5",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.2",

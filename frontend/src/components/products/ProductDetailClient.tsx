@@ -111,6 +111,34 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
     { label: 'Category', value: categoryLabel },
     product.finish && { label: 'Finish', value: product.finish },
     product.lightSource && { label: 'Light Source', value: product.lightSource },
+    product.watt !== undefined && product.watt !== null && product.watt !== '' && {
+      label: 'Watt',
+      value: `${product.watt} W`,
+    },
+    product.inputVoltage && { label: 'Input Voltage', value: product.inputVoltage },
+    product.lmPerW !== undefined && product.lmPerW !== null && product.lmPerW !== '' && {
+      label: 'LM/W',
+      value: product.lmPerW,
+    },
+    product.fluxLumin !== undefined && product.fluxLumin !== null && product.fluxLumin !== '' && {
+      label: 'Flux Lumin',
+      value: product.fluxLumin,
+    },
+    product.ra !== undefined && product.ra !== null && product.ra !== '' && {
+      label: 'RA',
+      value: product.ra,
+    },
+    product.chipBrand && { label: 'Chip Brand', value: product.chipBrand },
+    product.pf !== undefined && product.pf !== null && product.pf !== '' && {
+      label: 'PF',
+      value: product.pf,
+    },
+    product.cutSize && { label: 'Cut Size', value: product.cutSize },
+    product.beamAngle !== undefined && product.beamAngle !== null && product.beamAngle !== '' && {
+      label: 'Beam Angle',
+      value: `${product.beamAngle}°`,
+    },
+    product.ipRate && { label: 'IP Rate', value: product.ipRate },
     product.weight && { label: 'Weight', value: `${product.weight} g` },
     dimensionValue && {
       label: 'Dimensions',

@@ -14,7 +14,22 @@ const EMPTY_FORM = {
   sku: '', series: '', colors: '', tags: '', material: '',
   size: '', dimension: { height: '', width: '', depth: '', raw: '' },
   finish: '', lightSource: '', remark: '', weight: '',
+  watt: '', inputVoltage: '', lmPerW: '', fluxLumin: '', ra: '',
+  chipBrand: '', pf: '', cutSize: '', beamAngle: '', ipRate: '',
 };
+
+const LIGHTING_SPEC_FIELDS = [
+  { key: 'watt', label: 'Watt', placeholder: '12', type: 'number' },
+  { key: 'inputVoltage', label: 'Input Voltage', placeholder: '220-240V', type: 'text' },
+  { key: 'lmPerW', label: 'LM/W', placeholder: '100', type: 'number' },
+  { key: 'fluxLumin', label: 'Flux Lumin', placeholder: '1200', type: 'number' },
+  { key: 'ra', label: 'RA', placeholder: '80', type: 'number' },
+  { key: 'chipBrand', label: 'Chip Brand', placeholder: 'CREE', type: 'text' },
+  { key: 'pf', label: 'PF', placeholder: '0.95', type: 'number', step: '0.01' },
+  { key: 'cutSize', label: 'Cut Size', placeholder: '75mm', type: 'text' },
+  { key: 'beamAngle', label: 'Beam Angle', placeholder: '36', type: 'number' },
+  { key: 'ipRate', label: 'IP Rate', placeholder: 'IP65', type: 'text' },
+];
 
 export default function VendorProductsPage() {
   const qc = useQueryClient();
@@ -116,6 +131,16 @@ export default function VendorProductsPage() {
       lightSource: p.lightSource || p.LightSource || '',
       remark: p.remark || p.Remark || '',
       weight: p.weight || '',
+      watt: p.watt ?? '',
+      inputVoltage: p.inputVoltage || '',
+      lmPerW: p.lmPerW ?? '',
+      fluxLumin: p.fluxLumin ?? '',
+      ra: p.ra ?? '',
+      chipBrand: p.chipBrand || '',
+      pf: p.pf ?? '',
+      cutSize: p.cutSize || '',
+      beamAngle: p.beamAngle ?? '',
+      ipRate: p.ipRate || '',
     });
     setImagePreviews(getProductImages(p));
     setImageFiles([]);
@@ -441,6 +466,26 @@ export default function VendorProductsPage() {
                     className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                     placeholder="180mm"
                   />
+                </div>
+
+                <div className="col-span-2">
+                  <h4 className="mb-3 text-sm font-semibold text-gray-900">Lighting Specifications</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    {LIGHTING_SPEC_FIELDS.map(({ key, label, placeholder, type, step }) => (
+                      <div key={key}>
+                        <label className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
+                        <input
+                          type={type}
+                          min={type === 'number' ? '0' : undefined}
+                          step={step}
+                          value={(form as any)[key]}
+                          onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                          className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                          placeholder={placeholder}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 

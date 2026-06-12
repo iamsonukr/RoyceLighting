@@ -53,13 +53,11 @@ export class Product {
   // Enables "More from this series" on PDP
 
   // ── Content ────────────────────────────────────────────────────────────────
-
   @Prop({ required: true })
   description: string;
 
   @Prop({ type: [String], default: [] })
   tags: string[];
-
   // ── Classification ─────────────────────────────────────────────────────────
 
   @Prop({ type: Types.ObjectId, ref: 'Category', required: true })
@@ -113,6 +111,36 @@ export class Product {
   @Prop({ trim: true })
   lightSource?: string;
   // e.g. "LED 3IN1 3K/4K/6K", "E14*7", "GU10"
+
+  @Prop({ default: 0, min: 0 })
+  watt?: number;
+
+  @Prop({ trim: true })
+  inputVoltage?: string;
+
+  @Prop({ default: 0, min: 0 })
+  lmPerW?: number;
+
+  @Prop({ default: 0, min: 0 })
+  fluxLumin?: number;
+
+  @Prop({ default: 0, min: 0 })
+  ra?: number;
+
+  @Prop({ trim: true })
+  chipBrand?: string;
+
+  @Prop({ default: 0, min: 0 })
+  pf?: number;
+
+  @Prop({ trim: true })
+  cutSize?: string;
+
+  @Prop({ default: 0, min: 0 })
+  beamAngle?: number;
+
+  @Prop({ trim: true })
+  ipRate?: string;
 
   @Prop({ trim: true })
   remark?: string;

@@ -65,6 +65,48 @@ export class CreateProductDto {
   @IsOptional() @IsString()
   lightSource?: string;
 
+  @IsOptional()
+  @Transform(({ value }) => parseOptionalNumber(value))
+  @IsNumber()
+  watt?: number;
+
+  @IsOptional() @IsString()
+  inputVoltage?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => parseOptionalNumber(value))
+  @IsNumber()
+  lmPerW?: number;
+
+  @IsOptional()
+  @Transform(({ value }) => parseOptionalNumber(value))
+  @IsNumber()
+  fluxLumin?: number;
+
+  @IsOptional()
+  @Transform(({ value }) => parseOptionalNumber(value))
+  @IsNumber()
+  ra?: number;
+
+  @IsOptional() @IsString()
+  chipBrand?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => parseOptionalNumber(value))
+  @IsNumber()
+  pf?: number;
+
+  @IsOptional() @IsString()
+  cutSize?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => parseOptionalNumber(value))
+  @IsNumber()
+  beamAngle?: number;
+
+  @IsOptional() @IsString()
+  ipRate?: string;
+
   @IsOptional() @IsString()
   remark?: string;
 

@@ -13,7 +13,22 @@ const EMPTY_FORM = {
   dimension: { height: '', width: '', depth: '', raw: '' },
   weight: '', isActive: true,
   sku: '', slug: '', series: '', finish: '', lightSource: '', remark: '',
+  watt: '', inputVoltage: '', lmPerW: '', fluxLumin: '', ra: '',
+  chipBrand: '', pf: '', cutSize: '', beamAngle: '', ipRate: '',
 };
+
+const LIGHTING_SPEC_FIELDS = [
+  { key: 'watt', label: 'Watt', placeholder: '12', type: 'number' },
+  { key: 'inputVoltage', label: 'Input Voltage', placeholder: '220-240V', type: 'text' },
+  { key: 'lmPerW', label: 'LM/W', placeholder: '100', type: 'number' },
+  { key: 'fluxLumin', label: 'Flux Lumin', placeholder: '1200', type: 'number' },
+  { key: 'ra', label: 'RA', placeholder: '80', type: 'number' },
+  { key: 'chipBrand', label: 'Chip Brand', placeholder: 'CREE', type: 'text' },
+  { key: 'pf', label: 'PF', placeholder: '0.95', type: 'number', step: '0.01' },
+  { key: 'cutSize', label: 'Cut Size', placeholder: '75mm', type: 'text' },
+  { key: 'beamAngle', label: 'Beam Angle', placeholder: '36', type: 'number' },
+  { key: 'ipRate', label: 'IP Rate', placeholder: 'IP65', type: 'text' },
+];
 
 type ImageItem = {
   id: string;
@@ -148,6 +163,16 @@ export default function AdminProductsPage() {
       finish: product.finish || product.Fineshed || '',
       lightSource: product.lightSource || product.LightSource || '',
       remark: product.remark || product.Remark || '',
+      watt: product.watt ?? '',
+      inputVoltage: product.inputVoltage || '',
+      lmPerW: product.lmPerW ?? '',
+      fluxLumin: product.fluxLumin ?? '',
+      ra: product.ra ?? '',
+      chipBrand: product.chipBrand || '',
+      pf: product.pf ?? '',
+      cutSize: product.cutSize || '',
+      beamAngle: product.beamAngle ?? '',
+      ipRate: product.ipRate || '',
     });
     const nextImages = getProductImages(product).map((src: string) => ({
       id: src,
@@ -632,6 +657,26 @@ export default function AdminProductsPage() {
                     <input value={form.remark} onChange={(e) => setForm({ ...form, remark: e.target.value })}
                       placeholder="Any remarks"
                       className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900" />
+                  </div>
+                </div>
+
+                <div className="col-span-2">
+                  <h4 className="mb-3 text-sm font-semibold text-gray-900">Lighting Specifications</h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    {LIGHTING_SPEC_FIELDS.map(({ key, label, placeholder, type, step }) => (
+                      <div key={key}>
+                        <label className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
+                        <input
+                          type={type}
+                          min={type === 'number' ? '0' : undefined}
+                          step={step}
+                          value={(form as any)[key]}
+                          onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                          placeholder={placeholder}
+                          className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gray-900"
+                        />
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
