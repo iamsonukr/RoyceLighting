@@ -34,11 +34,9 @@ export class ProductsService {
         throw new BadRequestException('Only JPG, PNG, GIF, and WEBP images are allowed');
       }
 
-      assets.push(
-        enableCompression
-          ? await this.writeOptimizedImage(file, index)
-          : await this.writeOriginalImage(file, index),
-      );
+      // Store uploaded product images as-is. The optimized WebP path is kept below
+      // for future use, but automatic compression is disabled by request.
+      assets.push(await this.writeOriginalImage(file, index));
     }
 
     return assets;
