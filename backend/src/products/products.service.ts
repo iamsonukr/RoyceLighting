@@ -14,7 +14,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as sharp from 'sharp';
 
-const MAX_OPTIMIZED_IMAGE_SIZE = 500 * 1024;
+const MAX_OPTIMIZED_IMAGE_SIZE = 2 * 1024 * 1024;
 
 @Injectable()
 export class ProductsService {
@@ -482,8 +482,8 @@ export class ProductsService {
 
     candidates.push(await sharp(file.buffer).rotate().webp({ lossless: true, effort: 6 }).toBuffer());
 
-    const widths = [metadata.width || 1800, 1800, 1400, 1200, 1000, 800];
-    const qualities = [92, 86, 80, 74, 68, 62, 56];
+    const widths = [metadata.width || 2400, 2400, 2000, 1800, 1600, 1400];
+    const qualities = [96, 92, 88, 84, 80];
     for (const width of [...new Set(widths)].filter(Boolean)) {
       for (const quality of qualities) {
         const pipeline = sharp(file.buffer).rotate();
@@ -497,7 +497,7 @@ export class ProductsService {
     const underLimit = candidates.find((buffer) => buffer.length <= MAX_OPTIMIZED_IMAGE_SIZE);
     const selected = underLimit || candidates.sort((a, b) => a.length - b.length)[0];
     if (!selected || selected.length > MAX_OPTIMIZED_IMAGE_SIZE) {
-      throw new BadRequestException(`${file.originalname} could not be optimized under 500 KB`);
+      throw new BadRequestException(`${file.originalname} could not be optimized under 2 MB`);
     }
 
     const filename = `${baseName}.webp`;
