@@ -23,7 +23,7 @@ async function getProducts(params: Record<string, string | undefined>) {
 
     const res = await fetch(
       `${PUBLIC_API_URL}/products?${query.toString()}`,
-      { next: { revalidate: 60 } },
+      { cache: 'no-store' },
     );
     const data = await res.json();
     return {

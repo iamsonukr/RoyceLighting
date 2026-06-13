@@ -20,7 +20,7 @@ async function getFeaturedProducts() {
   try {
     const res = await fetch(
       `${PUBLIC_API_URL}/products/featured?limit=8`,
-      { next: { revalidate: 300 } },
+      { cache: 'no-store' },
     );
     const data = await res.json();
     return data.data || [];

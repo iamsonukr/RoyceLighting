@@ -10,7 +10,7 @@ async function getProduct(id: string) {
   try {
     const res = await fetch(
       `${PUBLIC_API_URL}/products/${id}`,
-      { next: { revalidate: 300 } },
+      { cache: 'no-store' },
     );
     if (!res.ok) return null;
     const data = await res.json();
@@ -25,7 +25,7 @@ async function getRelated(category: string | undefined, excludeId: string) {
   try {
     const res = await fetch(
       `${PUBLIC_API_URL}/products?category=${encodeURIComponent(category)}&limit=4`,
-      { next: { revalidate: 300 } },
+      { cache: 'no-store' },
     );
     const data = await res.json();
     return (data.data?.products || data.products || []).filter((p: any) => p._id !== excludeId);
