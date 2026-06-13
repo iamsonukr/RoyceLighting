@@ -127,7 +127,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <div
           style={{
             position: 'relative',
-            aspectRatio: '3/4',
+            aspectRatio: '1/1',
             overflow: 'hidden',
             background: 'var(--ivory)',
           }}

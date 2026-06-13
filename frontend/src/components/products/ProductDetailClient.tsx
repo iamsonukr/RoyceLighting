@@ -229,7 +229,7 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
           <div
             style={{
                 position: 'relative',
-                aspectRatio: '4/5',
+                aspectRatio: '1/1',
                 overflow: 'hidden',
                 background: 'var(--ivory)',
                 border: '1px solid rgba(0,96,57,0.2)',
