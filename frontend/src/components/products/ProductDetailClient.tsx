@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import type { MouseEvent, PointerEvent } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -60,6 +61,12 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
 
   const [selectedImage, setSelectedImage] = useState(product.primaryImage || productImages[0] || '');
   const imageUrl = getImageUrl(selectedImage);
+  const swipeState = useRef({
+    startX: 0,
+    startY: 0,
+    pointerId: null as number | null,
+    swiped: false,
+  });
   const categoryLabel = typeof product.category === 'object'
     ? product.category?.name || product.category?.slug || ''
     : product.category;
@@ -93,6 +100,60 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href);
     dispatch(addToast({ message: 'Link copied to clipboard', type: 'info' }));
+  };
+
+  const selectedImageIndex = productImages.findIndex((img: string) => img === selectedImage);
+  const activeImageIndex = selectedImageIndex >= 0 ? selectedImageIndex : 0;
+  const selectImageByOffset = (offset: number) => {
+    if (productImages.length < 2) return;
+    const nextIndex = (activeImageIndex + offset + productImages.length) % productImages.length;
+    setSelectedImage(productImages[nextIndex]);
+  };
+  const handleImagePointerDown = (e: PointerEvent<HTMLElement>) => {
+    if (productImages.length < 2) return;
+    swipeState.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      pointerId: e.pointerId,
+      swiped: false,
+    };
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+  };
+  const handleImagePointerUp = (e: PointerEvent<HTMLElement>) => {
+    if (swipeState.current.pointerId !== e.pointerId) return;
+
+    const deltaX = e.clientX - swipeState.current.startX;
+    const deltaY = e.clientY - swipeState.current.startY;
+    const isHorizontalSwipe = Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2;
+
+    if (isHorizontalSwipe) {
+      swipeState.current.swiped = true;
+      selectImageByOffset(deltaX < 0 ? 1 : -1);
+    }
+
+    e.currentTarget.releasePointerCapture?.(e.pointerId);
+    swipeState.current.pointerId = null;
+  };
+  const handleImagePointerCancel = (e: PointerEvent<HTMLElement>) => {
+    if (swipeState.current.pointerId === e.pointerId) {
+      e.currentTarget.releasePointerCapture?.(e.pointerId);
+      swipeState.current.pointerId = null;
+    }
+  };
+  const handleMainImageClick = () => {
+    if (swipeState.current.swiped) {
+      swipeState.current.swiped = false;
+      return;
+    }
+    setLightboxOpen(true);
+  };
+  const closeLightbox = () => {
+    swipeState.current.swiped = false;
+    setLightboxOpen(false);
+  };
+  const handleLightboxImageClick = (e: MouseEvent<HTMLElement>) => {
+    e.stopPropagation();
+    swipeState.current.swiped = false;
   };
 
   const dimensionParts = [
@@ -234,15 +295,21 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
                 background: 'var(--ivory)',
                 border: '1px solid rgba(0,96,57,0.2)',
                 marginBottom: '0.75rem',
-                cursor: 'zoom-in',
+                cursor: productImages.length > 1 ? 'grab' : 'zoom-in',
+                touchAction: 'pan-y',
+                userSelect: 'none',
               }}
-            onClick={() => setLightboxOpen(true)}
+            onClick={handleMainImageClick}
+            onPointerDown={handleImagePointerDown}
+            onPointerUp={handleImagePointerUp}
+            onPointerCancel={handleImagePointerCancel}
           >
             {selectedImage ? (
               <Image
                 src={imageUrl}
                 alt={product.name}
                 fill
+                draggable={false}
                 style={{ objectFit: 'cover', transition: 'transform 0.6s ease' }}
                 onMouseEnter={(e) => ((e.target as HTMLElement).style.transform = 'scale(1.04)')}
                 onMouseLeave={(e) => ((e.target as HTMLElement).style.transform = 'scale(1)')}
@@ -654,10 +721,10 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
             justifyContent: 'center',
             animation: 'fadeIn 0.25s ease forwards',
           }}
-          onClick={() => setLightboxOpen(false)}
+          onClick={closeLightbox}
         >
           <button
-            onClick={() => setLightboxOpen(false)}
+            onClick={closeLightbox}
             style={{
               position: 'absolute',
               top: '1.5rem',
@@ -676,13 +743,24 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
             <X size={18} strokeWidth={1.5} />
           </button>
           <div
-            style={{ position: 'relative', width: '80vmin', height: '80vmin' }}
-            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'relative',
+              width: '80vmin',
+              height: '80vmin',
+              cursor: productImages.length > 1 ? 'grab' : 'default',
+              touchAction: 'pan-y',
+              userSelect: 'none',
+            }}
+            onClick={handleLightboxImageClick}
+            onPointerDown={handleImagePointerDown}
+            onPointerUp={handleImagePointerUp}
+            onPointerCancel={handleImagePointerCancel}
           >
             <Image
               src={imageUrl}
               alt={product.name}
               fill
+              draggable={false}
               style={{ objectFit: 'contain' }}
             />
           </div>

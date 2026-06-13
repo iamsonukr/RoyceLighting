@@ -64,7 +64,6 @@ export class Product {
   category: Types.ObjectId;
 
   // ── Pricing ────────────────────────────────────────────────────────────────
-
   @Prop({ required: true, default: 0 })
   costPrice: number;
 
@@ -81,7 +80,7 @@ export class Product {
 
   @Prop({ default: 0 })
   salesCount: number;
-
+  
   // ── Physical Attributes ────────────────────────────────────────────────────
 
   @Prop({ trim: true })
